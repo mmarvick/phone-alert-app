@@ -1,75 +1,74 @@
 package marvick.phonealert;
 
+import java.util.ArrayList;
+
+import marvick.phonealert.RulesDbContract.RulesEntry;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.view.Menu;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-public class MainActivity extends Activity {
-
-	public final String SETTING_CALL_QTY = "callQty";
-	public final String SETTING_CALL_TIME = "callTime";
-
+public class MainActivity extends ListActivity {
+	private String[] mContactNames;
+	private String[] mContactLookUps;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		final Editor editor = prefs.edit();
-		EditText callQty = (EditText) findViewById(R.id.call_qty_value);
-		EditText callTime = (EditText) findViewById(R.id.call_time_value);
-		callQty.setText("" + prefs.getInt(SETTING_CALL_QTY, 3));
-		callTime.setText("" + prefs.getInt(SETTING_CALL_TIME, 15));
 		
-		callQty.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+		loadContacts();
+		
+		//String[] test = new String[1];
+		//test[0] = "Default Settings";
+		
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item_contact, mContactLookUps));
+		
+		ListView lv = getListView();
+		
+		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void afterTextChanged(Editable s) {
-				try {
-					editor.putInt(SETTING_CALL_QTY, Integer.parseInt(s.toString()));
-					editor.commit();
-				} catch (NumberFormatException e) {	}
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
 
+				Intent i = new Intent(getApplicationContext(), SettingActivity.class);
+				startActivity(i);
+			};	
 		});
 		
-		callTime.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				try {
-					editor.putInt(SETTING_CALL_TIME, Integer.parseInt(s.toString()));
-					editor.commit();
-				} catch (NumberFormatException e) {	}
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-		});
-		
-		
+		//getListView().setHeaderDividersEnabled(true);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	private void loadContacts() {
+		RulesDbOpenHelper mDbHelper = new RulesDbOpenHelper(this);
+		SQLiteDatabase mRulesDb = mDbHelper.getReadableDatabase();
+		SQLiteQueryBuilder mQBuilder = new SQLiteQueryBuilder();
+		
+		ArrayList<String> contactIDs = new ArrayList<String>();
+		
+		String[] projectionIn = {RulesEntry.COLUMN_NAME_CONTACT_LOOKUP};
+		
+		//Cursor c = mQBuilder.query(mRulesDb, projectionIn, null, null, null, null, null);
+		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules", null);
+		
+		c.moveToFirst();
+		while (!c.isAfterLast()) {
+			contactIDs.add(c.getString(1));
+			c.moveToNext();
+		}
+		
+		Object[] mContactLookUpsObj = contactIDs.toArray();
+		mContactLookUps = new String[mContactLookUpsObj.length];
+		for (int i = 0; i < mContactLookUpsObj.length; i++)
+			mContactLookUps[i] = (String) mContactLookUpsObj[i];
+		
 	}
-
 }

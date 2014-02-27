@@ -105,7 +105,6 @@ public class MainActivity extends ListActivity {
 				Intent i = new Intent(getApplicationContext(), SettingActivity.class);
 				i.setData(uri);
 				startActivity(i);
-				Toast.makeText(getApplicationContext(), uri.toString(), Toast.LENGTH_LONG).show();
 			}
 		}
 	}

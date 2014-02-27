@@ -50,11 +50,6 @@ public class MainActivity extends ListActivity {
 		
 		loadContacts();
 		
-		//String[] test = new String[1];
-		//test[0] = "Default Settings";
-		
-		
-		
 		ListView lv = getListView();
 		
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -72,7 +67,7 @@ public class MainActivity extends ListActivity {
 			};	
 		});
 		
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item_contact, mContactLookUps));
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item_contact, mContactNames));
 	}
 
 	private void loadContacts() {
@@ -95,19 +90,20 @@ public class MainActivity extends ListActivity {
 		
 		Object[] mContactLookUpsObj = contactIDs.toArray();
 		mContactLookUps = new String[mContactLookUpsObj.length];
+		mContactNames = new String[mContactLookUps.length];
 		for (int i = 0; i < mContactLookUpsObj.length; i++) {
 			mContactLookUps[i] = (String) mContactLookUpsObj[i];
 		
-			//TODO FIX THIS SUPER HACKINESS THIS IS INSANE BUT I WANT A WORKING PROTOTYPE BEFORE BED
-			/*if (i > 0) {
-				Uri uri = ContactsContract.Contacts.CONTENT_URI;
+			//TODO FIX THIS SUPER HACKINESS
+			if (i == 0) {
+				mContactNames[i] = mContactLookUps[i];
+			} else {
+				Uri uri = Uri.parse(Uri.decode(mContactLookUps[i]));
 				String[] projection = new String[] {ContactsContract.Contacts.DISPLAY_NAME};
-				String selection = ContactsContract.Contacts.LOOKUP_KEY + " = '" + mContactLookUps[i] + "'";
-				@SuppressWarnings("deprecation")
-				Cursor cursor = managedQuery(uri, projection, selection, null, null);
+				Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
 				cursor.moveToFirst();
-				cursor.getString(0);
-			}*/
+				mContactNames[i] = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+			}
 		}
 		
 	}

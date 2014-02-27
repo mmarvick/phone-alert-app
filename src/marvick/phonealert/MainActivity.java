@@ -2,14 +2,11 @@ package marvick.phonealert;
 
 import java.util.ArrayList;
 
-import marvick.phonealert.RulesDbContract.RulesEntry;
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -50,11 +47,11 @@ public class MainActivity extends ListActivity {
 	private void loadContacts() {
 		RulesDbOpenHelper mDbHelper = new RulesDbOpenHelper(this);
 		SQLiteDatabase mRulesDb = mDbHelper.getReadableDatabase();
-		SQLiteQueryBuilder mQBuilder = new SQLiteQueryBuilder();
+		//SQLiteQueryBuilder mQBuilder = new SQLiteQueryBuilder();
 		
 		ArrayList<String> contactIDs = new ArrayList<String>();
 		
-		String[] projectionIn = {RulesEntry.COLUMN_NAME_CONTACT_LOOKUP};
+		//String[] projectionIn = {RulesEntry.COLUMN_NAME_CONTACT_LOOKUP};
 		
 		//Cursor c = mQBuilder.query(mRulesDb, projectionIn, null, null, null, null, null);
 		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules", null);

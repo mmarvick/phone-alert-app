@@ -8,10 +8,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
 	private String[] mContactNames;
@@ -26,7 +29,7 @@ public class MainActivity extends ListActivity {
 		//String[] test = new String[1];
 		//test[0] = "Default Settings";
 		
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item_contact, mContactLookUps));
+		
 		
 		ListView lv = getListView();
 		
@@ -41,7 +44,21 @@ public class MainActivity extends ListActivity {
 			};	
 		});
 		
-		//getListView().setHeaderDividersEnabled(true);
+		getListView().setFooterDividersEnabled(true);
+		
+		TextView footer = (TextView) getLayoutInflater().inflate(R.layout.list_item_contact,  null).findViewById(R.id.list_contact_name);
+		//footer.setText("Add View");
+		getListView().addFooterView(footer);
+		
+		footer.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				createUser();
+			}
+		});
+		
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item_contact, mContactLookUps));
 	}
 
 	private void loadContacts() {
@@ -66,6 +83,10 @@ public class MainActivity extends ListActivity {
 		mContactLookUps = new String[mContactLookUpsObj.length];
 		for (int i = 0; i < mContactLookUpsObj.length; i++)
 			mContactLookUps[i] = (String) mContactLookUpsObj[i];
+		
+	}
+	
+	private void createUser() {
 		
 	}
 }

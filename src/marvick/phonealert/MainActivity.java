@@ -2,7 +2,10 @@ package marvick.phonealert;
 
 import java.util.ArrayList;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
+	private final int REQUEST_CONTACT = 1;
+	
 	private String[] mContactNames;
 	private String[] mContactLookUps;
 	
@@ -87,6 +92,21 @@ public class MainActivity extends ListActivity {
 	}
 	
 	private void createUser() {
-		
+		Intent contactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+		startActivityForResult(contactIntent, REQUEST_CONTACT);
+	}
+	
+	@Override
+	public void onActivityResult(int reqCode, int resultCode, Intent data) {
+		switch (reqCode) {
+		case (REQUEST_CONTACT):
+			if (resultCode == Activity.RESULT_OK){
+				Uri uri = data.getData();
+				Intent i = new Intent(getApplicationContext(), SettingActivity.class);
+				i.setData(uri);
+				startActivity(i);
+				Toast.makeText(getApplicationContext(), uri.toString(), Toast.LENGTH_LONG).show();
+			}
+		}
 	}
 }

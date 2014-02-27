@@ -3,6 +3,7 @@ package marvick.phonealert;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.text.Editable;
@@ -11,25 +12,31 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class SettingActivity extends Activity {
 
 	public final String SETTING_CALL_QTY = "callQty";
 	public final String SETTING_CALL_TIME = "callTime";
+	private EditText mCallQty;
+	private EditText mCallTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
+		
+		loadData();
+		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		final Editor editor = prefs.edit();
-		EditText callQty = (EditText) findViewById(R.id.call_qty_value);
-		EditText callTime = (EditText) findViewById(R.id.call_time_value);
+		mCallQty = (EditText) findViewById(R.id.call_qty_value);
+		mCallTime = (EditText) findViewById(R.id.call_time_value);
 		Button saveButton = (Button) findViewById(R.id.save_button);
-		callQty.setText("" + prefs.getInt(SETTING_CALL_QTY, 3));
-		callTime.setText("" + prefs.getInt(SETTING_CALL_TIME, 15));
+		mCallQty.setText("" + prefs.getInt(SETTING_CALL_QTY, 3));
+		mCallTime.setText("" + prefs.getInt(SETTING_CALL_TIME, 15));
 		
-		callQty.addTextChangedListener(new TextWatcher() {
+		mCallQty.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -47,7 +54,7 @@ public class SettingActivity extends Activity {
 
 		});
 		
-		callTime.addTextChangedListener(new TextWatcher() {
+		mCallTime.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -80,6 +87,15 @@ public class SettingActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	private void loadData() {
+		Intent intent = getIntent();
+		if (intent.getData() != null) {
+			Toast.makeText(getApplicationContext(), intent.getData().toString(), Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(getApplicationContext(), "Not a new user", Toast.LENGTH_LONG).show();
+		}
 	}
 
 }

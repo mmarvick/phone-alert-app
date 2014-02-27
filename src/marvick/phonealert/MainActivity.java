@@ -29,6 +29,25 @@ public class MainActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		getListView().setFooterDividersEnabled(true);
+		
+		TextView footer = (TextView) getLayoutInflater().inflate(R.layout.list_item_contact,  null).findViewById(R.id.list_contact_name);
+		//footer.setText("Add View");
+		getListView().addFooterView(footer);
+		
+		footer.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				createUser();
+			}
+		});		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
 		loadContacts();
 		
 		//String[] test = new String[1];
@@ -45,22 +64,12 @@ public class MainActivity extends ListActivity {
 					long id) {
 
 				Intent i = new Intent(getApplicationContext(), SettingActivity.class);
+				if (mContactLookUps[position].contains(Uri.encode("content://"))) {
+					Uri uri = Uri.parse(Uri.decode(mContactLookUps[position]));
+					i.setData(uri);
+				}
 				startActivity(i);
 			};	
-		});
-		
-		getListView().setFooterDividersEnabled(true);
-		
-		TextView footer = (TextView) getLayoutInflater().inflate(R.layout.list_item_contact,  null).findViewById(R.id.list_contact_name);
-		//footer.setText("Add View");
-		getListView().addFooterView(footer);
-		
-		footer.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				createUser();
-			}
 		});
 		
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item_contact, mContactLookUps));
@@ -86,8 +95,20 @@ public class MainActivity extends ListActivity {
 		
 		Object[] mContactLookUpsObj = contactIDs.toArray();
 		mContactLookUps = new String[mContactLookUpsObj.length];
-		for (int i = 0; i < mContactLookUpsObj.length; i++)
+		for (int i = 0; i < mContactLookUpsObj.length; i++) {
 			mContactLookUps[i] = (String) mContactLookUpsObj[i];
+		
+			//TODO FIX THIS SUPER HACKINESS THIS IS INSANE BUT I WANT A WORKING PROTOTYPE BEFORE BED
+			/*if (i > 0) {
+				Uri uri = ContactsContract.Contacts.CONTENT_URI;
+				String[] projection = new String[] {ContactsContract.Contacts.DISPLAY_NAME};
+				String selection = ContactsContract.Contacts.LOOKUP_KEY + " = '" + mContactLookUps[i] + "'";
+				@SuppressWarnings("deprecation")
+				Cursor cursor = managedQuery(uri, projection, selection, null, null);
+				cursor.moveToFirst();
+				cursor.getString(0);
+			}*/
+		}
 		
 	}
 	
@@ -105,6 +126,7 @@ public class MainActivity extends ListActivity {
 				Intent i = new Intent(getApplicationContext(), SettingActivity.class);
 				i.setData(uri);
 				startActivity(i);
+
 			}
 		}
 	}

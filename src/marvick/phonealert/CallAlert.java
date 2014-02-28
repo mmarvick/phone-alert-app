@@ -7,12 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.PhoneLookup;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -34,14 +37,52 @@ public class CallAlert extends BroadcastReceiver {
 		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 			saveState(context);
 			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-			int called = timesCalled(context, incomingNumber, prefs.getInt(SETTING_CALL_TIME, 15));
-			if (called >= prefs.getInt(SETTING_CALL_QTY, 3) - 1) {
+			int allowedMins = allowedMins(context, incomingNumber);
+			int allowedCalls = allowedCalls(context, incomingNumber);
+			int called = timesCalled(context, incomingNumber, allowedMins);
+			if (called >= allowedCalls - 1) {
 				alertAction(context);
 			}
 		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
 			resetAction(context);
 		}
 
+	}
+	
+	private int allowedCalls(Context context, String incomingNumber) {
+		int calls;
+		
+		RulesDbHelper dbHelper = new RulesDbHelper(context);
+		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
+		
+		if (lookup!=null)
+			Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
+
+		if (lookup!=null && dbHelper.isInDb(lookup)) {
+			calls = dbHelper.getCallsAllowed(lookup);
+		} else {
+			//load rules for default caller
+		}
+		
+		return calls;
+	}
+	
+	private int allowedMins(Context context, String incomingNumber) {
+		int mins;
+		
+		RulesDbHelper dbHelper = new RulesDbHelper(context);
+		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
+		
+		if (lookup!=null)
+			Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
+
+		if (lookup!=null && dbHelper.isInDb(lookup)) {
+			mins = dbHelper.getCallMins(lookup);
+		} else {
+			//load rules for default caller
+		}
+		
+		return mins;
 	}
 	
 	private void resetAction(Context context) {

@@ -1,7 +1,5 @@
 package marvick.phonealert;
 
-import java.util.ArrayList;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -9,7 +7,6 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -17,13 +14,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
 	private final int REQUEST_CONTACT = 1;
 	
 	private String[] mContactNames;
-	private String[] mContactLookUps;
+	private String[] mContactLookups;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +55,7 @@ public class MainActivity extends ListActivity {
 					long id) {
 
 				Intent i = new Intent(getApplicationContext(), SettingActivity.class);
-				if (mContactLookUps[position].contains(Uri.encode("content://"))) {
-					Uri uri = Uri.parse(Uri.decode(mContactLookUps[position]));
-					i.setData(uri);
-				}
+				i.putExtra("lookup", mContactLookups[position]);
 				startActivity(i);
 			};	
 		});
@@ -71,41 +64,9 @@ public class MainActivity extends ListActivity {
 	}
 
 	private void loadContacts() {
-		RulesDbOpenHelper mDbHelper = new RulesDbOpenHelper(this);
-		SQLiteDatabase mRulesDb = mDbHelper.getReadableDatabase();
-		//SQLiteQueryBuilder mQBuilder = new SQLiteQueryBuilder();
-		
-		ArrayList<String> contactIDs = new ArrayList<String>();
-		
-		//String[] projectionIn = {RulesEntry.COLUMN_NAME_CONTACT_LOOKUP};
-		
-		//Cursor c = mQBuilder.query(mRulesDb, projectionIn, null, null, null, null, null);
-		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules", null);
-		
-		c.moveToFirst();
-		while (!c.isAfterLast()) {
-			contactIDs.add(c.getString(1));
-			c.moveToNext();
-		}
-		
-		Object[] mContactLookUpsObj = contactIDs.toArray();
-		mContactLookUps = new String[mContactLookUpsObj.length];
-		mContactNames = new String[mContactLookUps.length];
-		for (int i = 0; i < mContactLookUpsObj.length; i++) {
-			mContactLookUps[i] = (String) mContactLookUpsObj[i];
-		
-			//TODO FIX THIS SUPER HACKINESS
-			if (i == 0) {
-				mContactNames[i] = mContactLookUps[i];
-			} else {
-				Uri uri = Uri.parse(Uri.decode(mContactLookUps[i]));
-				String[] projection = new String[] {ContactsContract.Contacts.DISPLAY_NAME};
-				Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-				cursor.moveToFirst();
-				mContactNames[i] = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-			}
-		}
-		
+		RulesDbHelper dbHelper = new RulesDbHelper(getApplicationContext());
+		mContactLookups = dbHelper.getContactLookups();
+		mContactNames = dbHelper.getNames(mContactLookups);
 	}
 	
 	private void createUser() {
@@ -119,8 +80,12 @@ public class MainActivity extends ListActivity {
 		case (REQUEST_CONTACT):
 			if (resultCode == Activity.RESULT_OK){
 				Uri uri = data.getData();
+				String[] projection = new String[] {ContactsContract.Contacts.LOOKUP_KEY};
+				Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+				cursor.moveToFirst();
+				String lookup = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
 				Intent i = new Intent(getApplicationContext(), SettingActivity.class);
-				i.setData(uri);
+				i.putExtra("lookup", lookup);
 				startActivity(i);
 
 			}

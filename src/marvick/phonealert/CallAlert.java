@@ -7,15 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.PhoneLookup;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,11 +25,12 @@ public class CallAlert extends BroadcastReceiver {
 	public final String SETTING_MODE_CHANGED = "modeChanged";
 	public final String SETTING_CALL_QTY = "callQty";
 	public final String SETTING_CALL_TIME = "callTime";
+	private SharedPreferences prefs;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
 		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 			saveState(context);
@@ -61,7 +59,7 @@ public class CallAlert extends BroadcastReceiver {
 		if (lookup!=null && dbHelper.isInDb(lookup)) {
 			calls = dbHelper.getCallsAllowed(lookup);
 		} else {
-			//load rules for default caller
+			calls = prefs.getInt(SETTING_CALL_QTY, 3);
 		}
 		
 		return calls;
@@ -79,7 +77,7 @@ public class CallAlert extends BroadcastReceiver {
 		if (lookup!=null && dbHelper.isInDb(lookup)) {
 			mins = dbHelper.getCallMins(lookup);
 		} else {
-			//load rules for default caller
+			mins = prefs.getInt(SETTING_CALL_TIME, 15);
 		}
 		
 		return mins;
@@ -89,7 +87,6 @@ public class CallAlert extends BroadcastReceiver {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		Toast.makeText(context,  ("" + prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL)),  Toast.LENGTH_LONG).show();
 		if (prefs.getBoolean(SETTING_MODE_CHANGED, false)) {
 			audio.setRingerMode(prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL));
 			editor.putBoolean(SETTING_MODE_CHANGED, false);
@@ -104,7 +101,6 @@ public class CallAlert extends BroadcastReceiver {
 		editor.putInt(SETTING_MODE, audio.getRingerMode());
 		editor.putBoolean(SETTING_MODE_CHANGED, true);
 		editor.commit();
-		Toast.makeText(context,  ("" + prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL)),  Toast.LENGTH_LONG).show();
 	}
 	
 	private void alertAction(Context context) {

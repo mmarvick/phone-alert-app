@@ -25,17 +25,20 @@ public class CallAlert extends BroadcastReceiver {
 	public final String SETTING_MODE_CHANGED = "modeChanged";
 	public final String SETTING_CALL_QTY = "callQty";
 	public final String SETTING_CALL_TIME = "callTime";
+	private SharedPreferences prefs;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
 		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 			saveState(context);
 			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-			int called = timesCalled(context, incomingNumber, prefs.getInt(SETTING_CALL_TIME, 15));
-			if (called >= prefs.getInt(SETTING_CALL_QTY, 3) - 1) {
+			int allowedMins = allowedMins(context, incomingNumber);
+			int allowedCalls = allowedCalls(context, incomingNumber);
+			int called = timesCalled(context, incomingNumber, allowedMins);
+			if (called >= allowedCalls - 1) {
 				alertAction(context);
 			}
 		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
@@ -44,11 +47,46 @@ public class CallAlert extends BroadcastReceiver {
 
 	}
 	
+	private int allowedCalls(Context context, String incomingNumber) {
+		int calls;
+		
+		RulesDbHelper dbHelper = new RulesDbHelper(context);
+		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
+		
+		if (lookup!=null)
+			Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
+
+		if (lookup!=null && dbHelper.isInDb(lookup)) {
+			calls = dbHelper.getCallsAllowed(lookup);
+		} else {
+			calls = prefs.getInt(SETTING_CALL_QTY, 3);
+		}
+		
+		return calls;
+	}
+	
+	private int allowedMins(Context context, String incomingNumber) {
+		int mins;
+		
+		RulesDbHelper dbHelper = new RulesDbHelper(context);
+		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
+		
+		if (lookup!=null)
+			Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
+
+		if (lookup!=null && dbHelper.isInDb(lookup)) {
+			mins = dbHelper.getCallMins(lookup);
+		} else {
+			mins = prefs.getInt(SETTING_CALL_TIME, 15);
+		}
+		
+		return mins;
+	}
+	
 	private void resetAction(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		Toast.makeText(context,  ("" + prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL)),  Toast.LENGTH_LONG).show();
 		if (prefs.getBoolean(SETTING_MODE_CHANGED, false)) {
 			audio.setRingerMode(prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL));
 			editor.putBoolean(SETTING_MODE_CHANGED, false);
@@ -63,7 +101,6 @@ public class CallAlert extends BroadcastReceiver {
 		editor.putInt(SETTING_MODE, audio.getRingerMode());
 		editor.putBoolean(SETTING_MODE_CHANGED, true);
 		editor.commit();
-		Toast.makeText(context,  ("" + prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL)),  Toast.LENGTH_LONG).show();
 	}
 	
 	private void alertAction(Context context) {

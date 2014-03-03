@@ -39,7 +39,12 @@ public class SettingActivity extends Activity {
 		Intent intent = getIntent();
 		lookup = intent.getStringExtra("lookup");
 		
-		setTitle("Editing settings for " + dbHelper.getName(lookup));
+		if (lookup.equals(RulesEntry.LOOKUP_DEFAULT)) {
+			setTitle("Editing default settings");
+		} else {
+			setTitle("Editing settings for " + dbHelper.getName(lookup));
+		}
+		
 		loadData();
 		
 		mSaveButton.setOnClickListener(new View.OnClickListener() {

@@ -28,7 +28,6 @@ public class MainActivity extends ListActivity {
 		getListView().setFooterDividersEnabled(true);
 		
 		TextView footer = (TextView) getLayoutInflater().inflate(R.layout.list_item_contact,  null).findViewById(R.id.list_contact_name);
-		//footer.setText("Add View");
 		getListView().addFooterView(footer);
 		
 		footer.setOnClickListener(new OnClickListener() {

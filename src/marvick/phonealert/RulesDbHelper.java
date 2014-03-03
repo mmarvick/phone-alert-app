@@ -109,4 +109,10 @@ public class RulesDbHelper {
 		values.put(RulesEntry.COLUMN_NAME_MINS, callMins);
 		mRulesDb.update(RulesEntry.TABLE_NAME, values, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
 	}
+	
+	public void deleteContact(String lookup) {
+		if (isInDb(lookup)) {
+			mRulesDb.delete(RulesEntry.TABLE_NAME, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "=?", new String[] {lookup});
+		}
+	}
 }

@@ -1,5 +1,6 @@
 package marvick.phonealert;
 
+import marvick.phonealert.RulesDbContract.RulesEntry;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
@@ -32,6 +33,8 @@ public class SettingActivity extends Activity {
 		mCallQty = (EditText) findViewById(R.id.call_qty_value);
 		mCallTime = (EditText) findViewById(R.id.call_time_value);
 		Button mSaveButton = (Button) findViewById(R.id.save_button);
+		Button mCancelButton = (Button) findViewById(R.id.cancel_button);
+		Button mDeleteButton = (Button) findViewById(R.id.delete_button);
 		dbHelper = new RulesDbHelper(getApplicationContext());
 		Intent intent = getIntent();
 		lookup = intent.getStringExtra("lookup");
@@ -46,6 +49,22 @@ public class SettingActivity extends Activity {
 				saveData();
 				finish();
 				
+			}
+		});
+		
+		mCancelButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		
+		mDeleteButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				delete();
 			}
 		});
 	}
@@ -74,6 +93,15 @@ public class SettingActivity extends Activity {
 			mEditor.putInt(SETTING_CALL_QTY, Integer.parseInt(mCallQty.getText().toString()));
 			mEditor.putInt(SETTING_CALL_TIME, Integer.parseInt(mCallTime.getText().toString()));
 			mEditor.commit();	
+		}
+	}
+	
+	private void delete() {
+		if (dbHelper.isInDb(lookup) && !lookup.equals(RulesEntry.LOOKUP_DEFAULT)) {
+			dbHelper.deleteContact(lookup);
+			finish();
+		} else if (lookup.equals(RulesEntry.LOOKUP_DEFAULT)) {
+			Toast.makeText(getApplicationContext(), "Cannot delete default settings", Toast.LENGTH_LONG).show();
 		}
 	}
 }

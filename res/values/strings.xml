@@ -4,7 +4,7 @@
     <string name="app_name">Phone Alert</string>
     <string name="title_activity_main">Phone Alert</string>
     <string name="title_activity_settings">Edit Settings</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_bug">Report a bug / Suggest features</string>
     <string name="call_time">In this many minutes: </string>
     <string name="call_qty">User must call this many times: </string>
     <string name="save">Save</string>

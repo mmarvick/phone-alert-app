@@ -7,6 +7,9 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -61,6 +64,25 @@ public class MainActivity extends ListActivity {
 		
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item_contact, mContactNames));
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.action_bug:
+	        	Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://github.com/mmarvick/phone-alert-app/issues"));
+	        	startActivity(i);
+	        default:
+	        	return true;
+	    }
+	}		
 
 	private void loadContacts() {
 		RulesDbHelper dbHelper = new RulesDbHelper(getApplicationContext());

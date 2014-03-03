@@ -37,12 +37,13 @@ public class CallAlert extends BroadcastReceiver {
 		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 			saveState(context);
 			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+			Toast.makeText(context, incomingNumber, Toast.LENGTH_LONG).show();
 			int allowedMins = allowedMins(context, incomingNumber);
 			int allowedCalls = allowedCalls(context, incomingNumber);
 			int called = timesCalled(context, incomingNumber, allowedMins);
 			if (called >= allowedCalls - 1) {
 				alertAction(context);
-			}
+			} 
 		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
 			resetAction(context);
 		}
@@ -123,9 +124,10 @@ public class CallAlert extends BroadcastReceiver {
 	
 	private int timesCalled(Context context, String incomingNumber, int minutes) {
 		String time = "" + ((new Date()).getTime() - minutes * 60 * 1000);
-		String selection = CallLog.Calls.NUMBER + " = " + incomingNumber;
-		selection += " AND " + CallLog.Calls.DATE + ">" + time;
-		Cursor calls = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, null, null);
+		String selection = CallLog.Calls.NUMBER + " = ?";
+		selection += " AND " + CallLog.Calls.DATE + "> ?";
+		String[] selectors = {incomingNumber, time};
+		Cursor calls = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, selectors, null);
 		calls.moveToFirst();
 		int numCalls = 0;
 		while (!calls.isAfterLast()) {

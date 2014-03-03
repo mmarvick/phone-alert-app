@@ -14,6 +14,8 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
 
 public class RulesDbHelper {
+	public static final String NAME_DEFAULT = "Default settings";
+	
 	SQLiteDatabase mRulesDb;
 	ContentResolver mContentResolver;
 	
@@ -48,8 +50,8 @@ public class RulesDbHelper {
 		for (int i = 0; i < lookups.length; i++) {
 			
 			//TODO FIX THIS SOMEWHAT HACKINESS
-			if (lookups[i].equals("Default settings")) {
-				names[i] = lookups[i];
+			if (lookups[i].equals(RulesEntry.LOOKUP_DEFAULT)) {
+				names[i] = NAME_DEFAULT;
 			} else {
 				Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
 						new String[] {Phone.DISPLAY_NAME},

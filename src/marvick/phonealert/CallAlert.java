@@ -2,6 +2,8 @@ package marvick.phonealert;
 
 import java.util.Date;
 
+import marvick.phonealert.RulesDbContract.RulesEntry;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,7 +43,7 @@ public class CallAlert extends BroadcastReceiver {
 			if (called >= allowedCalls - 1) {
 				alertAction(context);
 			}
-		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
+		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
 			resetAction(context);
 		}
 
@@ -59,7 +61,7 @@ public class CallAlert extends BroadcastReceiver {
 		if (lookup!=null && dbHelper.isInDb(lookup)) {
 			calls = dbHelper.getCallsAllowed(lookup);
 		} else {
-			calls = prefs.getInt(SETTING_CALL_QTY, 3);
+			calls = dbHelper.getCallsAllowed(RulesEntry.LOOKUP_DEFAULT);
 		}
 		
 		return calls;

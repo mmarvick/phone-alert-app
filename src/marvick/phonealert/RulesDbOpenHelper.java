@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class RulesDbOpenHelper extends SQLiteOpenHelper {
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 3;
 	public static final String DATABASE_FILE = "Rules.db";
 	
 	public static final String TEXT_TYPE = " TEXT";
@@ -25,7 +25,10 @@ public class RulesDbOpenHelper extends SQLiteOpenHelper {
 				RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + SEPARATOR +
 				RulesEntry.COLUMN_NAME_CALLS + SEPARATOR +
 				RulesEntry.COLUMN_NAME_MINS + ")" +
-				"VALUES(1, 'Default settings', 3, 15)";
+				"VALUES(1, '" + RulesEntry.LOOKUP_DEFAULT + "', 3, 15)";
+	
+	public static final String SQL_DELETE_ENTRIES =
+			"DROP TABLE " + RulesEntry.TABLE_NAME;
 	
 	public RulesDbOpenHelper(Context context) {
 		super(context, DATABASE_FILE, null, DATABASE_VERSION);
@@ -39,8 +42,8 @@ public class RulesDbOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		//db.execSQL(SQL_DELETE_ENTRIES);
-		//onCreate(db);
+		db.execSQL(SQL_DELETE_ENTRIES);
+		onCreate(db);
 	}
 
 }

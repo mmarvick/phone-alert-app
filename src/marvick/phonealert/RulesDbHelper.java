@@ -48,21 +48,23 @@ public class RulesDbHelper {
 		String[] names = new String[lookups.length];
 		
 		for (int i = 0; i < lookups.length; i++) {
-			
-			//TODO FIX THIS SOMEWHAT HACKINESS
-			if (lookups[i].equals(RulesEntry.LOOKUP_DEFAULT)) {
-				names[i] = NAME_DEFAULT;
-			} else {
-				Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
-						new String[] {Phone.DISPLAY_NAME},
-						Data.LOOKUP_KEY + "=?",
-						new String[] {lookups[i]}, null);
-				cursor.moveToFirst();
-				names[i] = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-			}
+			names[i] = getName(lookups[i]);
 		}
 		
 		return names;
+	}
+	
+	public String getName(String lookup) {
+		if (lookup.equals(RulesEntry.LOOKUP_DEFAULT))
+			return NAME_DEFAULT;
+		else {
+			Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
+					new String[] {Phone.DISPLAY_NAME},
+					Data.LOOKUP_KEY + "=?",
+					new String[] {lookup}, null);
+			cursor.moveToFirst();
+			return cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));	
+		}
 	}
 	
 	public boolean isInDb(String lookup) {

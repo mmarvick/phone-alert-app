@@ -38,8 +38,8 @@ public class SettingActivity extends Activity {
 		dbHelper = new RulesDbHelper(getApplicationContext());
 		Intent intent = getIntent();
 		lookup = intent.getStringExtra("lookup");
-		Toast.makeText(getApplicationContext(), lookup, Toast.LENGTH_LONG).show();
 		
+		setTitle("Editing settings for " + dbHelper.getName(lookup));
 		loadData();
 		
 		mSaveButton.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +75,6 @@ public class SettingActivity extends Activity {
 				mCallQty.setText("3");
 				mCallTime.setText("15");
 			} else {
-				Toast.makeText(getApplicationContext(), "This user already exists!", Toast.LENGTH_LONG).show();
 				mCallQty.setText("" + dbHelper.getCallsAllowed(lookup));
 				mCallTime.setText("" + dbHelper.getCallMins(lookup));
 			}

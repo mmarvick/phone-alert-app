@@ -35,7 +35,7 @@
         
         <activity
             android:name="marvick.phonealert.SettingActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_settings" >
         </activity>        
     </application>
 

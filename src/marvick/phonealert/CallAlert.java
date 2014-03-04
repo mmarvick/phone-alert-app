@@ -97,29 +97,29 @@ public class CallAlert extends BroadcastReceiver {
 		}
 	}
 	
-	private void saveState(Context context) {
+	private int saveState(Context context) {
 		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();	
 		editor.putInt(SETTING_MODE, audio.getRingerMode());
 		editor.putBoolean(SETTING_MODE_CHANGED, true);
 		editor.commit();
+		return audio.getRingerMode();
 	}
 	
 	private void alertAction(Context context) {
 		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		Log.d(TAG, "Ring mode: " + audio.getMode());
-		audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-		Log.d(TAG, "Ring mode: " + audio.getMode());
-		Uri toneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-		
-		//TODO: Fix this bug -- sometimes the phone will ring twice, with an echo
-		Ringtone tone = RingtoneManager.getRingtone(context, toneUri);
-		if (audio.getMode() != AudioManager.MODE_RINGTONE && !tone.isPlaying()) {
-			tone.play();
-			Log.d(TAG, "Trigger a ring!");
-		}
-		Log.d(TAG, "Ring mode: " + audio.getMode());
+		if (audio.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
+			audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+			/*Uri toneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+			
+			//TODO: Fix this bug -- sometimes the phone will ring twice, with an echo
+			Ringtone tone = RingtoneManager.getRingtone(context, toneUri);
+			if (audio.getMode() != AudioManager.MODE_RINGTONE && !tone.isPlaying()) {
+				tone.play();
+				Log.d(TAG, "Trigger a ring!");
+			} */
+		} 
 	}
 	
 	private int timesCalled(Context context, String incomingNumber, int minutes) {

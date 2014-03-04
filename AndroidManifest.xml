@@ -9,7 +9,7 @@
         android:targetSdkVersion="18" />
 
     <uses-feature android:name="android.hardware.telephony" />
-    
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
@@ -26,6 +26,19 @@
         </receiver>
 
         <activity
+            android:name="marvick.phonealert.ListSettings"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="marvick.phonealert.SettingActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
             android:name="marvick.phonealert.MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
@@ -34,11 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity
-            android:name="marvick.phonealert.SettingActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>        
     </application>
 
 </manifest>

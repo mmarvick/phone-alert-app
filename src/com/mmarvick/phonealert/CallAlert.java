@@ -38,7 +38,7 @@ public class CallAlert extends BroadcastReceiver {
 			if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 				saveState(context);
 				String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-				Toast.makeText(context, incomingNumber, Toast.LENGTH_LONG).show();
+				//Toast.makeText(context, incomingNumber, Toast.LENGTH_LONG).show();
 				int allowedMins = allowedMins(context, incomingNumber);
 				int allowedCalls = allowedCalls(context, incomingNumber);
 				int called = timesCalled(context, incomingNumber, allowedMins);
@@ -57,8 +57,8 @@ public class CallAlert extends BroadcastReceiver {
 		RulesDbHelper dbHelper = new RulesDbHelper(context);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 		
-		if (lookup!=null)
-			Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
+		//if (lookup!=null)
+		//	Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
 
 		if (lookup!=null && dbHelper.isInDb(lookup)) {
 			calls = dbHelper.getCallsAllowed(lookup);
@@ -75,8 +75,8 @@ public class CallAlert extends BroadcastReceiver {
 		RulesDbHelper dbHelper = new RulesDbHelper(context);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 		
-		if (lookup!=null)
-			Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
+		//if (lookup!=null)
+		//	Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
 
 		if (lookup!=null && dbHelper.isInDb(lookup)) {
 			mins = dbHelper.getCallMins(lookup);
@@ -112,6 +112,7 @@ public class CallAlert extends BroadcastReceiver {
 		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		if (audio.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
 			audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+			audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING), 0);
 			/*Uri toneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 			
 			//TODO: Fix this bug -- sometimes the phone will ring twice, with an echo

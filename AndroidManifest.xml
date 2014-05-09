@@ -24,23 +24,24 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name="com.mmarvick.phonealert.MainActivity"
-            android:label="@string/title_activity_main">
+            android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.mmarvick.phonealert.ListSettings"
-            android:label="@string/title_activity_main" >
         </activity>
         <activity
             android:name="com.mmarvick.phonealert.SettingActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-
+        <activity
+            android:name="com.mmarvick.phonealert.ContactListActivity"
+            android:label="@string/title_activity_contact_list" >
+        </activity>
     </application>
 
 </manifest>

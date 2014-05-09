@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
 			
 			@Override
 			public void onClick(View button) {
-				Intent i = new Intent(getApplicationContext(), ListSettings.class);
+				Intent i = new Intent(getApplicationContext(), ContactListActivity.class);
 				startActivity(i);
 			}
 		});

@@ -28,7 +28,7 @@ public class RulesDbHelper {
 	
 	public String[] getContactLookups() {
 		ArrayList<String> contactIDs = new ArrayList<String>();
-		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules", null);
+		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules WHERE " + RulesDbContract.RulesEntry.COLUMN_NAME_SYS_TYPE + " = '0'", null);
 		
 		c.moveToFirst();
 		
@@ -104,6 +104,7 @@ public class RulesDbHelper {
 		if (!isInDb(lookup)) {
 			ContentValues values = new ContentValues();
 			values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);
+			values.put(RulesEntry.COLUMN_NAME_SYS_TYPE, 0);			
 			mRulesDb.insert(RulesEntry.TABLE_NAME, null, values);
 		} 
 		ContentValues values = new ContentValues();

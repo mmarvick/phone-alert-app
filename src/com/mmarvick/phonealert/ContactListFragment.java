@@ -48,8 +48,6 @@ public class ContactListFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 	}
 	
-	
-	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -70,25 +68,7 @@ public class ContactListFragment extends ListFragment {
 			};	
 		});
 		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item_contact, mContactNames));
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	    inflater.inflate(R.menu.main, menu);
-	    super.onCreateOptionsMenu(menu,  inflater);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	        case R.id.action_bug:
-	        	Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://github.com/mmarvick/phone-alert-app/issues"));
-	        	startActivity(i);
-	        default:
-	        	return true;
-	    }
-	}		
+	}	
 
 	private void loadContacts() {
 		RulesDbHelper dbHelper = new RulesDbHelper(getActivity().getApplicationContext());
@@ -118,5 +98,23 @@ public class ContactListFragment extends ListFragment {
 			}
 		}
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	    inflater.inflate(R.menu.main, menu);
+	    super.onCreateOptionsMenu(menu,  inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.action_bug:
+	        	Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://github.com/mmarvick/phone-alert-app/issues"));
+	        	startActivity(i);
+	        default:
+	        	return true;
+	    }
+	}		
 	
 }

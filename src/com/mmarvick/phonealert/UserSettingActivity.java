@@ -5,6 +5,7 @@ import com.mmarvick.phonealert.RulesDbContract.RulesEntry;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.content.Intent;
@@ -23,7 +24,7 @@ public class UserSettingActivity extends ActionBarActivity {
 	public final String SETTING_CALL_QTY = "callQty";
 	public final String SETTING_CALL_TIME = "callTime";
 	private EditText mCallQty;
-	private EditText mCallTime;
+	private EditText mCallTime; 
 	private SharedPreferences mPrefs;
 	private Editor mEditor;
 	private RulesDbHelper dbHelper;
@@ -33,6 +34,9 @@ public class UserSettingActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_setting);
+		
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);		
 		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mEditor = mPrefs.edit();

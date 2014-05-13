@@ -26,7 +26,8 @@ public class MainActivity extends ActionBarActivity {
 		mEditor = mPrefs.edit();
 		
 		ToggleButton mToggle = (ToggleButton) findViewById(R.id.toggleState);
-		Button mSettings = (Button) findViewById(R.id.settings_button);
+		Button mUserSettings = (Button) findViewById(R.id.settings_button);
+		Button mDefaultSettings = (Button) findViewById(R.id.default_settings_button);
 		
 		mToggle.setChecked(mPrefs.getBoolean("state", true));
 		
@@ -43,12 +44,21 @@ public class MainActivity extends ActionBarActivity {
 			
 		});
 		
-		mSettings.setOnClickListener(new View.OnClickListener() {
+		mUserSettings.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View button) {
 				Intent i = new Intent(getApplicationContext(), ContactListActivity.class);
 				startActivity(i);
+			}
+		});
+		
+		mDefaultSettings.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View button) {
+				Intent i = new Intent(getApplicationContext(), UserSettingActivity.class);
+				i.putExtra("lookup", "_default");
+				startActivity(i);				
 			}
 		});
 	}

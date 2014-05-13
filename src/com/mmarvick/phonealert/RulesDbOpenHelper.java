@@ -7,11 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class RulesDbOpenHelper extends SQLiteOpenHelper {
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 4;
 	public static final String DATABASE_FILE = "Rules.db";
 	
 	public static final String TEXT_TYPE = " TEXT";
 	public static final String INTEGER_TYPE = " INTEGER";
+	public static final String BOOLEAN_TYPE = " INTEGER";
 	public static final String SEPARATOR = ", ";
 	
 	public static final String SQL_CREATE_ENTRIES = 
@@ -19,14 +20,19 @@ public class RulesDbOpenHelper extends SQLiteOpenHelper {
 					RulesEntry._ID + " INTEGER PRIMARY KEY," +
 					RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + TEXT_TYPE + SEPARATOR +
 					RulesEntry.COLUMN_NAME_CALLS + INTEGER_TYPE + SEPARATOR +
-					RulesEntry.COLUMN_NAME_MINS + INTEGER_TYPE + ")";
+					RulesEntry.COLUMN_NAME_MINS + INTEGER_TYPE + SEPARATOR +
+					RulesEntry.COLUMN_NAME_ON + BOOLEAN_TYPE + SEPARATOR +
+					RulesEntry.COLUMN_NAME_SYS_TYPE + BOOLEAN_TYPE +
+					")";
 	
 	public static final String SQL_CREATE_FIRST_ROW =
 			"INSERT INTO " + RulesEntry.TABLE_NAME + "(" + RulesEntry._ID + SEPARATOR +
 				RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + SEPARATOR +
 				RulesEntry.COLUMN_NAME_CALLS + SEPARATOR +
-				RulesEntry.COLUMN_NAME_MINS + ")" +
-				"VALUES(1, '" + RulesEntry.LOOKUP_DEFAULT + "', 3, 15)";
+				RulesEntry.COLUMN_NAME_MINS + SEPARATOR +
+				RulesEntry.COLUMN_NAME_ON + SEPARATOR +
+				RulesEntry.COLUMN_NAME_SYS_TYPE +  ")" +
+				"VALUES(1, '" + RulesEntry.LOOKUP_DEFAULT + "', 3, 15, 1, 1)";
 	
 	public static final String SQL_DELETE_ENTRIES =
 			"DROP TABLE " + RulesEntry.TABLE_NAME;

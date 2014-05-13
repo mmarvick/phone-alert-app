@@ -26,6 +26,8 @@
         android:layout_alignParentLeft="true"
         android:text="Phone alerts are:" />
 
+   
+    
     <Button
         android:id="@+id/settings_button"
         android:layout_width="wrap_content"
@@ -33,5 +35,13 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="User Settings" />
+    
+    <Button
+        android:id="@+id/default_settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/settings_button"
+        android:layout_centerHorizontal="true"
+        android:text="Default Settings" />     
 
 </RelativeLayout>

@@ -1,6 +1,6 @@
-package com.mmarvick.phonealert;
+package com.mmarvick.urgentcall;
 
-import com.mmarvick.phonealert.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

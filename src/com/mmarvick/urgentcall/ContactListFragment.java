@@ -1,5 +1,7 @@
-package com.mmarvick.phonealert;
+package com.mmarvick.urgentcall;
 
+
+import com.mmarvick.phonealert.R;
 
 import android.net.Uri;
 import android.os.Bundle;

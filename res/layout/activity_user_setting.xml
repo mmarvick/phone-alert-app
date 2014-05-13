@@ -9,11 +9,20 @@
     tools:context=".UserSettingActivity" >
         
     <TextView
-        android:id="@+id/call_qty"
+        android:id="@+id/state_on"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="36dp"
+        android:text="Alerts for user are:" />
+    
+    <TextView
+        android:id="@+id/call_qty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/state_on_value"
         android:layout_marginTop="36dp"
         android:text="@string/call_qty" />
 
@@ -21,10 +30,17 @@
         android:id="@+id/call_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/call_qty"
-        android:layout_below="@+id/call_qty"
-        android:layout_marginTop="24dp"
+        android:layout_alignLeft="@id/call_qty"
+        android:layout_below="@id/call_qty"
+        android:layout_marginTop="36dp"
         android:text="@string/call_time" />
+    
+    <ToggleButton
+        android:id="@+id/state_on_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/state_on"
+        android:layout_alignParentRight="true" />
     
     <EditText
         android:id="@+id/call_qty_value"
@@ -75,5 +91,6 @@
         android:layout_alignBottom="@+id/save_button"
         android:layout_alignParentRight="true"
         android:text="@string/delete" />
+
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.mmarvick.phonealert;
+package com.mmarvick.urgentcall;
 
 import android.provider.BaseColumns;
 

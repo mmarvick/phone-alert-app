@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="User Settings" />
+        android:text="Specific User Settings" />
     
     <Button
         android:id="@+id/default_settings_button"

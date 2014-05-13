@@ -1,6 +1,7 @@
-package com.mmarvick.phonealert;
+package com.mmarvick.urgentcall;
 
-import com.mmarvick.phonealert.RulesDbContract.RulesEntry;
+import com.mmarvick.phonealert.R;
+import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class UserSettingActivity extends ActionBarActivity {
 
@@ -25,6 +27,7 @@ public class UserSettingActivity extends ActionBarActivity {
 	public final String SETTING_CALL_TIME = "callTime";
 	private EditText mCallQty;
 	private EditText mCallTime; 
+	private ToggleButton mStateButton;
 	private SharedPreferences mPrefs;
 	private Editor mEditor;
 	private RulesDbHelper dbHelper;
@@ -42,6 +45,7 @@ public class UserSettingActivity extends ActionBarActivity {
 		mEditor = mPrefs.edit();
 		mCallQty = (EditText) findViewById(R.id.call_qty_value);
 		mCallTime = (EditText) findViewById(R.id.call_time_value);
+		mStateButton = (ToggleButton) findViewById(R.id.state_on_value);
 		Button mSaveButton = (Button) findViewById(R.id.save_button);
 		Button mCancelButton = (Button) findViewById(R.id.cancel_button);
 		Button mDeleteButton = (Button) findViewById(R.id.delete_button);
@@ -82,6 +86,31 @@ public class UserSettingActivity extends ActionBarActivity {
 				delete();
 			}
 		});
+	}	
+	
+	private void loadData() {
+		if (!dbHelper.isInDb(lookup)) {
+			mCallQty.setText("3");
+			mCallTime.setText("15");
+			mStateButton.setChecked(true);
+		} else {
+			mCallQty.setText("" + dbHelper.getCallsAllowed(lookup));
+			mCallTime.setText("" + dbHelper.getCallMins(lookup));
+			mStateButton.setChecked(dbHelper.getStateOn(lookup));
+		}
+	}
+
+	private void saveData() {
+		dbHelper.makeContact(lookup, Integer.parseInt(mCallQty.getText().toString()), Integer.parseInt(mCallTime.getText().toString()), mStateButton.isChecked());
+	}
+	
+	private void delete() {
+		if (dbHelper.isInDb(lookup) && !lookup.equals(RulesEntry.LOOKUP_DEFAULT)) {
+			dbHelper.deleteContact(lookup);
+			finish();
+		} else if (lookup.equals(RulesEntry.LOOKUP_DEFAULT)) {
+			Toast.makeText(getApplicationContext(), "Cannot delete default settings", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	@Override
@@ -102,39 +131,4 @@ public class UserSettingActivity extends ActionBarActivity {
 	        	return true;
 	    }
 	}	
-	
-	private void loadData() {
-		if (lookup != null) {
-			if (!dbHelper.isInDb(lookup)) {
-				mCallQty.setText("3");
-				mCallTime.setText("15");
-			} else {
-				mCallQty.setText("" + dbHelper.getCallsAllowed(lookup));
-				mCallTime.setText("" + dbHelper.getCallMins(lookup));
-			}
-		} else {
-			mCallQty.setText("" + mPrefs.getInt(SETTING_CALL_QTY, 3));
-			mCallTime.setText("" + mPrefs.getInt(SETTING_CALL_TIME, 15));
-			Toast.makeText(getApplicationContext(), "Pulling from default file", Toast.LENGTH_LONG).show();
-		}
-	}
-
-	private void saveData() {
-		if (lookup != null) {
-			dbHelper.makeContact(lookup, Integer.parseInt(mCallQty.getText().toString()), Integer.parseInt(mCallTime.getText().toString()));
-		} else {
-			mEditor.putInt(SETTING_CALL_QTY, Integer.parseInt(mCallQty.getText().toString()));
-			mEditor.putInt(SETTING_CALL_TIME, Integer.parseInt(mCallTime.getText().toString()));
-			mEditor.commit();	
-		}
-	}
-	
-	private void delete() {
-		if (dbHelper.isInDb(lookup) && !lookup.equals(RulesEntry.LOOKUP_DEFAULT)) {
-			dbHelper.deleteContact(lookup);
-			finish();
-		} else if (lookup.equals(RulesEntry.LOOKUP_DEFAULT)) {
-			Toast.makeText(getApplicationContext(), "Cannot delete default settings", Toast.LENGTH_LONG).show();
-		}
-	}
 }

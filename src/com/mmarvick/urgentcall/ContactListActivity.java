@@ -1,4 +1,6 @@
-package com.mmarvick.phonealert;
+package com.mmarvick.urgentcall;
+
+import com.mmarvick.phonealert.R;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;

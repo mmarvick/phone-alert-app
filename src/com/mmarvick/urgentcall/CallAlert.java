@@ -1,9 +1,10 @@
-package com.mmarvick.phonealert;
+package com.mmarvick.urgentcall;
 
 import java.util.Date;
 
-import com.mmarvick.phonealert.RulesDbContract.RulesEntry;
 
+
+import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,23 +33,37 @@ public class CallAlert extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		
-		if (prefs.getBoolean("state", true)) {
-		
-			if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-				saveState(context);
-				String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-				//Toast.makeText(context, incomingNumber, Toast.LENGTH_LONG).show();
+				
+		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
+			saveState(context);
+			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+			//Toast.makeText(context, incomingNumber, Toast.LENGTH_LONG).show();
+			if (isOn(context, incomingNumber)) {
 				int allowedMins = allowedMins(context, incomingNumber);
 				int allowedCalls = allowedCalls(context, incomingNumber);
 				int called = timesCalled(context, incomingNumber, allowedMins);
 				if (called >= allowedCalls - 1) {
 					alertAction(context);
-				} 
-			} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
-				resetAction(context);
+				} 					
 			}
+		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
+			resetAction(context);
 		}
+	}
+	
+	private boolean isOn(Context context, String incomingNumber) {
+		if (prefs.getBoolean("state", true)) {
+			RulesDbHelper dbHelper = new RulesDbHelper(context);
+			String lookup = dbHelper.getLookupFromNumber(incomingNumber);			
+			
+			if (lookup!=null && dbHelper.isInDb(lookup)) {
+				return dbHelper.getStateOn(lookup);
+			} else {
+				return dbHelper.getStateOn(RulesEntry.LOOKUP_DEFAULT);
+			}
+		};
+		
+		return false;
 	}
 	
 	private int allowedCalls(Context context, String incomingNumber) {
@@ -56,9 +71,6 @@ public class CallAlert extends BroadcastReceiver {
 		
 		RulesDbHelper dbHelper = new RulesDbHelper(context);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-		
-		//if (lookup!=null)
-		//	Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
 
 		if (lookup!=null && dbHelper.isInDb(lookup)) {
 			calls = dbHelper.getCallsAllowed(lookup);
@@ -74,14 +86,11 @@ public class CallAlert extends BroadcastReceiver {
 		
 		RulesDbHelper dbHelper = new RulesDbHelper(context);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-		
-		//if (lookup!=null)
-		//	Toast.makeText(context, lookup, Toast.LENGTH_LONG).show();
 
 		if (lookup!=null && dbHelper.isInDb(lookup)) {
 			mins = dbHelper.getCallMins(lookup);
 		} else {
-			mins = prefs.getInt(SETTING_CALL_TIME, 15);
+			mins = dbHelper.getCallMins(RulesEntry.LOOKUP_DEFAULT);;
 		}
 		
 		return mins;

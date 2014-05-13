@@ -1,9 +1,8 @@
-package com.mmarvick.phonealert;
+package com.mmarvick.urgentcall;
 
 import java.util.ArrayList;
 
-import com.mmarvick.phonealert.RulesDbContract.RulesEntry;
-
+import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -85,6 +84,13 @@ public class RulesDbHelper {
 		return cursor.getString(cursor.getColumnIndex(Phone.LOOKUP_KEY));
 	}
 	
+	public boolean getStateOn(String lookup) {
+		String[] columns = new String[] {RulesEntry.COLUMN_NAME_ON};
+		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, columns, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
+		c.moveToFirst();
+		return c.getInt(c.getColumnIndex(RulesEntry.COLUMN_NAME_ON)) == 1;
+	}
+	
 	public int getCallsAllowed(String lookup) {
 		return getXAllowed(lookup, RulesEntry.COLUMN_NAME_CALLS);
 	}
@@ -100,7 +106,7 @@ public class RulesDbHelper {
 		return c.getInt(c.getColumnIndex(column));
 	}
 	
-	public void makeContact(String lookup, int callsAllowed, int callMins) {
+	public void makeContact(String lookup, int callsAllowed, int callMins, boolean stateOn) {
 		if (!isInDb(lookup)) {
 			ContentValues values = new ContentValues();
 			values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);
@@ -111,6 +117,7 @@ public class RulesDbHelper {
 		values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);
 		values.put(RulesEntry.COLUMN_NAME_CALLS, callsAllowed);
 		values.put(RulesEntry.COLUMN_NAME_MINS, callMins);
+		values.put(RulesEntry.COLUMN_NAME_ON, (stateOn? 1:0));
 		mRulesDb.update(RulesEntry.TABLE_NAME, values, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
 	}
 	

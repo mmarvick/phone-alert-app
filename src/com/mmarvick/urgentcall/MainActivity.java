@@ -1,6 +1,6 @@
 package com.mmarvick.urgentcall;
 
-import com.mmarvick.phonealert.R;
+import com.mmarvick.urgentcall.R;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

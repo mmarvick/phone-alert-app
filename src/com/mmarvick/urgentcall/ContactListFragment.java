@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.NavUtils;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -111,9 +112,9 @@ public class ContactListFragment extends ListFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
-	        case R.id.action_bug:
-	        	Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://github.com/mmarvick/phone-alert-app/issues"));
-	        	startActivity(i);
+	    	case android.R.id.home:
+	    		NavUtils.navigateUpFromSameTask(getActivity());
+	    		return true;
 	        default:
 	        	return true;
 	    }

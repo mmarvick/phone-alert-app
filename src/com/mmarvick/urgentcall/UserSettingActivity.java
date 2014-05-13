@@ -124,9 +124,9 @@ public class UserSettingActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
-	        case R.id.action_bug:
-	        	Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://github.com/mmarvick/phone-alert-app/issues"));
-	        	startActivity(i);
+	    	case android.R.id.home:
+	    		finish();
+	    		return true;
 	        default:
 	        	return true;
 	    }

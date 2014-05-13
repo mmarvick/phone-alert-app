@@ -22,7 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListSettings extends ListFragment {
+public class ContactListFragment extends ListFragment {
 	
 	private final int REQUEST_CONTACT = 1;
 	
@@ -64,7 +64,7 @@ public class ListSettings extends ListFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 
-				Intent i = new Intent(getActivity().getApplicationContext(), SettingActivity.class);
+				Intent i = new Intent(getActivity().getApplicationContext(), UserSettingActivity.class);
 				i.putExtra("lookup", mContactLookups[position]);
 				startActivity(i);
 			};	
@@ -111,7 +111,7 @@ public class ListSettings extends ListFragment {
 				Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
 				cursor.moveToFirst();
 				String lookup = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-				Intent i = new Intent(getActivity().getApplicationContext(), SettingActivity.class);
+				Intent i = new Intent(getActivity().getApplicationContext(), UserSettingActivity.class);
 				i.putExtra("lookup", lookup);
 				startActivity(i);
 

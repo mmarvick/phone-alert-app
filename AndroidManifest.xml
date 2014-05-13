@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mmarvick.phonealert"
-    android:versionCode="3"
-    android:versionName="0.3" >
+    android:versionCode="4"
+    android:versionName="0.4" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -18,7 +18,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <receiver android:name="com.mmarvick.phonealert.CallAlert" >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mmarvick.phonealert.SettingActivity"
+            android:name="com.mmarvick.phonealert.UserSettingActivity"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity

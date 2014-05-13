@@ -6,7 +6,7 @@
  
     <fragment
         android:tag="list_fragment"
-        android:name="com.mmarvick.phonealert.ListSettings"
+        android:name="com.mmarvick.phonealert.ContactListFragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
     />

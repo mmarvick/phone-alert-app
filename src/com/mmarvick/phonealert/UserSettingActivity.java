@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SettingActivity extends ActionBarActivity {
+public class UserSettingActivity extends ActionBarActivity {
 
 	public final String SETTING_CALL_QTY = "callQty";
 	public final String SETTING_CALL_TIME = "callTime";
@@ -32,7 +32,7 @@ public class SettingActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_setting);
+		setContentView(R.layout.activity_user_setting);
 		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mEditor = mPrefs.edit();

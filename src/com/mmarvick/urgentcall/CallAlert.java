@@ -52,6 +52,7 @@ public class CallAlert extends BroadcastReceiver {
 					alertAction(context);
 				} 					
 			}
+		//TODO: MAKE THIS WORK FOR WHEN CALL IS IGNORED
 		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
 			resetAction(context);
 		}

@@ -9,9 +9,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.PhoneLookup;
+import android.widget.Toast;
 
 public class RulesDbHelper {
 	public static final String NAME_DEFAULT = "Default settings";
@@ -72,14 +75,15 @@ public class RulesDbHelper {
 		return c.getCount() > 0;
 	}
 	
-	//TODO: This might fail based on how the number is saved in the database
 	public String getLookupFromNumber(String phoneNumber) {
-		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
+		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+		Cursor cursor = mContentResolver.query(uri,
 				new String[] {Phone.LOOKUP_KEY},
-				Phone.NUMBER + "=?",
-				new String[] {phoneNumber}, null);
-		if (cursor.getCount() == 0)
-			return null;
+				null, null, null);
+		if (cursor.getCount() == 0) {
+			return "NOT FUCKING HERE!";
+			//return null;
+		}
 		cursor.moveToFirst();
 		return cursor.getString(cursor.getColumnIndex(Phone.LOOKUP_KEY));
 	}

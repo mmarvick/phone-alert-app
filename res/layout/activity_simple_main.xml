@@ -20,19 +20,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:textStyle="bold"
-        android:text="Status???" />    
+        android:text="Status???"
+        android:textAppearance="?android:attr/textAppearanceMedium" />    
 
     <SeekBar
         android:id="@+id/simpleState"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="81dp" />
+        android:layout_below="@id/simpleStateText"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp" />
 
 
 

@@ -28,16 +28,22 @@ public class CallAlert extends BroadcastReceiver {
 	public final String SETTING_CALL_QTY = "callQty";
 	public final String SETTING_CALL_TIME = "callTime";
 	private SharedPreferences prefs;
+	SharedPreferences.Editor editor;
+	RulesDbHelper dbHelper;
+	AudioManager audio;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		editor = prefs.edit();
+		dbHelper = new RulesDbHelper(context);
+		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 				
 		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 			saveState(context);
 			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-			//Toast.makeText(context, incomingNumber, Toast.LENGTH_LONG).show();
+			
 			if (isOn(context, incomingNumber)) {
 				int allowedMins = allowedMins(context, incomingNumber);
 				int allowedCalls = allowedCalls(context, incomingNumber);
@@ -51,10 +57,11 @@ public class CallAlert extends BroadcastReceiver {
 		}
 	}
 	
-	private boolean isOn(Context context, String incomingNumber) {
+	/*private boolean isOn(Context context, String incomingNumber) {
 		if (prefs.getBoolean("state", true)) {
 			RulesDbHelper dbHelper = new RulesDbHelper(context);
 			String lookup = dbHelper.getLookupFromNumber(incomingNumber);			
+			Toast.makeText(context, lookup, Toast.LENGTH_SHORT).show();
 			
 			if (lookup!=null && dbHelper.isInDb(lookup)) {
 				return dbHelper.getStateOn(lookup);
@@ -64,19 +71,39 @@ public class CallAlert extends BroadcastReceiver {
 		};
 		
 		return false;
+	}*/
+	
+	private boolean isOn(Context context, String incomingNumber) {
+		int state = prefs.getInt(SimpleMainActivity.STATE, SimpleMainActivity.STATE_ON);
+		switch(state) {
+		
+		case SimpleMainActivity.STATE_ON:
+			return true;
+		case SimpleMainActivity.STATE_OFF:
+			return false;
+		case SimpleMainActivity.STATE_ON_WHITELIST:
+			String lookup = dbHelper.getLookupFromNumber(incomingNumber);
+			if (lookup!=null && dbHelper.isInDb(lookup)) {
+				return dbHelper.getStateOn(lookup);
+			} else {
+				return false;
+			}
+		default:
+			return true;
+		
+		}
 	}
 	
 	private int allowedCalls(Context context, String incomingNumber) {
 		int calls;
 		
-		RulesDbHelper dbHelper = new RulesDbHelper(context);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 
-		if (lookup!=null && dbHelper.isInDb(lookup)) {
+		/*if (lookup!=null && dbHelper.isInDb(lookup)) {
 			calls = dbHelper.getCallsAllowed(lookup);
-		} else {
+		} else { */
 			calls = dbHelper.getCallsAllowed(RulesEntry.LOOKUP_DEFAULT);
-		}
+		//}
 		
 		return calls;
 	}
@@ -84,22 +111,18 @@ public class CallAlert extends BroadcastReceiver {
 	private int allowedMins(Context context, String incomingNumber) {
 		int mins;
 		
-		RulesDbHelper dbHelper = new RulesDbHelper(context);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 
-		if (lookup!=null && dbHelper.isInDb(lookup)) {
+		/*if (lookup!=null && dbHelper.isInDb(lookup)) {
 			mins = dbHelper.getCallMins(lookup);
-		} else {
+		} else {*/
 			mins = dbHelper.getCallMins(RulesEntry.LOOKUP_DEFAULT);;
-		}
+		//}
 		
 		return mins;
 	}
 	
 	private void resetAction(Context context) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();
-		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		if (prefs.getBoolean(SETTING_MODE_CHANGED, false)) {
 			audio.setRingerMode(prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL));
 			editor.putBoolean(SETTING_MODE_CHANGED, false);
@@ -108,9 +131,6 @@ public class CallAlert extends BroadcastReceiver {
 	}
 	
 	private int saveState(Context context) {
-		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();	
 		editor.putInt(SETTING_MODE, audio.getRingerMode());
 		editor.putBoolean(SETTING_MODE_CHANGED, true);
 		editor.commit();
@@ -118,7 +138,6 @@ public class CallAlert extends BroadcastReceiver {
 	}
 	
 	private void alertAction(Context context) {
-		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		if (audio.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
 			audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 			audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING), 0);

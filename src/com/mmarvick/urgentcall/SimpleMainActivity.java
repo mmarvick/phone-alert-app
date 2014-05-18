@@ -1,21 +1,26 @@
 package com.mmarvick.urgentcall;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class SimpleMainActivity extends ActionBarActivity {
 
-	public final String STATE = "STATE";
-	public final int STATE_OFF = 0;
-	public final int STATE_ON_WHITELIST = 1;
-	public final int STATE_ON = 2;
+	public final static String STATE = "STATE";
+	public final static int STATE_OFF = 0;
+	public final static int STATE_ON_WHITELIST = 1;
+	public final static int STATE_ON = 2;
 	
 	private SharedPreferences pref;
 	private Editor editor;
@@ -28,20 +33,35 @@ public class SimpleMainActivity extends ActionBarActivity {
 		pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		editor = pref.edit();
 		
+	}
+	
+	@Override
+	protected void onResume() {
 		initializeState();
+		super.onResume();
 	}
 	
 	private void initializeState() {
 		final TextView stateText = (TextView) findViewById(R.id.simpleStateText);
 		final SeekBar state = (SeekBar) findViewById(R.id.simpleState);
 		
-		state.setMax(STATE_ON);
+		final int max = STATE_ON * 100;
+		final int options = STATE_ON + 1;
+		final int snap = max / (options - 1);
+		final int boundary = max / options;
+		
+		state.setMax(max);
 		state.setProgress(pref.getInt(STATE, STATE_ON));
 		setStateText(pref.getInt(STATE, STATE_ON), stateText);
 		
+		//TODO: MAKE SMOOTHER SNAP POINTS
+		
 		state.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) { }
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				int state = seekBar.getProgress() / boundary;
+				seekBar.setProgress(state * snap);
+			}
 			
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) { }
@@ -49,8 +69,9 @@ public class SimpleMainActivity extends ActionBarActivity {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
-				setStateText(progress, stateText);
-				editor.putInt(STATE, progress);
+				int state = seekBar.getProgress()/ boundary;
+				setStateText(state, stateText);
+				editor.putInt(STATE, state);
 				editor.commit();				
 			}
 		});
@@ -76,6 +97,24 @@ public class SimpleMainActivity extends ActionBarActivity {
 			break;
 		}
 		
-
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.simple_main_activity_menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.advanced:
+			Intent i = new Intent(this, MainActivity.class);
+			startActivity(i);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }	

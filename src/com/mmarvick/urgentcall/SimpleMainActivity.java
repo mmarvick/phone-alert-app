@@ -43,24 +43,24 @@ public class SimpleMainActivity extends ActionBarActivity {
 	
 	private void initializeState() {
 		final TextView stateText = (TextView) findViewById(R.id.simpleStateText);
-		final SeekBar state = (SeekBar) findViewById(R.id.simpleState);
+		final SeekBar stateBar = (SeekBar) findViewById(R.id.simpleState);
 		
-		final int max = STATE_ON * 100;
-		final int options = STATE_ON + 1;
-		final int snap = max / (options - 1);
-		final int boundary = max / options;
+		final int res = 100;
+		final int states = STATE_ON + 1;
 		
-		state.setMax(max);
-		state.setProgress(pref.getInt(STATE, STATE_ON));
-		setStateText(pref.getInt(STATE, STATE_ON), stateText);
+		final int max = (states - 1) * res;
 		
-		//TODO: MAKE SMOOTHER SNAP POINTS
+		int state = pref.getInt(STATE, STATE_ON);
 		
-		state.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		stateBar.setMax(max);
+		stateBar.setProgress(state * res);
+		setStateText(state, stateText);
+		
+		stateBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				int state = seekBar.getProgress() / boundary;
-				seekBar.setProgress(state * snap);
+				int state = (seekBar.getProgress() + res/2) / res;
+				seekBar.setProgress(state * res);
 			}
 			
 			@Override
@@ -69,7 +69,7 @@ public class SimpleMainActivity extends ActionBarActivity {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
-				int state = seekBar.getProgress()/ boundary;
+				int state = (seekBar.getProgress() + res/2) / res;
 				setStateText(state, stateText);
 				editor.putInt(STATE, state);
 				editor.commit();				
@@ -80,6 +80,7 @@ public class SimpleMainActivity extends ActionBarActivity {
 	}
 	
 	public void setStateText(int progress, TextView stateText) {
+		Log.e("State:", ""+progress);
 		switch (progress) {
 		case STATE_OFF:
 			stateText.setText("OFF");

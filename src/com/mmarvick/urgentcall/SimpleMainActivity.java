@@ -1,13 +1,18 @@
 package com.mmarvick.urgentcall;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -53,6 +58,7 @@ public class SimpleMainActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		initializeState();
+		checkTwoVersions();		
 		super.onResume();
 	}
 	
@@ -176,6 +182,32 @@ public class SimpleMainActivity extends ActionBarActivity {
 		alertDialog.show();
 		
 		
+	}
+	
+	public void checkTwoVersions() {
+		List<PackageInfo> pkgs = getPackageManager().getInstalledPackages(0);
+		for (int i = 0; i < pkgs.size(); i++) {
+			if (pkgs.get(i).packageName.equals("com.mmarvick.urgentcall_lite")) {
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+				alertDialogBuilder
+					.setTitle("Thank you!")
+					.setMessage("Thank you for installing Urgent Call Pro! Please remove Urgent Call Lite before continuing. Keeping both versions may cause buggy behavior.")
+					.setCancelable(false)
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							Uri pkg_uri = Uri.parse("package:com.mmarvick.urgentcall_lite");
+							Intent removeIntent = new Intent(Intent.ACTION_DELETE, pkg_uri);
+							startActivity(removeIntent);
+						}
+					});
+				
+				AlertDialog alertDialog = alertDialogBuilder.create();
+				alertDialog.show();
+				
+;
+			}
+		}
 	}
 	
 }	

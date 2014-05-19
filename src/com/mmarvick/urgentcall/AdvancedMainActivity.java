@@ -8,6 +8,8 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -67,9 +69,26 @@ public class AdvancedMainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.advanced_main_activity_menu, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int itemId = item.getItemId();
+		if (itemId == R.id.simple) {
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+			edit.putInt(Constants.MODE, Constants.MODE_SIMPLE);
+			edit.commit();
+			
+			Intent i = new Intent(this, MainActivity.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+			return true;				
+		} else {
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }

@@ -29,8 +29,22 @@ public class RulesDbHelper {
 	}
 	
 	public String[] getContactLookups() {
+		return getContactLookups("");
+	}
+	
+	public String[] getContactLookups(boolean on) {
+		String moreWhere = " AND " + RulesDbContract.RulesEntry.COLUMN_NAME_ON + " = ";
+		if (on) {
+			moreWhere += "'1'";
+		} else {
+			moreWhere += "'0'";
+		}
+		return getContactLookups(moreWhere);
+	}
+	
+	private String[] getContactLookups(String moreWhere) {
 		ArrayList<String> contactIDs = new ArrayList<String>();
-		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules WHERE " + RulesDbContract.RulesEntry.COLUMN_NAME_SYS_TYPE + " = '0'", null);
+		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules WHERE " + RulesDbContract.RulesEntry.COLUMN_NAME_SYS_TYPE + " = '0'" + moreWhere, null);
 		
 		c.moveToFirst();
 		
@@ -44,7 +58,7 @@ public class RulesDbHelper {
 		for (int i = 0; i < lookupObjects.length; i++)
 			lookups[i] = (String) lookupObjects[i];
 		
-		return lookups;
+		return lookups;		
 	}
 	
 	public String[] getNames(String[] lookups) {

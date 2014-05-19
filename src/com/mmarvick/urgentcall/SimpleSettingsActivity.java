@@ -1,6 +1,7 @@
 package com.mmarvick.urgentcall;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class SimpleSettingsActivity extends ActionBarActivity {
 		final EditText callTime = (EditText) findViewById(R.id.simple_call_time_value);
 		Button save = (Button) findViewById(R.id.simple_save_button);
 		Button cancel = (Button) findViewById(R.id.simple_cancel_button);
+		Button whiteList = (Button) findViewById(R.id.simple_white_list);
 		
 		final String lookup = RulesDbContract.RulesEntry.LOOKUP_DEFAULT;
 		
@@ -49,7 +51,16 @@ public class SimpleSettingsActivity extends ActionBarActivity {
 				finish();
 				
 			}
-		});		
+		});	
+		
+		whiteList.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(getApplicationContext(), ContactListActivity.class);
+				startActivity(i);
+			}
+		});
 		
 	}	
 }

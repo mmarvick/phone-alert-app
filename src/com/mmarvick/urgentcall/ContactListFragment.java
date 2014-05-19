@@ -5,12 +5,14 @@ import com.mmarvick.urgentcall.R;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,9 +34,13 @@ public class ContactListFragment extends ListFragment {
 	private String[] mContactNames;
 	private String[] mContactLookups;
 	
+	private SharedPreferences pref;
+	
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		
+		pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		
 		getListView().setFooterDividersEnabled(true);
 		
@@ -66,7 +72,7 @@ public class ContactListFragment extends ListFragment {
 					long id) {
 
 				Intent i = new Intent(getActivity().getApplicationContext(), UserSettingActivity.class);
-				i.putExtra("lookup", mContactLookups[position]);
+				i.putExtra("lookup", mContactLookups[position-1]); //Subtract 1 due to header
 				startActivity(i);
 			};	
 		});
@@ -75,7 +81,11 @@ public class ContactListFragment extends ListFragment {
 
 	private void loadContacts() {
 		RulesDbHelper dbHelper = new RulesDbHelper(getActivity().getApplicationContext());
-		mContactLookups = dbHelper.getContactLookups();
+		if (pref.getInt(Constants.MODE, Constants.MODE_SIMPLE) == Constants.MODE_SIMPLE) {
+			mContactLookups = dbHelper.getContactLookups(true);
+		} else {
+			mContactLookups = dbHelper.getContactLookups();
+		}
 		mContactNames = dbHelper.getNames(mContactLookups);
 	}
 	

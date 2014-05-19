@@ -51,7 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="20dp"
         android:layout_alignParentLeft="true"
         android:text="@string/cancel" />
 
@@ -60,7 +61,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/simple_cancel_button"
+        android:layout_marginRight="20dp"
         android:layout_alignParentRight="true"
         android:text="@string/save" />
+
+    <Button
+        android:id="@+id/simple_white_list"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/simple_cancel_button"
+        android:layout_centerHorizontal="true"
+        android:text="Edit white list..." />
 
 </RelativeLayout>

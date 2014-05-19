@@ -19,14 +19,13 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <receiver android:name="com.mmarvick.urgentcall.CallAlert" >
+        <receiver android:name="com.mmarvick.urgentcall.CallAlertBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-
         <activity
-            android:name="com.mmarvick.urgentcall.SimpleMainActivity"
+            android:name="com.mmarvick.urgentcall.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,16 +34,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.mmarvick.urgentcall.SimpleMainActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="com.mmarvick.urgentcall.AdvancedMainActivity"
             android:label="@string/title_activity_main" >
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name="com.mmarvick.urgentcall.UserSettingActivity"

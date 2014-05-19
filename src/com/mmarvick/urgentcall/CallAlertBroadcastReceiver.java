@@ -26,7 +26,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
-public class CallAlert extends BroadcastReceiver {
+public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	private final String TAG = "PhoneAlert";
 	public final String SETTING_MODE = "mode";
 	public final String SETTING_MODE_CHANGED = "modeChanged";

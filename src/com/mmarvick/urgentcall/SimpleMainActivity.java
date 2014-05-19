@@ -1,5 +1,7 @@
 package com.mmarvick.urgentcall;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -10,12 +12,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
 import com.mmarvick.urgentcall.Constants;
 
 public class SimpleMainActivity extends ActionBarActivity {
@@ -118,6 +122,47 @@ public class SimpleMainActivity extends ActionBarActivity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.simple_main_activity_menu, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int itemId = item.getItemId();
+		if (itemId == R.id.advanced) {
+			if (getResources().getBoolean(R.bool.paid_version)) {
+				Editor edit = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+				edit.putInt(Constants.MODE, Constants.MODE_ADVANCED);
+				edit.commit();
+				
+				Intent i = new Intent(this, MainActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(i);
+				return true;				
+			} else {
+				advancedInFree();
+				return true;
+			} 
+		} else {
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	public void advancedInFree() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+		alertDialogBuilder
+			.setTitle("Pro Version Only")
+			.setMessage("This feature only available in the pro version!")
+			.setCancelable(false)
+			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+		
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+		
+		
 	}
 	
 }	

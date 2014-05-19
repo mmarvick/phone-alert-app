@@ -33,14 +33,21 @@ public class AdvancedMainActivity extends ActionBarActivity {
 		Button mUserSettings = (Button) findViewById(R.id.settings_button);
 		Button mDefaultSettings = (Button) findViewById(R.id.default_settings_button);
 		
-		mToggle.setChecked(mPrefs.getBoolean("state", true));
+		int simpleState = mPrefs.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
+		boolean state = !(simpleState == Constants.SIMPLE_STATE_OFF);
+		
+		mToggle.setChecked(state);
 		
 		mToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				mEditor.putBoolean("state", isChecked);
+				if (isChecked) {
+					mEditor.putInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
+				} else {
+					mEditor.putInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_OFF);
+				}
 				mEditor.commit();
 				
 			}

@@ -1,5 +1,7 @@
 package com.mmarvick.urgentcall;
 
+import java.util.Arrays;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -66,7 +68,7 @@ public class SimpleMainActivity extends ActionBarActivity {
 		int state = pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
 		
 		stateBar.setMax(max);
-		stateBar.setProgress(state * res);
+		stateBar.setProgress(getStateIndex(state) * res);
 		setStateText(state, stateText);
 		
 		stateBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -117,6 +119,13 @@ public class SimpleMainActivity extends ActionBarActivity {
 		
 	}
 	
+	public int getStateIndex(int state) {
+		for (int i = 0; i < Constants.SIMPLE_STATES.length; i++) {
+			if (Constants.SIMPLE_STATES[i] == state) return i;
+		}
+		return -1;
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -147,11 +156,15 @@ public class SimpleMainActivity extends ActionBarActivity {
 	}
 	
 	public void advancedInFree() {
+		upgradeDialog("This feature only available in the pro version!");
+	}
+	
+	public void upgradeDialog(String messageText) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
 		alertDialogBuilder
 			.setTitle("Pro Version Only")
-			.setMessage("This feature only available in the pro version!")
+			.setMessage(messageText)
 			.setCancelable(false)
 			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {

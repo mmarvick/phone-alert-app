@@ -63,40 +63,44 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		}
 	}
 	
-	/*private boolean isOn(Context context, String incomingNumber) {
-		if (prefs.getBoolean("state", true)) {
-			RulesDbHelper dbHelper = new RulesDbHelper(context);
-			String lookup = dbHelper.getLookupFromNumber(incomingNumber);			
-			Toast.makeText(context, lookup, Toast.LENGTH_SHORT).show();
-			
-			if (lookup!=null && dbHelper.isInDb(lookup)) {
-				return dbHelper.getStateOn(lookup);
-			} else {
-				return dbHelper.getStateOn(RulesEntry.LOOKUP_DEFAULT);
-			}
-		};
-		
-		return false;
-	}*/
-	
 	private boolean isOn(Context context, String incomingNumber) {
 		int state = prefs.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
-		switch(state) {
+		int mode = prefs.getInt(Constants.MODE, Constants.MODE_SIMPLE);
+		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 		
-		case Constants.SIMPLE_STATE_ON:
-			return true;
-		case Constants.SIMPLE_STATE_OFF:
-			return false;
-		case Constants.SIMPLE_STATE_WHITELIST:
-			String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-			if (lookup!=null && dbHelper.isInDb(lookup)) {
-				return dbHelper.getStateOn(lookup);
-			} else {
+		if (mode == Constants.MODE_SIMPLE) {
+			
+			switch(state) {
+			
+			case Constants.SIMPLE_STATE_ON:
+				return true;
+			case Constants.SIMPLE_STATE_OFF:
 				return false;
+			case Constants.SIMPLE_STATE_WHITELIST:
+				if (lookup!=null && dbHelper.isInDb(lookup)) {
+					return dbHelper.getStateOn(lookup);
+				} else {
+					return false;
+				}
+			case Constants.SIMPLE_STATE_BLACKLIST:
+				if (lookup!=null && dbHelper.isInDb(lookup)) {
+					return dbHelper.getStateOn(lookup);
+				} else {
+					return true;
+				}
+			default:
+				return true;
 			}
-		default:
-			return true;
-		
+		} else {
+			if (state == Constants.SIMPLE_STATE_OFF) {
+				return false;
+			} else {
+				if (lookup!=null && dbHelper.isInDb(lookup)) {
+					return dbHelper.getStateOn(lookup);
+				} else {
+					return dbHelper.getStateOn(RulesEntry.LOOKUP_DEFAULT);
+				}
+			}
 		}
 	}
 	
@@ -104,29 +108,38 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		int calls;
 		
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-
-		/*if (lookup!=null && dbHelper.isInDb(lookup)) {
-			calls = dbHelper.getCallsAllowed(lookup);
-		} else { */
-			calls = dbHelper.getCallsAllowed(RulesEntry.LOOKUP_DEFAULT);
-		//}
+		int defaultCalls = dbHelper.getCallsAllowed(RulesEntry.LOOKUP_DEFAULT);
+		int mode = prefs.getInt(Constants.MODE, Constants.MODE_SIMPLE);
 		
-		return calls;
+		if (mode == Constants.MODE_SIMPLE) {
+			return defaultCalls;
+		} else {
+			if (lookup!=null && dbHelper.isInDb(lookup)) {
+				return dbHelper.getCallsAllowed(lookup);
+			} else {
+				return defaultCalls;
+			}
+		}
 	}
 	
 	private int allowedMins(Context context, String incomingNumber) {
-		int mins;
+		int calls;
 		
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-
-		/*if (lookup!=null && dbHelper.isInDb(lookup)) {
-			mins = dbHelper.getCallMins(lookup);
-		} else {*/
-			mins = dbHelper.getCallMins(RulesEntry.LOOKUP_DEFAULT);;
-		//}
+		int defaultMins = dbHelper.getCallMins(RulesEntry.LOOKUP_DEFAULT);
+		int mode = prefs.getInt(Constants.MODE, Constants.MODE_SIMPLE);
 		
-		return mins;
-	}
+		if (mode == Constants.MODE_SIMPLE) {
+			return defaultMins;
+		} else {
+			if (lookup!=null && dbHelper.isInDb(lookup)) {
+				return dbHelper.getCallMins(lookup);
+			} else {
+				return defaultMins;
+			}
+		}
+	}	
+	
 	
 	private void resetAction(Context context) {
 		if (prefs.getBoolean(SETTING_MODE_CHANGED, false)) {

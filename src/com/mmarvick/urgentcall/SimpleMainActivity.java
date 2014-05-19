@@ -186,8 +186,17 @@ public class SimpleMainActivity extends ActionBarActivity {
 	
 	public void checkTwoVersions() {
 		List<PackageInfo> pkgs = getPackageManager().getInstalledPackages(0);
+		boolean lite = false;
+		boolean pro = false;
+		
 		for (int i = 0; i < pkgs.size(); i++) {
 			if (pkgs.get(i).packageName.equals("com.mmarvick.urgentcall_lite")) {
+				lite = true;
+			} else if (pkgs.get(i).packageName.equals("com.mmarvick.urgentcall_pro")) {
+				pro = true;
+			}
+			
+			if (lite && pro) {
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
 				alertDialogBuilder
@@ -204,8 +213,6 @@ public class SimpleMainActivity extends ActionBarActivity {
 				
 				AlertDialog alertDialog = alertDialogBuilder.create();
 				alertDialog.show();
-				
-;
 			}
 		}
 	}

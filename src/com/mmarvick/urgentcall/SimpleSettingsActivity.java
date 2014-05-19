@@ -14,7 +14,6 @@ import android.widget.EditText;
 
 public class SimpleSettingsActivity extends ActionBarActivity {
 	private SharedPreferences pref;
-	private Editor editor;
 	private RulesDbHelper dbHelper;	
 	
 	@Override
@@ -28,12 +27,18 @@ public class SimpleSettingsActivity extends ActionBarActivity {
 		final EditText callTime = (EditText) findViewById(R.id.simple_call_time_value);
 		Button save = (Button) findViewById(R.id.simple_save_button);
 		Button cancel = (Button) findViewById(R.id.simple_cancel_button);
-		Button whiteList = (Button) findViewById(R.id.simple_white_list);
+		Button customList = (Button) findViewById(R.id.simple_custom_list);
 		
 		final String lookup = RulesDbContract.RulesEntry.LOOKUP_DEFAULT;
 		
 		callQty.setText("" + dbHelper.getCallsAllowed(lookup));
 		callTime.setText("" + dbHelper.getCallMins(lookup));
+		
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		int mode = pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
+		if (!(mode == Constants.SIMPLE_STATE_BLACKLIST || mode == Constants.SIMPLE_STATE_WHITELIST)) {
+			customList.setVisibility(View.GONE);
+		}
 		
 		save.setOnClickListener(new OnClickListener() {
 			
@@ -53,7 +58,7 @@ public class SimpleSettingsActivity extends ActionBarActivity {
 			}
 		});	
 		
-		whiteList.setOnClickListener(new OnClickListener() {
+		customList.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {

@@ -176,6 +176,17 @@ public class SimpleMainActivity extends ActionBarActivity {
 				public void onClick(DialogInterface dialog, int id) {
 					dialog.cancel();
 				}
+			})
+			.setNeutralButton("Upgrade", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					String packageName = "com.mmarvick.urgentcall_pro";
+					try {
+					    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+					} catch (android.content.ActivityNotFoundException anfe) {
+					    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)));
+					}
+				}
 			});
 		
 		AlertDialog alertDialog = alertDialogBuilder.create();
@@ -184,6 +195,12 @@ public class SimpleMainActivity extends ActionBarActivity {
 		
 	}
 	
+	private void setNeutralButton(String string,
+			android.content.DialogInterface.OnClickListener onClickListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public void checkTwoVersions() {
 		List<PackageInfo> pkgs = getPackageManager().getInstalledPackages(0);
 		boolean lite = false;

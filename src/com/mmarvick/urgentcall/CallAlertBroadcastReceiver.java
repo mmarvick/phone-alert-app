@@ -105,8 +105,6 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private int allowedCalls(Context context, String incomingNumber) {
-		int calls;
-		
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 		int defaultCalls = dbHelper.getCallsAllowed(RulesEntry.LOOKUP_DEFAULT);
 		int mode = prefs.getInt(Constants.MODE, Constants.MODE_SIMPLE);
@@ -123,8 +121,6 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private int allowedMins(Context context, String incomingNumber) {
-		int calls;
-		
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 		int defaultMins = dbHelper.getCallMins(RulesEntry.LOOKUP_DEFAULT);
 		int mode = prefs.getInt(Constants.MODE, Constants.MODE_SIMPLE);

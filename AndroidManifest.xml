@@ -68,6 +68,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mmarvick.urgentcall.SimpleMainActivity" />
         </activity>
+        <activity
+            android:name="com.mmarvick.urgentcall.SimpleContactListDisplay"
+            android:label="@string/title_activity_simple_contact_list_display" >
+        </activity>
     </application>
 
 </manifest>

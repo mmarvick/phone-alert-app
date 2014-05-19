@@ -4,6 +4,11 @@ import java.util.Date;
 
 
 
+
+
+
+
+
 import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
 
 import android.content.BroadcastReceiver;
@@ -75,14 +80,14 @@ public class CallAlert extends BroadcastReceiver {
 	}*/
 	
 	private boolean isOn(Context context, String incomingNumber) {
-		int state = prefs.getInt(SimpleMainActivity.STATE, SimpleMainActivity.STATE_ON);
+		int state = prefs.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
 		switch(state) {
 		
-		case SimpleMainActivity.STATE_ON:
+		case Constants.SIMPLE_STATE_ON:
 			return true;
-		case SimpleMainActivity.STATE_OFF:
+		case Constants.SIMPLE_STATE_OFF:
 			return false;
-		case SimpleMainActivity.STATE_ON_WHITELIST:
+		case Constants.SIMPLE_STATE_WHITELIST:
 			String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 			if (lookup!=null && dbHelper.isInDb(lookup)) {
 				return dbHelper.getStateOn(lookup);

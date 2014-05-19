@@ -38,10 +38,10 @@ public class ContactListFragment extends ListFragment {
 		
 		getListView().setFooterDividersEnabled(true);
 		
-		TextView footer = (TextView) getActivity().getLayoutInflater().inflate(R.layout.list_item_contact,  null).findViewById(R.id.list_contact_name);
-		getListView().addFooterView(footer);
+		TextView header = (TextView) getActivity().getLayoutInflater().inflate(R.layout.list_item_contact,  null).findViewById(R.id.list_contact_name);
+		getListView().addHeaderView(header);
 		
-		footer.setOnClickListener(new OnClickListener() {
+		header.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {

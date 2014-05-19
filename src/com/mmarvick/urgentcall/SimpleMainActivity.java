@@ -10,23 +10,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import com.mmarvick.urgentcall.Constants;
 
 public class SimpleMainActivity extends ActionBarActivity {
-
-	public final static String STATE = "STATE";
-	public final static int STATE_OFF = 0;
-	public final static int STATE_ON = 1;
-	public final static int STATE_ON_WHITELIST = 2;
-	public final static int STATE_ON_BLACKLIST = 3;
-	public final static int[] STATES = {STATE_OFF, STATE_ON};
-	
 	private SharedPreferences pref;
 	private Editor editor;
 
@@ -63,11 +55,11 @@ public class SimpleMainActivity extends ActionBarActivity {
 		final SeekBar stateBar = (SeekBar) findViewById(R.id.simpleState);
 		
 		final int res = 100;
-		final int states = STATES.length;
+		final int states = Constants.SIMPLE_STATES.length;
 		
 		final int max = (states - 1) * res;
 		
-		int state = pref.getInt(STATE, STATE_ON);
+		int state = pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
 		
 		stateBar.setMax(max);
 		stateBar.setProgress(state * res);
@@ -86,9 +78,9 @@ public class SimpleMainActivity extends ActionBarActivity {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
-				int state = STATES[(seekBar.getProgress() + res/2) / res];
+				int state = Constants.SIMPLE_STATES[(seekBar.getProgress() + res/2) / res];
 				setStateText(state, stateText);
-				editor.putInt(STATE, state);
+				editor.putInt(Constants.SIMPLE_STATE, state);
 				editor.commit();				
 			}
 		});
@@ -99,19 +91,19 @@ public class SimpleMainActivity extends ActionBarActivity {
 	public void setStateText(int progress, TextView stateText) {
 		Log.e("State:", ""+progress);
 		switch (progress) {
-		case STATE_OFF:
+		case Constants.SIMPLE_STATE_OFF:
 			stateText.setText("OFF");
 			stateText.setTextColor(Color.RED);
 			break;
-		case STATE_ON:
+		case Constants.SIMPLE_STATE_ON:
 			stateText.setText("ON");
 			stateText.setTextColor(Color.GREEN);
 			break;
-		case STATE_ON_WHITELIST:
+		case Constants.SIMPLE_STATE_WHITELIST:
 			stateText.setText("ON FOR WHITELIST");
 			stateText.setTextColor(Color.YELLOW);
 			break;
-		case STATE_ON_BLACKLIST:
+		case Constants.SIMPLE_STATE_BLACKLIST:
 			stateText.setText("ON EXCEPT BLACKLIST");
 			stateText.setTextColor(Color.YELLOW);
 			break;
@@ -121,22 +113,11 @@ public class SimpleMainActivity extends ActionBarActivity {
 		
 	}
 	
-	/*@Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.simple_main_activity_menu, menu);
 		return true;
 	}
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.advanced:
-			Intent i = new Intent(this, MainActivity.class);
-			startActivity(i);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}*/
 }	

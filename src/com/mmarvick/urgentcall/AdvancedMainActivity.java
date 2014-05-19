@@ -14,7 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 import android.support.v7.app.ActionBarActivity;
 
-public class MainActivity extends ActionBarActivity {
+public class AdvancedMainActivity extends ActionBarActivity {
 
 	private SharedPreferences mPrefs;
 	private Editor mEditor;
@@ -22,7 +22,7 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_advanced_main);
 		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mEditor = mPrefs.edit();

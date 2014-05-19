@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mmarvick.urgentcall.MainActivity"
+            android:name="com.mmarvick.urgentcall.AdvancedMainActivity"
             android:label="@string/title_activity_main" >
 
             <!--
@@ -53,7 +53,7 @@
         <activity
             android:name="com.mmarvick.urgentcall.ContactListActivity"
             android:label="@string/title_activity_contact_list"
-            android:parentActivityName="com.mmarvick.urgentcall.MainActivity" >
+            android:parentActivityName="com.mmarvick.urgentcall.AdvancedMainActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

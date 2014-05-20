@@ -38,6 +38,10 @@ public class SimpleSettingsActivity extends ActionBarActivity {
 		int mode = pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
 		if (!(mode == Constants.SIMPLE_STATE_BLACKLIST || mode == Constants.SIMPLE_STATE_WHITELIST)) {
 			customList.setVisibility(View.GONE);
+		} else if (mode == Constants.SIMPLE_STATE_BLACKLIST) {
+			customList.setText("Edit Blacklist...");
+		} else if (mode == Constants.SIMPLE_STATE_WHITELIST) {
+			customList.setText("Edit Whitelist...");
 		}
 		
 		save.setOnClickListener(new OnClickListener() {

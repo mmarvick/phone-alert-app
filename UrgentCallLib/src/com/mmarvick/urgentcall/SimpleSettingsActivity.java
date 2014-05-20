@@ -44,6 +44,7 @@ public class SimpleSettingsActivity extends ActionBarActivity {
 			customList.setText("Edit Whitelist...");
 		}
 		
+		
 		save.setOnClickListener(new OnClickListener() {
 			
 			@Override

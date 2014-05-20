@@ -67,10 +67,9 @@
 
     <Button
         android:id="@+id/simple_custom_list"
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/simple_cancel_button"
+        android:layout_alignBottom="@id/simple_cancel_button"
         android:layout_centerHorizontal="true"
         android:text="Edit white list..." />
 

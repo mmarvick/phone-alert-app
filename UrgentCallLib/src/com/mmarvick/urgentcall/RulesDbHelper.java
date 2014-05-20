@@ -19,10 +19,12 @@ import android.widget.Toast;
 public class RulesDbHelper {
 	public static final String NAME_DEFAULT = "Default settings";
 	
+	Context context;
 	SQLiteDatabase mRulesDb;
 	ContentResolver mContentResolver;
 	
 	public RulesDbHelper(Context context) {
+		this.context = context;
 		RulesDbOpenHelper mDbHelper = new RulesDbOpenHelper(context);
 		mRulesDb = mDbHelper.getReadableDatabase();
 		mContentResolver = context.getContentResolver();

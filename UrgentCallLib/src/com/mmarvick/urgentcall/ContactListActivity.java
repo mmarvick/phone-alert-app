@@ -17,4 +17,9 @@ public class ContactListActivity extends ActionBarActivity {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
+	
+	public void refresh() {
+		finish();
+		startActivity(getIntent());
+	}
 }

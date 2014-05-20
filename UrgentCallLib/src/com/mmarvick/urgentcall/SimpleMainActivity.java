@@ -162,7 +162,7 @@ public class SimpleMainActivity extends ActionBarActivity {
 	}
 	
 	public void advancedInFree() {
-		upgradeDialog("This feature only available in the pro version!");
+		upgradeDialog("Advanced mode allows you to define different call thresholds for different contacts.\n\nThis feature is only available in the pro version!");
 	}
 	
 	public void upgradeDialog(String messageText) {
@@ -218,7 +218,7 @@ public class SimpleMainActivity extends ActionBarActivity {
 
 				alertDialogBuilder
 					.setTitle("Thank you!")
-					.setMessage("Thank you for installing Urgent Call Pro! Please remove Urgent Call Lite before continuing. Keeping both versions may cause buggy behavior.")
+					.setMessage("Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.")
 					.setCancelable(false)
 					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {

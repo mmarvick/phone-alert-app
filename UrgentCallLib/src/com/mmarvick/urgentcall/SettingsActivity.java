@@ -12,14 +12,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class SimpleSettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends ActionBarActivity {
 	private SharedPreferences pref;
 	private RulesDbHelper dbHelper;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_simple_settings);
+		setContentView(R.layout.activity_settings);
 		
 		dbHelper = new RulesDbHelper(getApplicationContext());
 		

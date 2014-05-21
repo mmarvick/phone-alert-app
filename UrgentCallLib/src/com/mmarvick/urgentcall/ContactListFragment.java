@@ -36,7 +36,6 @@ public class ContactListFragment extends ListFragment {
 	
 	private RulesDbHelper dbHelper;
 	private SharedPreferences pref;
-	private int mode;
 	private int state;
 	
 	
@@ -64,7 +63,6 @@ public class ContactListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		mode = pref.getInt(Constants.MODE, Constants.MODE_SIMPLE);
 		state = pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
 		loadContacts();
 		
@@ -76,31 +74,19 @@ public class ContactListFragment extends ListFragment {
 					long id) {
 				String lookup = mContactLookups[position-1]; //Subtract 1 due to header
 				
-				if (mode == Constants.MODE_ADVANCED) { 
-					Intent i = new Intent(getActivity().getApplicationContext(), UserSettingActivity.class);
-					i.putExtra("lookup", lookup); 
-					startActivity(i);
-				} else {
-					dbHelper.deleteContact(lookup);
-					((ContactListActivity) getActivity()).refresh();
-				}
+				dbHelper.deleteContact(lookup);
+				((ContactListActivity) getActivity()).refresh();
 			};	
 		});
-		//if (mode == Constants.MODE_ADVANCED)
-			setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item_contact_adv, mContactNames));
-		//else
-			//setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item_contact_simple, mContactNames));
+
+		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item_contact_adv, mContactNames));
 	}	
 
 	private void loadContacts() {
-		if (mode == Constants.MODE_SIMPLE) {
-			if (state == Constants.SIMPLE_STATE_WHITELIST) { 
-				mContactLookups = dbHelper.getContactLookups(true);
-			} else if (state == Constants.SIMPLE_STATE_BLACKLIST) {
-				mContactLookups = dbHelper.getContactLookups(false);
-			}
-		} else {
-			mContactLookups = dbHelper.getContactLookups();
+		if (state == Constants.SIMPLE_STATE_WHITELIST) { 
+			mContactLookups = dbHelper.getContactLookups(true);
+		} else if (state == Constants.SIMPLE_STATE_BLACKLIST) {
+			mContactLookups = dbHelper.getContactLookups(false);
 		}
 		mContactNames = dbHelper.getNames(mContactLookups);
 	}
@@ -120,20 +106,14 @@ public class ContactListFragment extends ListFragment {
 				Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
 				cursor.moveToFirst();
 				String lookup = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-				
-				if (mode == Constants.MODE_ADVANCED) {
-					Intent i = new Intent(getActivity().getApplicationContext(), UserSettingActivity.class);
-					i.putExtra("lookup", lookup);
-					startActivity(i);
+
+				if (dbHelper.isInDb(lookup)) {
+					//TODO: alert
 				} else {
-					if (dbHelper.isInDb(lookup)) {
-						//alert
-					} else {
-						//just add
-					}
-					
-					dbHelper.makeContact(lookup, 3, 15, (state == Constants.SIMPLE_STATE_WHITELIST));
+					//just add
 				}
+				
+				dbHelper.makeContact(lookup, 3, 15, (state == Constants.SIMPLE_STATE_WHITELIST));
 
 			}
 		}

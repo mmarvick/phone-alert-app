@@ -30,8 +30,6 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	private final String TAG = "PhoneAlert";
 	public final String SETTING_MODE = "mode";
 	public final String SETTING_MODE_CHANGED = "modeChanged";
-	public final String SETTING_CALL_QTY = "callQty";
-	public final String SETTING_CALL_TIME = "callTime";
 	private SharedPreferences prefs;
 	SharedPreferences.Editor editor;
 	RulesDbHelper dbHelper;
@@ -50,9 +48,10 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
 			
 			if (isOn(context, incomingNumber)) {
-				int allowedMins = allowedMins(context, incomingNumber);
-				int allowedCalls = allowedCalls(context, incomingNumber);
+				int allowedMins = allowedMins();
+				int allowedCalls = allowedCalls();
 				int called = timesCalled(context, incomingNumber, allowedMins);
+				//TODO: this is buggy
 				if (called >= allowedCalls - 1) {
 					alertAction(context);
 				} 					
@@ -65,75 +64,40 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	
 	private boolean isOn(Context context, String incomingNumber) {
 		int state = prefs.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
-		int mode = prefs.getInt(Constants.MODE, Constants.MODE_SIMPLE);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 		
-		if (mode == Constants.MODE_SIMPLE) {
-			
-			switch(state) {
-			
-			case Constants.SIMPLE_STATE_ON:
-				return true;
-			case Constants.SIMPLE_STATE_OFF:
-				return false;
-			case Constants.SIMPLE_STATE_WHITELIST:
-				if (lookup!=null && dbHelper.isInDb(lookup)) {
-					return dbHelper.getStateOn(lookup);
-				} else {
-					return false;
-				}
-			case Constants.SIMPLE_STATE_BLACKLIST:
-				if (lookup!=null && dbHelper.isInDb(lookup)) {
-					return dbHelper.getStateOn(lookup);
-				} else {
-					return true;
-				}
-			default:
-				return true;
-			}
-		} else {
-			if (state == Constants.SIMPLE_STATE_OFF) {
-				return false;
-			} else {
-				if (lookup!=null && dbHelper.isInDb(lookup)) {
-					return dbHelper.getStateOn(lookup);
-				} else {
-					return dbHelper.getStateOn(RulesEntry.LOOKUP_DEFAULT);
-				}
-			}
-		}
-	}
-	
-	private int allowedCalls(Context context, String incomingNumber) {
-		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-		int defaultCalls = dbHelper.getCallsAllowed(RulesEntry.LOOKUP_DEFAULT);
-		int mode = prefs.getInt(Constants.MODE, Constants.MODE_SIMPLE);
+		switch(state) {
 		
-		if (mode == Constants.MODE_SIMPLE) {
-			return defaultCalls;
-		} else {
+		case Constants.SIMPLE_STATE_ON:
+			return true;
+		case Constants.SIMPLE_STATE_OFF:
+			return false;
+		case Constants.SIMPLE_STATE_WHITELIST:
 			if (lookup!=null && dbHelper.isInDb(lookup)) {
-				return dbHelper.getCallsAllowed(lookup);
+				return dbHelper.getStateOn(lookup);
 			} else {
-				return defaultCalls;
+				return false;
 			}
+		case Constants.SIMPLE_STATE_BLACKLIST:
+			if (lookup!=null && dbHelper.isInDb(lookup)) {
+				return dbHelper.getStateOn(lookup);
+			} else {
+				return true;
+			}
+		default:
+			return true;
 		}
 	}
 	
-	private int allowedMins(Context context, String incomingNumber) {
-		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
+	private int allowedCalls() {
+		int defaultCalls = dbHelper.getCallsAllowed(RulesEntry.LOOKUP_DEFAULT);	
+		return defaultCalls;
+		
+	}
+	
+	private int allowedMins() {
 		int defaultMins = dbHelper.getCallMins(RulesEntry.LOOKUP_DEFAULT);
-		int mode = prefs.getInt(Constants.MODE, Constants.MODE_SIMPLE);
-		
-		if (mode == Constants.MODE_SIMPLE) {
-			return defaultMins;
-		} else {
-			if (lookup!=null && dbHelper.isInDb(lookup)) {
-				return dbHelper.getCallMins(lookup);
-			} else {
-				return defaultMins;
-			}
-		}
+		return defaultMins;
 	}	
 	
 	

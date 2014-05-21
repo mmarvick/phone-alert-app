@@ -25,7 +25,7 @@
             </intent-filter>
         </receiver>
 
-		<activity
+        <activity
             android:name="com.mmarvick.urgentcall.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
@@ -34,18 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.mmarvick.urgentcall.SimpleMainActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name="com.mmarvick.urgentcall.AdvancedMainActivity"
-            android:label="@string/title_activity_main" >
-        </activity>
-        <activity
-            android:name="com.mmarvick.urgentcall.UserSettingActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
+ 
         <activity
             android:name="com.mmarvick.urgentcall.ContactListActivity"
             android:label="@string/title_activity_contact_list"
@@ -56,10 +45,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mmarvick.urgentcall.MainActivity" />
         </activity>
+        
         <activity
-            android:name="com.mmarvick.urgentcall.SimpleSettingsActivity"
+            android:name="com.mmarvick.urgentcall.SettingsActivity"
             android:label="@string/title_activity_simple_settings"
-            android:parentActivityName="com.mmarvick.urgentcall.SimpleMainActivity" >
+            android:parentActivityName="com.mmarvick.urgentcall.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mmarvick.urgentcall.SimpleMainActivity" />

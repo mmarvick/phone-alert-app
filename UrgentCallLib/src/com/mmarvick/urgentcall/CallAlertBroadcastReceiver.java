@@ -66,6 +66,10 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		int state = prefs.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 		
+		if (SnoozeHelper.isSnoozing(prefs)) {
+			return false;
+		}
+		
 		switch(state) {
 		
 		case Constants.SIMPLE_STATE_ON:

@@ -44,4 +44,22 @@
         android:layout_marginBottom="16dp"
         android:text="Settings" />
 
+    <Button
+        android:id="@+id/button_snooze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/simpleSettingsButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="86dp"
+        android:text="Snooze" />
+
+    <TextView
+        android:id="@+id/textView_snooze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/simpleSettingsButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="33dp"
+        android:text="Snoozing" />
+
 </RelativeLayout>

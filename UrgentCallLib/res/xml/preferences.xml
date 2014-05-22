@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <EditTextPreference
+        android:key="CALL_QTY"
+        android:title="Call Quantity Threshold"
+        android:defaultValue="3"
+        android:inputType="number"
+        />
+    
+    <EditTextPreference
+        android:key="CALL_MIN"
+        android:title="Call Time Threshold"
+        android:defaultValue="15"
+        android:inputType="number"
+        />
+    
+    <ListPreference
+        android:key="LIST_TYPE"
+        android:title="Blacklist/Whitelist Mode"
+        android:dialogTitle="Select mode when Urgent Call is only on for some"
+        android:entries="@array/pref_listType_entries"
+        android:entryValues="@array/pref_listType_values"
+        android:defaultValue="0"
+        />
+    
+    <Preference android:key="EDIT_WHITELIST" 
+        android:title="Edit Whitelist" >
+        
+    </Preference>
+    
+    <Preference android:key="EDIT_BLACKLIST" 
+        android:title="Edit Blacklist" >
+        
+    </Preference>
+
+</PreferenceScreen>

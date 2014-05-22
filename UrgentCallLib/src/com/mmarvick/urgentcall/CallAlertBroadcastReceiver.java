@@ -1,14 +1,6 @@
 package com.mmarvick.urgentcall;
 
 import java.util.Date;
-
-
-
-
-
-
-
-
 import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
 
 import android.content.BroadcastReceiver;
@@ -27,7 +19,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class CallAlertBroadcastReceiver extends BroadcastReceiver {
-	private final String TAG = "PhoneAlert";
 	public final String SETTING_MODE = "mode";
 	public final String SETTING_MODE_CHANGED = "modeChanged";
 	private SharedPreferences prefs;
@@ -48,8 +39,8 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
 			
 			if (isOn(context, incomingNumber)) {
-				int allowedMins = allowedMins();
-				int allowedCalls = allowedCalls();
+				int allowedMins = PrefHelper.getCallMins(context);
+				int allowedCalls = PrefHelper.getCallQty(context);;
 				int called = timesCalled(context, incomingNumber, allowedMins);
 				//TODO: this is buggy
 				if (called >= allowedCalls - 1) {
@@ -63,10 +54,10 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private boolean isOn(Context context, String incomingNumber) {
-		int state = prefs.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
+		int state = PrefHelper.getState(context);
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
 		
-		if (SnoozeHelper.isSnoozing(prefs)) {
+		if (PrefHelper.isSnoozing(context)) {
 			return false;
 		}
 		
@@ -76,34 +67,16 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 			return true;
 		case Constants.SIMPLE_STATE_OFF:
 			return false;
-		case Constants.SIMPLE_STATE_WHITELIST:
+		case Constants.SIMPLE_STATE_SOME:
 			if (lookup!=null && dbHelper.isInDb(lookup)) {
-				return dbHelper.getStateOn(lookup);
+				return dbHelper.getState(lookup);
 			} else {
-				return false;
-			}
-		case Constants.SIMPLE_STATE_BLACKLIST:
-			if (lookup!=null && dbHelper.isInDb(lookup)) {
-				return dbHelper.getStateOn(lookup);
-			} else {
-				return true;
+				return (PrefHelper.getState(context) == Constants.LIST_WHITELIST); 
 			}
 		default:
 			return true;
 		}
 	}
-	
-	private int allowedCalls() {
-		int defaultCalls = dbHelper.getCallsAllowed(RulesEntry.LOOKUP_DEFAULT);	
-		return defaultCalls;
-		
-	}
-	
-	private int allowedMins() {
-		int defaultMins = dbHelper.getCallMins(RulesEntry.LOOKUP_DEFAULT);
-		return defaultMins;
-	}	
-	
 	
 	private void resetAction(Context context) {
 		if (prefs.getBoolean(SETTING_MODE_CHANGED, false)) {

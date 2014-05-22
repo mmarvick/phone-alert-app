@@ -37,6 +37,7 @@ public class MainActivity extends ActionBarActivity
 				implements TimePickerDialog.OnTimeSetListener {
 	private SharedPreferences pref;
 	private Editor editor;
+	private CheckSnooze checker;
 	
 	private TextView stateText;
 
@@ -48,23 +49,32 @@ public class MainActivity extends ActionBarActivity
 		pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		editor = pref.edit();
 		
-		stateText = (TextView) findViewById(R.id.simpleStateText);
-		
-		new CheckSnooze().execute();
-		
+		stateText = (TextView) findViewById(R.id.simpleStateText);	
 	}
 	
 	@Override
 	protected void onResume() {
 		initializeState();
-		checkTwoVersions();		
+		checkTwoVersions();
+		checker = new CheckSnooze();
+		checker.execute();
 		super.onResume();
 	}
 	
+	@Override
+	protected void onPause() {
+		checker.cancel(true);	
+		super.onPause();
+	}
+	
 	private void showSnooze() {
-		TimePickerDialog snooze = new TimePickerDialog(this, this, 0, 0, true);
-		snooze.setTitle("Snooze for...");
-		snooze.show();
+		if (getResources().getBoolean(R.bool.paid_version)) {
+			TimePickerDialog snooze = new TimePickerDialog(this, this, 0, 0, true);
+			snooze.setTitle("Snooze for...");
+			snooze.show();
+		} else {
+			upgradeDialog("Users of Urgent Call Pro can snooze alerts for a period of time.\n\nUsers of Urgent Call Lite must turn the application off and on manually.");
+		}
 	}
 	
 	@Override
@@ -76,7 +86,7 @@ public class MainActivity extends ActionBarActivity
 	}	
 	
 	public void snoozing() {
-		long remaining = SnoozeHelper.snoozeRemaining(pref);
+		long remaining = PrefHelper.snoozeRemaining(getApplicationContext());
 		updateState(remaining);
 	}
 	
@@ -93,7 +103,9 @@ public class MainActivity extends ActionBarActivity
 			long sec = allsec % 60;
 			long min = (allsec % 3600) / 60;
 			long hour = allsec / 3600;
-			snoozeText.setText(hour + ":" + min + ":" + sec);			
+			String extraMin = ((min<10) ? "0" : "");
+			String extraSec = ((sec<10) ? "0" : "");
+			snoozeText.setText(hour + ":" + extraMin + min + ":" + extraSec + sec);			
 		} else {
 			snoozeText.setVisibility(View.GONE);
 		}
@@ -119,7 +131,16 @@ public class MainActivity extends ActionBarActivity
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				int snap = (seekBar.getProgress() + res/2) / res;
+				int state = Constants.SIMPLE_STATES[snap];
+				if (!(getResources().getBoolean(R.bool.paid_version)) && (state == Constants.SIMPLE_STATE_SOME)) {
+					upgradeDialog("Users of Urgent Call Pro may trigger alerts for specific users.\n\n"
+							+ "Urgent Call Lite can only be turned on or off for all users.");
+					state = PrefHelper.getState(getApplicationContext());
+					snap = getStateIndex(state);
+				}
 				seekBar.setProgress(snap * res);
+				editor.putInt(Constants.SIMPLE_STATE, state);
+				editor.commit();				
 			}
 			
 			@Override
@@ -130,8 +151,6 @@ public class MainActivity extends ActionBarActivity
 					boolean fromUser) {
 				int state = Constants.SIMPLE_STATES[(seekBar.getProgress() + res/2) / res];
 				setStateText(state, stateText);
-				editor.putInt(Constants.SIMPLE_STATE, state);
-				editor.commit();				
 			}
 		});
 		
@@ -140,7 +159,7 @@ public class MainActivity extends ActionBarActivity
 	
 	public void setStateText(int progress, TextView stateText) {
 		Log.e("State:", ""+progress);
-		if (SnoozeHelper.isSnoozing(pref)) {
+		if (PrefHelper.isSnoozing(getApplicationContext())) {
 			stateText.setText("SNOOZING");
 			stateText.setTextColor(Color.RED);
 		} else {
@@ -153,12 +172,8 @@ public class MainActivity extends ActionBarActivity
 				stateText.setText("ON");
 				stateText.setTextColor(Color.GREEN);
 				break;
-			case Constants.SIMPLE_STATE_WHITELIST:
-				stateText.setText("ON FOR WHITELIST");
-				stateText.setTextColor(Color.YELLOW);
-				break;
-			case Constants.SIMPLE_STATE_BLACKLIST:
-				stateText.setText("ON EXCEPT BLACKLIST");
+			case Constants.SIMPLE_STATE_SOME:
+				stateText.setText("ON FOR SOME");
 				stateText.setTextColor(Color.YELLOW);
 				break;
 			default:
@@ -254,7 +269,7 @@ public class MainActivity extends ActionBarActivity
 			startActivity(i);
 			return true;
 		} else if (itemId == R.id.action_snooze) {
-			if (SnoozeHelper.isSnoozing(pref)) {
+			if (PrefHelper.isSnoozing(getApplicationContext())) {
 				onTimeSet(null, 0, 0);
 			} else {
 				showSnooze();

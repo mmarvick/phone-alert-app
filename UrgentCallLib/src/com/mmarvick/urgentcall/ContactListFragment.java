@@ -45,6 +45,8 @@ public class ContactListFragment extends ListFragment {
 		pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		dbHelper = new RulesDbHelper(getActivity().getApplicationContext());
 		
+		state = getActivity().getIntent().getIntExtra(Constants.LIST_TYPE, Constants.LIST_WHITELIST);
+		
 		getListView().setFooterDividersEnabled(true);
 		
 		TextView header = (TextView) getActivity().getLayoutInflater().inflate(R.layout.list_item_contact_adv,  null).findViewById(R.id.list_contact_name);
@@ -63,7 +65,6 @@ public class ContactListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		state = pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
 		loadContacts();
 		
 		final ListView lv = getListView();
@@ -83,9 +84,9 @@ public class ContactListFragment extends ListFragment {
 	}	
 
 	private void loadContacts() {
-		if (state == Constants.SIMPLE_STATE_WHITELIST) { 
+		if (state == Constants.LIST_WHITELIST) { 
 			mContactLookups = dbHelper.getContactLookups(true);
-		} else if (state == Constants.SIMPLE_STATE_BLACKLIST) {
+		} else if (state == Constants.LIST_BLACKLIST) {
 			mContactLookups = dbHelper.getContactLookups(false);
 		}
 		mContactNames = dbHelper.getNames(mContactLookups);
@@ -113,28 +114,10 @@ public class ContactListFragment extends ListFragment {
 					//just add
 				}
 				
-				dbHelper.makeContact(lookup, 3, 15, (state == Constants.SIMPLE_STATE_WHITELIST));
+				dbHelper.makeContact(lookup, (state == Constants.LIST_WHITELIST));
 
 			}
 		}
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	    inflater.inflate(R.menu.main, menu);
-	    super.onCreateOptionsMenu(menu,  inflater);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	    	case android.R.id.home:
-	    		NavUtils.navigateUpFromSameTask(getActivity());
-	    		return true;
-	        default:
-	        	return true;
-	    }
 	}		
 	
 }

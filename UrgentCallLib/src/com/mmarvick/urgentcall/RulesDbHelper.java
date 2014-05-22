@@ -17,7 +17,6 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.widget.Toast;
 
 public class RulesDbHelper {
-	public static final String NAME_DEFAULT = "Default settings";
 	
 	Context context;
 	SQLiteDatabase mRulesDb;
@@ -30,13 +29,9 @@ public class RulesDbHelper {
 		mContentResolver = context.getContentResolver();
 	}
 	
-	public String[] getContactLookups() {
-		return getContactLookups("");
-	}
-	
-	public String[] getContactLookups(boolean on) {
-		String moreWhere = " AND " + RulesDbContract.RulesEntry.COLUMN_NAME_ON + " = ";
-		if (on) {
+	public String[] getContactLookups(boolean state) {
+		String moreWhere = RulesDbContract.RulesEntry.COLUMN_NAME_ON + " = ";
+		if (state) {
 			moreWhere += "'1'";
 		} else {
 			moreWhere += "'0'";
@@ -46,7 +41,7 @@ public class RulesDbHelper {
 	
 	private String[] getContactLookups(String moreWhere) {
 		ArrayList<String> contactIDs = new ArrayList<String>();
-		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules WHERE " + RulesDbContract.RulesEntry.COLUMN_NAME_SYS_TYPE + " = '0'" + moreWhere, null);
+		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules WHERE " + moreWhere, null);
 		
 		c.moveToFirst();
 		
@@ -74,16 +69,12 @@ public class RulesDbHelper {
 	}
 	
 	public String getName(String lookup) {
-		if (lookup.equals(RulesEntry.LOOKUP_DEFAULT))
-			return NAME_DEFAULT;
-		else {
-			Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
-					new String[] {Phone.DISPLAY_NAME},
-					Data.LOOKUP_KEY + "=?",
-					new String[] {lookup}, null);
-			cursor.moveToFirst();
-			return cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));	
-		}
+		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
+				new String[] {Phone.DISPLAY_NAME},
+				Data.LOOKUP_KEY + "=?",
+				new String[] {lookup}, null);
+		cursor.moveToFirst();
+		return cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));	
 	}
 	
 	public boolean isInDb(String lookup) {
@@ -96,48 +87,26 @@ public class RulesDbHelper {
 		Cursor cursor = mContentResolver.query(uri,
 				new String[] {Phone.LOOKUP_KEY},
 				null, null, null);
-		if (cursor.getCount() == 0) {
-			return "NOT FUCKING HERE!";
-			//return null;
-		}
 		cursor.moveToFirst();
 		return cursor.getString(cursor.getColumnIndex(Phone.LOOKUP_KEY));
 	}
 	
-	public boolean getStateOn(String lookup) {
+	public boolean getState(String lookup) {
 		String[] columns = new String[] {RulesEntry.COLUMN_NAME_ON};
 		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, columns, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
 		c.moveToFirst();
 		return c.getInt(c.getColumnIndex(RulesEntry.COLUMN_NAME_ON)) == 1;
 	}
 	
-	public int getCallsAllowed(String lookup) {
-		return getXAllowed(lookup, RulesEntry.COLUMN_NAME_CALLS);
-	}
-	
-	public int getCallMins(String lookup) {
-		return getXAllowed(lookup, RulesEntry.COLUMN_NAME_MINS);
-	}	
-	
-	private int getXAllowed(String lookup, String column) {
-		String[] columns = new String[] {column};
-		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, columns, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
-		c.moveToFirst();
-		return c.getInt(c.getColumnIndex(column));
-	}
-	
-	public void makeContact(String lookup, int callsAllowed, int callMins, boolean stateOn) {
+	public void makeContact(String lookup, boolean state) {
 		if (!isInDb(lookup)) {
 			ContentValues values = new ContentValues();
-			values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);
-			values.put(RulesEntry.COLUMN_NAME_SYS_TYPE, 0);			
+			values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);		
 			mRulesDb.insert(RulesEntry.TABLE_NAME, null, values);
 		} 
 		ContentValues values = new ContentValues();
 		values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);
-		values.put(RulesEntry.COLUMN_NAME_CALLS, callsAllowed);
-		values.put(RulesEntry.COLUMN_NAME_MINS, callMins);
-		values.put(RulesEntry.COLUMN_NAME_ON, (stateOn? 1:0));
+		values.put(RulesEntry.COLUMN_NAME_ON, (state? 1:0));
 		mRulesDb.update(RulesEntry.TABLE_NAME, values, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
 	}
 	

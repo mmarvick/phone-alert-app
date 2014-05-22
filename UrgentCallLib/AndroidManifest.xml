@@ -45,6 +45,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mmarvick.urgentcall.SettingsActivity" />
+            <intent-filter>
+                <action android:name="com.mmarvick.urgentcall.list.launch" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>            
         </activity>
         
         <activity
@@ -56,6 +60,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mmarvick.urgentcall.MainActivity" />
+
         </activity>
         
         <receiver android:name = "com.mmarvick.urgentcall.SnoozeReset" >

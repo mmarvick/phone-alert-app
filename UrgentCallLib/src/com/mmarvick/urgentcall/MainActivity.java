@@ -50,24 +50,6 @@ public class MainActivity extends ActionBarActivity
 		
 		stateText = (TextView) findViewById(R.id.simpleStateText);
 		
-		Button settings = (Button) findViewById(R.id.simpleSettingsButton);
-		Button snooze = (Button) findViewById(R.id.button_snooze);
-		
-		settings.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-				startActivity(i);	
-			}
-		});
-		
-		snooze.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showSnooze();
-			}
-		});
-		
 		new CheckSnooze().execute();
 		
 	}
@@ -90,12 +72,15 @@ public class MainActivity extends ActionBarActivity
 		long snoozeTime = SystemClock.elapsedRealtime() + hours * 3600000 + minutes * 60000;
 		editor.putLong(Constants.SNOOZE_TIME, snoozeTime);
 		editor.commit();
-		setCountdown(hours*3600000 + minutes*60000);
-		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON), stateText);
+		updateState(hours*3600000 + minutes*60000);
 	}	
 	
 	public void snoozing() {
 		long remaining = SnoozeHelper.snoozeRemaining(pref);
+		updateState(remaining);
+	}
+	
+	public void updateState(long remaining) {
 		setCountdown(remaining);
 		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON), stateText);
 	}
@@ -250,6 +235,34 @@ public class MainActivity extends ActionBarActivity
 				AlertDialog alertDialog = alertDialogBuilder.create();
 				alertDialog.show();
 			}
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    // Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_activity_actions, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    int itemId = item.getItemId();
+		if (itemId == R.id.action_settings) {
+			Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+			startActivity(i);
+			return true;
+		} else if (itemId == R.id.action_snooze) {
+			if (SnoozeHelper.isSnoozing(pref)) {
+				onTimeSet(null, 0, 0);
+			} else {
+				showSnooze();
+			}
+			return true;
+		}
+		else {
+			return super.onOptionsItemSelected(item);
 		}
 	}
 	

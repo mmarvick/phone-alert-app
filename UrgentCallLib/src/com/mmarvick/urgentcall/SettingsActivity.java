@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -25,8 +26,6 @@ public class SettingsActivity extends ActionBarActivity {
 		
 		final EditText callQty = (EditText) findViewById(R.id.simple_call_qty_value);
 		final EditText callTime = (EditText) findViewById(R.id.simple_call_time_value);
-		Button save = (Button) findViewById(R.id.simple_save_button);
-		Button cancel = (Button) findViewById(R.id.simple_cancel_button);
 		Button customList = (Button) findViewById(R.id.simple_custom_list);
 		
 		final String lookup = RulesDbContract.RulesEntry.LOOKUP_DEFAULT;
@@ -44,24 +43,26 @@ public class SettingsActivity extends ActionBarActivity {
 			customList.setText("Edit Whitelist...");
 		}
 		
-		
-		save.setOnClickListener(new OnClickListener() {
+		callQty.setOnFocusChangeListener(new OnFocusChangeListener() {
 			
 			@Override
-			public void onClick(View v) {
-				dbHelper.makeContact(lookup, Integer.parseInt(callQty.getText().toString()), Integer.parseInt(callTime.getText().toString()), true);
-				finish();
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!(hasFocus)) {
+					dbHelper.makeContact(lookup, Integer.parseInt(callQty.getText().toString()), Integer.parseInt(callTime.getText().toString()), true);
+				}
 			}
 		});
 		
-		cancel.setOnClickListener(new OnClickListener() {
+		callTime.setOnFocusChangeListener(new OnFocusChangeListener() {
 			
 			@Override
-			public void onClick(View v) {
-				finish();
-				
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!(hasFocus)) {
+					dbHelper.makeContact(lookup, Integer.parseInt(callQty.getText().toString()), Integer.parseInt(callTime.getText().toString()), true);
+				}
 			}
-		});	
+		});
+		
 		
 		customList.setOnClickListener(new OnClickListener() {
 

@@ -22,7 +22,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
-        android:text="Status???"
         android:textAppearance="?android:attr/textAppearanceMedium" />    
 
     <SeekBar
@@ -35,31 +34,12 @@
         android:layout_marginRight="40dp"
         android:layout_marginTop="20dp" />
 
-    <Button
-        android:id="@+id/simpleSettingsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="Settings" />
-
-    <Button
-        android:id="@+id/button_snooze"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/simpleSettingsButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="86dp"
-        android:text="Snooze" />
-
     <TextView
         android:id="@+id/textView_snooze"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/simpleSettingsButton"
+        android:layout_below="@id/simpleState"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="33dp"
-        android:text="Snoozing" />
+        android:layout_marginTop="33dp" />
 
 </RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:urgentcall="http://schemas.android.com/apk/res-auto" >
+    
+ 	<item android:id="@+id/action_snooze"
+	    android:icon="@drawable/ic_action_time"
+	    android:title="@string/action_settings"
+	    urgentcall:showAsAction="ifRoom" />
+    
+	<item android:id="@+id/action_settings"
+	    android:icon="@drawable/ic_action_settings"
+	    android:title="@string/action_settings"
+	    urgentcall:showAsAction="ifRoom" />    
+</menu>

@@ -49,17 +49,13 @@ public class ContactListFragment extends ListFragment {
 		
 		getListView().setFooterDividersEnabled(true);
 		
-		TextView header = (TextView) getActivity().getLayoutInflater().inflate(R.layout.list_item_contact_adv,  null).findViewById(R.id.list_contact_name);
-		getListView().addHeaderView(header);
-		
-		header.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				createUser();
-			}
-		});
 		super.onActivityCreated(savedInstanceState);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		 setHasOptionsMenu(true);
+		 return super.onCreateView(inflater, container, savedInstanceState);
 	}
 	
 	@Override
@@ -73,7 +69,7 @@ public class ContactListFragment extends ListFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				String lookup = mContactLookups[position-1]; //Subtract 1 due to header
+				String lookup = mContactLookups[position];
 				
 				dbHelper.deleteContact(lookup);
 				((ContactListActivity) getActivity()).refresh();
@@ -118,6 +114,25 @@ public class ContactListFragment extends ListFragment {
 
 			}
 		}
-	}		
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	    // Inflate the menu items for use in the action bar
+	    inflater.inflate(R.menu.list_actions, menu);
+	    super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    int itemId = item.getItemId();
+		if (itemId == R.id.action_add_contact) {
+			createUser();
+			return true;
+		}
+		else {
+			return super.onOptionsItemSelected(item);
+		}
+	}	
 	
 }

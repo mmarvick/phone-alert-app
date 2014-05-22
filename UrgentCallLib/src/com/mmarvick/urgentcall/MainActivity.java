@@ -40,6 +40,9 @@ public class MainActivity extends ActionBarActivity
 	private CheckSnooze checker;
 	
 	private TextView stateText;
+	private TextView footerText1;
+	private TextView footerText2;
+	private TextView footerText3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,9 @@ public class MainActivity extends ActionBarActivity
 		editor = pref.edit();
 		
 		stateText = (TextView) findViewById(R.id.simpleStateText);	
+		footerText1 = (TextView) findViewById(R.id.textView_footer1);
+		footerText2 = (TextView) findViewById(R.id.textView_footer2);
+		footerText3 = (TextView) findViewById(R.id.textView_footer3);		
 	}
 	
 	@Override
@@ -87,12 +93,14 @@ public class MainActivity extends ActionBarActivity
 	
 	public void snoozing() {
 		long remaining = PrefHelper.snoozeRemaining(getApplicationContext());
-		updateState(remaining);
+		if (remaining > 0) {
+			updateState(remaining);
+		}
 	}
 	
 	public void updateState(long remaining) {
 		setCountdown(remaining);
-		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON), stateText);
+		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
 	}
 	
 	public void setCountdown(long time) {
@@ -125,7 +133,7 @@ public class MainActivity extends ActionBarActivity
 		
 		stateBar.setMax(max);
 		stateBar.setProgress(getStateIndex(state) * res);
-		setStateText(state, stateText);
+		setStateText(state);
 		
 		stateBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
@@ -140,7 +148,7 @@ public class MainActivity extends ActionBarActivity
 				}
 				seekBar.setProgress(snap * res);
 				editor.putInt(Constants.SIMPLE_STATE, state);
-				editor.commit();				
+				editor.commit();	
 			}
 			
 			@Override
@@ -150,15 +158,14 @@ public class MainActivity extends ActionBarActivity
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				int state = Constants.SIMPLE_STATES[(seekBar.getProgress() + res/2) / res];
-				setStateText(state, stateText);
+				setStateText(state);
 			}
 		});
 		
 			
 	}
 	
-	public void setStateText(int progress, TextView stateText) {
-		Log.e("State:", ""+progress);
+	public void setStateText(int progress) {
 		if (PrefHelper.isSnoozing(getApplicationContext())) {
 			stateText.setText("SNOOZING");
 			stateText.setTextColor(Color.RED);
@@ -167,20 +174,38 @@ public class MainActivity extends ActionBarActivity
 			case Constants.SIMPLE_STATE_OFF:
 				stateText.setText("OFF");
 				stateText.setTextColor(Color.RED);
+				footerText1.setText("No calls");
+				footerText2.setText("will trigger an alert");
+				footerText3.setText("");				
 				break;
 			case Constants.SIMPLE_STATE_ON:
 				stateText.setText("ON");
 				stateText.setTextColor(Color.GREEN);
+				footerText1.setText(callsMin());
+				footerText2.setText("will trigger an alert");
+				footerText3.setText("for any user");
 				break;
 			case Constants.SIMPLE_STATE_SOME:
 				stateText.setText("ON FOR SOME");
 				stateText.setTextColor(Color.YELLOW);
+				footerText1.setText(callsMin());
+				footerText2.setText("will trigger an alert");
+				if (PrefHelper.getListMode(getApplicationContext()) == Constants.LIST_WHITELIST) {
+					footerText3.setText("for whitelisted users only");
+				} else {
+					footerText3.setText("for all except blacklisted users");
+				}
 				break;
 			default:
 				break;
 			}
-		}
-		
+		}	
+	}
+	
+	public String callsMin() {
+		int calls = PrefHelper.getCallQty(getApplicationContext());
+		int min = PrefHelper.getCallMins(getApplicationContext());
+		return calls + " calls in " + min + " minutes";
 	}
 	
 	public int getStateIndex(int state) {

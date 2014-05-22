@@ -5,7 +5,7 @@
     tools:context="${packageName}.${activityClass}" >
     
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textView_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -18,7 +18,7 @@
         android:id="@+id/simpleStateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/textView_heading"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
@@ -41,5 +41,38 @@
         android:layout_below="@id/simpleState"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp" />
+
+    <TextView
+        android:id="@+id/textView_footer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/simpleState"
+        android:layout_marginTop="80dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />   
+          
+    <TextView
+        android:id="@+id/textView_footer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textView_footer1"
+        android:layout_marginTop="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" /> 
+           
+    <TextView
+        android:id="@+id/textView_footer3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textView_footer2"
+        android:layout_marginTop="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" /> 
+        
+
+    
+    
+
+
 
 </RelativeLayout>

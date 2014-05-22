@@ -34,8 +34,6 @@ public class PrefHelper {
 	public static long snoozeRemaining(Context context) {
 		long snoozeTime = getPrefs(context).getLong(Constants.SNOOZE_TIME, SystemClock.elapsedRealtime());
 		long clockTime = SystemClock.elapsedRealtime();
-		Log.e("Snooze Time:", "" + snoozeTime);
-		Log.e("Clock Time:", "" + clockTime);
 		return snoozeTime - clockTime;
 	}	
 	

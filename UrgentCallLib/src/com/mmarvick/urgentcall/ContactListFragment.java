@@ -35,14 +35,12 @@ public class ContactListFragment extends ListFragment {
 	private String[] mContactLookups;
 	
 	private RulesDbHelper dbHelper;
-	private SharedPreferences pref;
 	private int state;
 	
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		
-		pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		dbHelper = new RulesDbHelper(getActivity().getApplicationContext());
 		
 		state = getActivity().getIntent().getIntExtra(Constants.LIST_TYPE, Constants.LIST_WHITELIST);

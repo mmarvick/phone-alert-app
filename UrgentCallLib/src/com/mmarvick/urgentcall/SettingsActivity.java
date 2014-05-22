@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,21 +17,57 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity 
+			implements OnSharedPreferenceChangeListener {
+	PreferenceScreen prefScreen;
+	Preference whitelistPref;
+	Preference blacklistPref;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         
-        Preference whitelistPref = findPreference("EDIT_WHITELIST");
+        prefScreen = getPreferenceScreen();
+        
+        whitelistPref = findPreference("EDIT_WHITELIST");
         Intent whitelistIntent = new Intent(this, ContactListActivity.class);
         whitelistIntent.putExtra(Constants.LIST_TYPE, Constants.LIST_WHITELIST);
         whitelistPref.setIntent(whitelistIntent);
         
-        Preference blacklistPref = findPreference("EDIT_BLACKLIST");
+        blacklistPref = findPreference("EDIT_BLACKLIST");
         Intent blacklistIntent = new Intent(this, ContactListActivity.class);
         blacklistIntent.putExtra(Constants.LIST_TYPE, Constants.LIST_BLACKLIST);
         blacklistPref.setIntent(blacklistIntent);
     }
+    
+    @Override
+    public void onResume() {
+    	setWhiteBlackList();
+    	prefScreen.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    	super.onResume();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        prefScreen.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }    
+    
+    private void setWhiteBlackList() {
+    	if (PrefHelper.getListMode(getApplicationContext()) == Constants.LIST_WHITELIST) {
+    		prefScreen.removePreference(blacklistPref);
+    		prefScreen.addPreference(whitelistPref);
+    	} else {
+    		prefScreen.removePreference(whitelistPref);
+    		prefScreen.addPreference(blacklistPref);    		
+    	}
+    }
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		setWhiteBlackList();
+	}
    
 }

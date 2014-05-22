@@ -88,35 +88,25 @@ public class MainActivity extends ActionBarActivity
 		long snoozeTime = SystemClock.elapsedRealtime() + hours * 3600000 + minutes * 60000;
 		editor.putLong(Constants.SNOOZE_TIME, snoozeTime);
 		editor.commit();
-		updateState(hours*3600000 + minutes*60000);
+		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
 	}	
 	
 	public void snoozing() {
 		long remaining = PrefHelper.snoozeRemaining(getApplicationContext());
 		if (remaining > 0) {
-			updateState(remaining);
+			setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
 		}
 	}
 	
-	public void updateState(long remaining) {
-		setCountdown(remaining);
-		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
-	}
-	
-	public void setCountdown(long time) {
-		TextView snoozeText = (TextView) findViewById(R.id.textView_snooze);
-		if (time > 0) {
-			snoozeText.setVisibility(View.VISIBLE);
-			long allsec = time / 1000;
-			long sec = allsec % 60;
-			long min = (allsec % 3600) / 60;
-			long hour = allsec / 3600;
-			String extraMin = ((min<10) ? "0" : "");
-			String extraSec = ((sec<10) ? "0" : "");
-			snoozeText.setText(hour + ":" + extraMin + min + ":" + extraSec + sec);			
-		} else {
-			snoozeText.setVisibility(View.GONE);
-		}
+	public String setCountdown() {
+		long time = PrefHelper.snoozeRemaining(getApplicationContext());
+		long allsec = time / 1000;
+		long sec = allsec % 60;
+		long min = (allsec % 3600) / 60;
+		long hour = allsec / 3600;
+		String extraMin = ((min<10) ? "0" : "");
+		String extraSec = ((sec<10) ? "0" : "");
+		return hour + ":" + extraMin + min + ":" + extraSec + sec;			
 		
 	}
 	
@@ -169,6 +159,9 @@ public class MainActivity extends ActionBarActivity
 		if (PrefHelper.isSnoozing(getApplicationContext())) {
 			stateText.setText("SNOOZING");
 			stateText.setTextColor(Color.RED);
+			footerText1.setText("No alerts for");
+			footerText2.setText(setCountdown());
+			footerText3.setText("");
 		} else {
 			switch (progress) {
 			case Constants.SIMPLE_STATE_OFF:
@@ -183,7 +176,7 @@ public class MainActivity extends ActionBarActivity
 				stateText.setTextColor(Color.GREEN);
 				footerText1.setText(callsMin());
 				footerText2.setText("will trigger an alert");
-				footerText3.setText("for any user");
+				footerText3.setText("from any caller");
 				break;
 			case Constants.SIMPLE_STATE_SOME:
 				stateText.setText("ON FOR SOME");
@@ -191,9 +184,9 @@ public class MainActivity extends ActionBarActivity
 				footerText1.setText(callsMin());
 				footerText2.setText("will trigger an alert");
 				if (PrefHelper.getListMode(getApplicationContext()) == Constants.LIST_WHITELIST) {
-					footerText3.setText("for whitelisted users only");
+					footerText3.setText("from whitelisted callers only");
 				} else {
-					footerText3.setText("for all except blacklisted users");
+					footerText3.setText("from all except blacklisted callers");
 				}
 				break;
 			default:

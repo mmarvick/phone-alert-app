@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:range="http://schemas.android.com/apk/lib/com.mmarvick.urgentcall"
     android:key="PREFERENCES" >
-    <EditTextPreference
+    <com.mmarvick.urgentcall.MinMaxEditTextPreference
         android:key="CALL_QTY"
         android:title="Call Quantity Threshold"
         android:defaultValue="3"
         android:inputType="number"
+        range:min="1"
         />
     
-    <EditTextPreference
+    <com.mmarvick.urgentcall.MinMaxEditTextPreference
         android:key="CALL_MIN"
         android:title="Call Time Threshold"
         android:defaultValue="15"
         android:inputType="number"
+        range:min="1"
         />
     
     <ListPreference

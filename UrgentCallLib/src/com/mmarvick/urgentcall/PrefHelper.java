@@ -18,14 +18,17 @@ public class PrefHelper {
 	}
 	
 	public static int getCallQty(Context context) {
-		String qty = getPrefs(context).getString(Constants.CALL_QTY, "" + Constants.CALL_QTY_DEFAULT);
-		return Integer.parseInt(qty);
+		return getCallValue(context, Constants.CALL_QTY);
 		
 	}
 	
 	public static int getCallMins(Context context) {
-		String min = getPrefs(context).getString(Constants.CALL_MIN, "" + Constants.CALL_MIN_DEFAULT);
-		return Integer.parseInt(min);
+		return getCallValue(context, Constants.CALL_MIN);
+	}	
+	
+	public static int getCallValue(Context context, String name) {
+		String value = getPrefs(context).getString(name, "" + Constants.CALL_MIN_DEFAULT);
+		return Integer.parseInt(value);
 	}	
 	
 	public static void setCallValue(Context context, String name, int value) {

@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 public class EditTextPrompt {
@@ -18,6 +19,11 @@ public class EditTextPrompt {
 		alertDialogBuilder.setView(promptView);
 		
 		final EditText userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
+		String setText = "" + PrefHelper.getCallValue(context, name);
+		userInput.setText(setText);
+		userInput.setSelection(setText.length());
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 		
 		alertDialogBuilder
 			.setTitle(title)

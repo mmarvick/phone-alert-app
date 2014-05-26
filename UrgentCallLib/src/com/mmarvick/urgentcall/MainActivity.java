@@ -33,6 +33,9 @@ import android.widget.TimePicker;
 
 import com.mmarvick.urgentcall.Constants;
 
+// Launcher icons created with Android Asset Studio
+// http://romannurik.github.io/AndroidAssetStudio
+
 public class MainActivity extends ActionBarActivity
 				implements TimePickerDialog.OnTimeSetListener {
 	private SharedPreferences pref;

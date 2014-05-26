@@ -76,10 +76,16 @@ public class MainActivity extends ActionBarActivity
 		super.onPause();
 	}
 	
+	public void check() {
+		long remaining = PrefHelper.snoozeRemaining(getApplicationContext());
+		if (remaining > 0) {
+			setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
+		}
+	}	
+	
 	private void showSnooze() {
 		if (getResources().getBoolean(R.bool.paid_version)) {
-			TimePickerDialog snooze = new TimePickerDialog(this, this, 0, 0, true);
-			snooze.setTitle("Snooze for...");
+			SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
 			snooze.show();
 		} else {
 			upgradeDialog("Users of Urgent Call Pro can snooze alerts for a period of time.\n\nUsers of Urgent Call Lite must turn the application off and on manually.");
@@ -88,18 +94,14 @@ public class MainActivity extends ActionBarActivity
 	
 	@Override
 	public void onTimeSet(TimePicker view, int hours, int minutes) {
-		long snoozeTime = SystemClock.elapsedRealtime() + hours * 3600000 + minutes * 60000;
+		long snoozeTime = SystemClock.elapsedRealtime() + hours * 3600000 + minutes * 60000 + 500;
+			//TODO: Hack! Added 1/2 s to make snooze time show up correctly when first set.
 		editor.putLong(Constants.SNOOZE_TIME, snoozeTime);
 		editor.commit();
 		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
 	}	
 	
-	public void snoozing() {
-		long remaining = PrefHelper.snoozeRemaining(getApplicationContext());
-		if (remaining > 0) {
-			setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
-		}
-	}
+
 	
 	public String setCountdown() {
 		long time = PrefHelper.snoozeRemaining(getApplicationContext());
@@ -308,12 +310,10 @@ public class MainActivity extends ActionBarActivity
 		protected Boolean doInBackground(Void... none) {
 			long i = 1;
 			while (i > 0) {
-				runOnUiThread(new Runnable() {public void run() {snoozing();}});
+				runOnUiThread(new Runnable() {public void run() {check();}});
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 			return true;

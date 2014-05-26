@@ -4,7 +4,7 @@
     android:key="PREFERENCES" >
     <com.mmarvick.urgentcall.MinMaxEditTextPreference
         android:key="CALL_QTY"
-        android:title="Call Quantity Threshold"
+        android:title="Number of Calls"
         android:defaultValue="3"
         android:inputType="number"
         range:min="1"
@@ -12,7 +12,7 @@
     
     <com.mmarvick.urgentcall.MinMaxEditTextPreference
         android:key="CALL_MIN"
-        android:title="Call Time Threshold"
+        android:title="Minutes for Incoming Calls"
         android:defaultValue="15"
         android:inputType="number"
         range:min="1"

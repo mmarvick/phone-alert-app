@@ -61,10 +61,10 @@ public class MainActivity extends ActionBarActivity
 	@Override
 	protected void onResume() {
 		initializeState();
-		checkTwoVersions();
 		checker = new CheckSnooze();
 		checker.execute();
-		super.onResume();
+		checkTwoVersions();
+		super.onResume();		
 	}
 	
 	@Override
@@ -168,21 +168,21 @@ public class MainActivity extends ActionBarActivity
 				stateText.setText("OFF");
 				stateText.setTextColor(Color.RED);
 				footerText1.setText("No calls");
-				footerText2.setText("will trigger an alert");
+				footerText2.setText("trigger an alert");
 				footerText3.setText("");				
 				break;
 			case Constants.SIMPLE_STATE_ON:
 				stateText.setText("ON");
 				stateText.setTextColor(Color.GREEN);
 				footerText1.setText(callsMin());
-				footerText2.setText("will trigger an alert");
+				footerText2.setText("trigger an alert");
 				footerText3.setText("from any caller");
 				break;
 			case Constants.SIMPLE_STATE_SOME:
 				stateText.setText("ON FOR SOME");
 				stateText.setTextColor(Color.YELLOW);
 				footerText1.setText(callsMin());
-				footerText2.setText("will trigger an alert");
+				footerText2.setText("trigger an alert");
 				if (PrefHelper.getListMode(getApplicationContext()) == Constants.LIST_WHITELIST) {
 					footerText3.setText("from whitelisted callers only");
 				} else {
@@ -249,25 +249,27 @@ public class MainActivity extends ActionBarActivity
 			} else if (pkgs.get(i).packageName.equals("com.mmarvick.urgentcall_pro")) {
 				pro = true;
 			}
+		}
+		
+		if (lite && pro) {
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			
-			if (lite && pro) {
-				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-				alertDialogBuilder
-					.setTitle("Thank you!")
-					.setMessage("Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.")
-					.setCancelable(false)
-					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							Uri pkg_uri = Uri.parse("package:com.mmarvick.urgentcall_lite");
-							Intent removeIntent = new Intent(Intent.ACTION_DELETE, pkg_uri);
-							startActivity(removeIntent);
-						}
-					});
-				
-				AlertDialog alertDialog = alertDialogBuilder.create();
-				alertDialog.show();
-			}
+			Log.e("Test", "Makes it to the builder");
+			
+			alertDialogBuilder
+				.setTitle("Thank you!")
+				.setMessage("Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.")
+				.setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						Uri pkg_uri = Uri.parse("package:com.mmarvick.urgentcall_lite");
+						Intent removeIntent = new Intent(Intent.ACTION_DELETE, pkg_uri);
+						startActivity(removeIntent);
+					}
+				});
+			
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
 		}
 	}
 

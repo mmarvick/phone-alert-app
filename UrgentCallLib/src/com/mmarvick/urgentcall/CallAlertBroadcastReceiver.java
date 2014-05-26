@@ -21,8 +21,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class CallAlertBroadcastReceiver extends BroadcastReceiver {
-	public final String SETTING_MODE = "mode";
-	public final String SETTING_MODE_CHANGED = "modeChanged";
+	public final String SETTING_VOLUME = "volume";
+	public final String SETTING_VOLUME_CHANGED = "volumeChanged";
 	private SharedPreferences prefs;
 	SharedPreferences.Editor editor;
 	RulesDbHelper dbHelper;
@@ -110,16 +110,16 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		Intent ringService = new Intent(context, RingService.class);
 		context.stopService(ringService);
 		
-		if (prefs.getBoolean(SETTING_MODE_CHANGED, false)) {
-			audio.setRingerMode(prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL));
-			editor.putBoolean(SETTING_MODE_CHANGED, false);
+		if (prefs.getBoolean(SETTING_VOLUME_CHANGED, false)) {
+			audio.setStreamVolume(AudioManager.STREAM_RING, prefs.getInt(SETTING_VOLUME, audio.getStreamMaxVolume(AudioManager.STREAM_RING)), 0);
+			editor.putBoolean(SETTING_VOLUME_CHANGED, false);
 			editor.commit();
 		}
 	}
 	
 	private int saveState(Context context) {
-		editor.putInt(SETTING_MODE, audio.getRingerMode());
-		editor.putBoolean(SETTING_MODE_CHANGED, true);
+		editor.putInt(SETTING_VOLUME, audio.getStreamVolume(AudioManager.STREAM_RING));
+		editor.putBoolean(SETTING_VOLUME_CHANGED, true);
 		editor.commit();
 		return audio.getRingerMode();
 	}

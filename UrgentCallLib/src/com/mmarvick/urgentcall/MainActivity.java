@@ -77,10 +77,7 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	public void check() {
-		long remaining = PrefHelper.snoozeRemaining(getApplicationContext());
-		if (remaining > 0) {
-			setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
-		}
+		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
 	}	
 	
 	private void showSnooze() {
@@ -94,10 +91,9 @@ public class MainActivity extends ActionBarActivity
 	
 	@Override
 	public void onTimeSet(TimePicker view, int hours, int minutes) {
-		long snoozeTime = SystemClock.elapsedRealtime() + hours * 3600000 + minutes * 60000 + 500;
+		long snoozeTime = hours * 3600000 + minutes * 60000 + 500;
 			//TODO: Hack! Added 1/2 s to make snooze time show up correctly when first set.
-		editor.putLong(Constants.SNOOZE_TIME, snoozeTime);
-		editor.commit();
+		PrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
 		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
 	}	
 	
@@ -295,7 +291,8 @@ public class MainActivity extends ActionBarActivity
 			return true;
 		} else if (itemId == R.id.action_snooze) {
 			if (PrefHelper.isSnoozing(getApplicationContext())) {
-				onTimeSet(null, 0, 0);
+				PrefHelper.setSnoozeTime(getApplicationContext(), 0);
+				check();
 			} else {
 				showSnooze();
 			}

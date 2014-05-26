@@ -2,6 +2,7 @@ package com.mmarvick.urgentcall;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -26,6 +27,12 @@ public class PrefHelper {
 		String min = getPrefs(context).getString(Constants.CALL_MIN, "" + Constants.CALL_MIN_DEFAULT);
 		return Integer.parseInt(min);
 	}	
+	
+	public static void setSnoozeTime(Context context, long remaining) {
+		Editor editor = getPrefs(context).edit();
+		editor.putLong(Constants.SNOOZE_TIME, SystemClock.elapsedRealtime() + remaining);
+		editor.commit();
+	}
 	
 	public static boolean isSnoozing(Context context) {
 		return (snoozeRemaining(context) > 0);

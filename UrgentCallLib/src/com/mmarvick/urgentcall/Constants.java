@@ -20,4 +20,7 @@ public class Constants {
 	public final static int LIST_NONE = 0;
 	public final static int LIST_WHITELIST = 1;
 	public final static int LIST_BLACKLIST = 2;
+	
+	public final static String SETTING_VOLUME = "VOLUME";
+	public final static String SETTING_VOLUME_CHANGED = "VOLUME_CHANGED";
 }

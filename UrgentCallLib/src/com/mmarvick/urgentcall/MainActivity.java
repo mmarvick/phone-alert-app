@@ -17,7 +17,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.EditTextPreference;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -43,9 +45,14 @@ public class MainActivity extends ActionBarActivity
 	private CheckSnooze checker;
 	
 	private TextView stateText;
-	private TextView footerText1;
+	private TextView footerTextMain;
 	private TextView footerText2;
 	private TextView footerText3;
+	private TextView footerTextCallsNum;
+	private TextView footerTextCallsText;
+	private TextView footerTextInBetween;
+	private TextView footerTextMinsNum; 
+	private TextView footerTextMinsText; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +63,33 @@ public class MainActivity extends ActionBarActivity
 		editor = pref.edit();
 		
 		stateText = (TextView) findViewById(R.id.simpleStateText);	
-		footerText1 = (TextView) findViewById(R.id.textView_footer1);
+		footerTextMain = (TextView) findViewById(R.id.textView_footer1);
 		footerText2 = (TextView) findViewById(R.id.textView_footer2);
-		footerText3 = (TextView) findViewById(R.id.textView_footer3);		
+		footerText3 = (TextView) findViewById(R.id.textView_footer3);	
+		footerTextCallsNum = (TextView) findViewById(R.id.textView_callsNumber);
+		footerTextCallsText = (TextView) findViewById(R.id.textView_callsText);
+		footerTextMinsNum = (TextView) findViewById(R.id.textView_minsNumber);
+		footerTextMinsText = (TextView) findViewById(R.id.textView_minsText);
+		
+		footerTextCallsNum.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View view) {
+				new EditTextPrompt(MainActivity.this, 1, Integer.MAX_VALUE, Constants.CALL_QTY, 
+						"Number of calls");
+				
+			}
+		});
+		
+		footerTextMinsNum.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View view) {
+				new EditTextPrompt(MainActivity.this, 1, Integer.MAX_VALUE, Constants.CALL_MIN, 
+						"Minutes for calls");
+				
+			}
+		});
 	}
 	
 	@Override
@@ -156,7 +187,7 @@ public class MainActivity extends ActionBarActivity
 		if (PrefHelper.isSnoozing(getApplicationContext())) {
 			stateText.setText("SNOOZING");
 			stateText.setTextColor(Color.RED);
-			footerText1.setText("No alerts for");
+			footerOneText();
 			footerText2.setText(setCountdown());
 			footerText3.setText("");
 		} else {
@@ -166,19 +197,19 @@ public class MainActivity extends ActionBarActivity
 			if (state == Constants.SIMPLE_STATE_OFF) {
 				stateText.setText("OFF");
 				stateText.setTextColor(Color.RED);
-				footerText1.setText("No calls");
+				footerOneText();
 				footerText2.setText("trigger an alert");
 				footerText3.setText("");	
 			} else if (state == Constants.SIMPLE_STATE_ON && list == Constants.LIST_NONE) {
 				stateText.setText("ON");
 				stateText.setTextColor(Color.GREEN);
-				footerText1.setText(callsMin());
+				footerOneText();
 				footerText2.setText("trigger an alert");
 				footerText3.setText("from any caller");
 			} else {
 				stateText.setText("ON FOR SOME");
 				stateText.setTextColor(Color.YELLOW);
-				footerText1.setText(callsMin());
+				footerOneText();
 				footerText2.setText("trigger an alert");
 				if (list == Constants.LIST_WHITELIST) {
 					footerText3.setText("from whitelisted callers only");
@@ -189,10 +220,30 @@ public class MainActivity extends ActionBarActivity
 		}	
 	}
 	
-	public String callsMin() {
-		int calls = PrefHelper.getCallQty(getApplicationContext());
-		int min = PrefHelper.getCallMins(getApplicationContext());
-		return calls + " calls in " + min + " minutes";
+	public void footerOneText() {
+		if (PrefHelper.isSnoozing(getApplicationContext())) {
+			footerTextCallsNum.setText("");
+			footerTextCallsText.setText("");
+			footerTextMinsNum.setText("");
+			footerTextMinsText.setText("");
+			footerTextMain.setText("No alerts for");
+		} else {
+			int state = PrefHelper.getState(getApplicationContext());
+			if (state == Constants.SIMPLE_STATE_OFF) {
+				footerTextCallsNum.setText("");
+				footerTextCallsText.setText("");
+				footerTextMinsNum.setText("");
+				footerTextMinsText.setText("");
+				footerTextMain.setText("No calls");
+			} else {
+				footerTextCallsNum.setText("" + PrefHelper.getCallQty(getApplicationContext()));
+				footerTextCallsText.setText(" calls");
+				footerTextMain.setText(" in ");
+				footerTextMinsNum.setText("" + PrefHelper.getCallMins(getApplicationContext()));
+				footerTextMinsText.setText(" minutes");
+			}
+		}
+
 	}
 	
 	public int getStateIndex(int state) {

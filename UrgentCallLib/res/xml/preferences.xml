@@ -12,7 +12,7 @@
     
     <com.mmarvick.urgentcall.MinMaxEditTextPreference
         android:key="CALL_MIN"
-        android:title="Minutes for Incoming Calls"
+        android:title="Minutes for Calls"
         android:defaultValue="15"
         android:inputType="number"
         range:min="1"

@@ -28,6 +28,12 @@ public class PrefHelper {
 		return Integer.parseInt(min);
 	}	
 	
+	public static void setCallValue(Context context, String name, int value) {
+		Editor editor = getPrefs(context).edit();
+		editor.putString(name, "" + value);
+		editor.commit();
+	}
+	
 	public static void setSnoozeTime(Context context, long remaining) {
 		Editor editor = getPrefs(context).edit();
 		editor.putLong(Constants.SNOOZE_TIME, SystemClock.elapsedRealtime() + remaining);

@@ -43,6 +43,7 @@ public class MainActivity extends ActionBarActivity
 	private SharedPreferences pref;
 	private Editor editor;
 	private CheckSnooze checker;
+	private AlertDialog endSnoozeDialog;
 	
 	private TextView stateText;
 	private TextView footerTextMain;
@@ -90,6 +91,13 @@ public class MainActivity extends ActionBarActivity
 				
 			}
 		});
+		
+		footerText2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				endSnooze();
+			}
+		});
 	}
 	
 	@Override
@@ -109,6 +117,9 @@ public class MainActivity extends ActionBarActivity
 	
 	public void check() {
 		setStateText();
+		if (!PrefHelper.isSnoozing(getApplicationContext()) && endSnoozeDialog != null) {
+			endSnoozeDialog.cancel();
+		}
 	}	
 	
 	private void showSnooze() {
@@ -122,10 +133,40 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 	
+	private void endSnooze() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		
+		alertDialogBuilder
+			.setTitle("Cancel Snooze?")
+			.setMessage("Do you want to cancel the current snooze?")
+			.setCancelable(true)
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					PrefHelper.setSnoozeTime(getApplicationContext(), 0);
+					check();
+				}
+			})
+			.setNeutralButton("No", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+				
+			});
+		
+		endSnoozeDialog = alertDialogBuilder.create();
+		endSnoozeDialog.show();
+
+	}
+	
 	@Override
 	public void onTimeSet(TimePicker view, int hours, int minutes) {
-		long snoozeTime = hours * 3600000 + minutes * 60000 + 500;
-			//TODO: Hack! Added 1/2 s to make snooze time show up correctly when first set.
+		long snoozeTime = hours * 3600000 + minutes * 60000;
+		//TODO: Hack! Added 1/2 s to make snooze time show up correctly when first set.
+		if (snoozeTime > 0) {
+			snoozeTime += 500;
+		}
 		PrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
 		setStateText();
 	}	
@@ -204,13 +245,13 @@ public class MainActivity extends ActionBarActivity
 				stateText.setText("ON");
 				stateText.setTextColor(Color.GREEN);
 				footerOneText();
-				footerText2.setText("trigger an alert");
+				footerText2.setText("triggers an alert");
 				footerText3.setText("from any caller");
 			} else {
 				stateText.setText("ON FOR SOME");
 				stateText.setTextColor(Color.YELLOW);
 				footerOneText();
-				footerText2.setText("trigger an alert");
+				footerText2.setText("triggers an alert");
 				if (list == Constants.LIST_WHITELIST) {
 					footerText3.setText("from whitelisted callers only");
 				} else {
@@ -271,8 +312,6 @@ public class MainActivity extends ActionBarActivity
 		if (lite && pro) {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			
-			Log.e("Test", "Makes it to the builder");
-			
 			alertDialogBuilder
 				.setTitle("Thank you!")
 				.setMessage("Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.")
@@ -307,8 +346,7 @@ public class MainActivity extends ActionBarActivity
 			return true;
 		} else if (itemId == R.id.action_snooze) {
 			if (PrefHelper.isSnoozing(getApplicationContext())) {
-				PrefHelper.setSnoozeTime(getApplicationContext(), 0);
-				check();
+				endSnooze();
 			} else {
 				showSnooze();
 			}

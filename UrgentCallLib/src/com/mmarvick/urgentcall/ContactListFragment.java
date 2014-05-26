@@ -1,6 +1,8 @@
 package com.mmarvick.urgentcall;
 
 
+import java.util.ArrayList;
+
 import com.mmarvick.urgentcall.R;
 
 import android.net.Uri;
@@ -11,6 +13,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -24,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -62,19 +66,9 @@ public class ContactListFragment extends ListFragment {
 		loadContacts();
 		
 		final ListView lv = getListView();
-		lv.setOnItemClickListener(new OnItemClickListener() {
+		ContactsArrayAdapter adapter = new ContactsArrayAdapter(getActivity(), mContactNames);
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
-				String lookup = mContactLookups[position];
-				
-				dbHelper.deleteContact(lookup);
-				((ContactListActivity) getActivity()).refresh();
-			};	
-		});
-
-		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item_contact_adv, mContactNames));
+		setListAdapter(adapter);
 	}	
 
 	private void loadContacts() {
@@ -132,5 +126,44 @@ public class ContactListFragment extends ListFragment {
 			return super.onOptionsItemSelected(item);
 		}
 	}	
+	
+	private class ContactsArrayAdapter extends ArrayAdapter<String> {
+		private final Context context;
+		private final ArrayList<String> values;
+
+		public ContactsArrayAdapter(Context context, String[] values) {
+			super(context, R.layout.list_item_contact, values);
+			this.context = context;
+			this.values = new ArrayList<String>();
+			for (String s : values) {
+				this.values.add(s);
+			}
+		}
+		
+		@Override
+		public View getView(final int position, View view, ViewGroup parent) {
+			LayoutInflater inflater = LayoutInflater.from(context);
+			View rowView = inflater.inflate(R.layout.list_item_contact, null);
+			TextView textView = (TextView) rowView.findViewById(R.id.list_contact_name_simple);
+			textView.setText(values.get(position));
+			
+			ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.list_contact_delete_button);
+			
+			imageButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					String lookup = mContactLookups[position];
+					
+					dbHelper.deleteContact(lookup);
+					((ContactListActivity) getActivity()).refresh();
+					
+				};	
+			});
+			
+			return rowView;
+		}
+		
+	}
 	
 }

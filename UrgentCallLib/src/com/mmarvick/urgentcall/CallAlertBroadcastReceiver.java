@@ -1,6 +1,7 @@
 package com.mmarvick.urgentcall;
 
 import java.util.Date;
+
 import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
 
 import android.content.BroadcastReceiver;
@@ -14,6 +15,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
+import android.sax.StartElementListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -37,7 +39,6 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		Log.e("PHONE STATE:", "" + state);
 				
 		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-			saveState(context);
 			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
 			
 			if (isOn(context, incomingNumber)) {
@@ -46,6 +47,7 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 				int called = timesCalled(context, incomingNumber, allowedMins);
 				//TODO: this is buggy
 				if (called >= allowedCalls - 1) {
+					Log.e("Alert", "Let's try to alert!");
 					alertAction(context);
 				} 					
 			}
@@ -79,7 +81,35 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		}
 	}
 	
+	private int timesCalled(Context context, String incomingNumber, int minutes) {
+		String time = "" + ((new Date()).getTime() - minutes * 60 * 1000);
+		String selection = CallLog.Calls.NUMBER + " = ?";
+		selection += " AND " + CallLog.Calls.DATE + "> ?";
+		String[] selectors = {incomingNumber, time};
+		Cursor calls = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, selectors, null);
+		calls.moveToFirst();
+		int numCalls = 0;
+		while (!calls.isAfterLast()) {
+			calls.moveToNext();
+			numCalls += 1;
+		}
+		return numCalls;
+	}	
+	
+	private void alertAction(Context context) {
+		if (audio.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+			saveState(context);
+			audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING), 0);
+		} else {
+			Intent ringService = new Intent(context, RingService.class);
+			context.startService(ringService);			
+		}
+	}	
+	
 	private void resetAction(Context context) {
+		Intent ringService = new Intent(context, RingService.class);
+		context.stopService(ringService);
+		
 		if (prefs.getBoolean(SETTING_MODE_CHANGED, false)) {
 			audio.setRingerMode(prefs.getInt("mode", AudioManager.RINGER_MODE_NORMAL));
 			editor.putBoolean(SETTING_MODE_CHANGED, false);
@@ -94,34 +124,6 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		return audio.getRingerMode();
 	}
 	
-	private void alertAction(Context context) {
-		if (audio.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-			audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-			audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING), 0);
-			/*Uri toneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-			
-			//TODO: Fix this bug -- sometimes the phone will ring twice, with an echo
-			Ringtone tone = RingtoneManager.getRingtone(context, toneUri);
-			if (audio.getMode() != AudioManager.MODE_RINGTONE && !tone.isPlaying()) {
-				tone.play();
-				Log.d(TAG, "Trigger a ring!");
-			} */
-		} 
-	}
-	
-	private int timesCalled(Context context, String incomingNumber, int minutes) {
-		String time = "" + ((new Date()).getTime() - minutes * 60 * 1000);
-		String selection = CallLog.Calls.NUMBER + " = ?";
-		selection += " AND " + CallLog.Calls.DATE + "> ?";
-		String[] selectors = {incomingNumber, time};
-		Cursor calls = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, selectors, null);
-		calls.moveToFirst();
-		int numCalls = 0;
-		while (!calls.isAfterLast()) {
-			calls.moveToNext();
-			numCalls += 1;
-		}
-		return numCalls;
-	}
+
 
 }

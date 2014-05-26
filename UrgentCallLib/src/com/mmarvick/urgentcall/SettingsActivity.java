@@ -10,6 +10,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -23,6 +24,7 @@ public class SettingsActivity extends PreferenceActivity
 			implements OnSharedPreferenceChangeListener {
 	PreferenceScreen prefScreen;
 	Preference listSelect;
+	Preference listSelectLite;
 	Preference whitelistPref;
 	Preference blacklistPref;
 	
@@ -45,6 +47,25 @@ public class SettingsActivity extends PreferenceActivity
         blacklistPref.setIntent(blacklistIntent);
         
         listSelect = findPreference("LIST_TYPE");
+        listSelectLite = findPreference("LIST_TYPE_LITE");
+        
+        if (getResources().getBoolean(R.bool.paid_version)) {
+        	prefScreen.removePreference(listSelectLite);
+        }
+        else {
+        	prefScreen.removePreference(listSelect);
+        	
+        	listSelectLite.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        		
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					UpgradeDialog.upgradeDialog(SettingsActivity.this, 
+							"Users of Urgent Call Pro can filter users with a whitelist or blacklist.\n\n"
+									+ "Users of Urgent Call Lite must leave the app on or off for all users.");
+					return true;
+				}
+			});
+        }
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar ab = getActionBar();
@@ -66,17 +87,23 @@ public class SettingsActivity extends PreferenceActivity
     }    
     
     private void setWhiteBlackList() {
-    	if (!(getResources().getBoolean(R.bool.paid_version))) {
+    	int mode = PrefHelper.getListMode(getApplicationContext());
+    	
+    	if (mode == Constants.LIST_NONE) {
     		blacklistPref.setEnabled(false);
     		whitelistPref.setEnabled(false);
-    		listSelect.setEnabled(false);
+    	} else {
+    		blacklistPref.setEnabled(true);
+    		whitelistPref.setEnabled(true);
+    		
     	}
-    	if (PrefHelper.getListMode(getApplicationContext()) == Constants.LIST_WHITELIST) {
+    	
+    	if (mode == Constants.LIST_BLACKLIST) {
+    		prefScreen.removePreference(whitelistPref);
+    		prefScreen.addPreference(blacklistPref);
+    	} else {
     		prefScreen.removePreference(blacklistPref);
     		prefScreen.addPreference(whitelistPref);
-    	} else {
-    		prefScreen.removePreference(whitelistPref);
-    		prefScreen.addPreference(blacklistPref);    		
     	}
     }
 

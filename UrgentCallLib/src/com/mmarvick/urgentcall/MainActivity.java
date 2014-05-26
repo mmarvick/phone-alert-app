@@ -77,7 +77,7 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	public void check() {
-		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
+		setStateText();
 	}	
 	
 	private void showSnooze() {
@@ -85,7 +85,9 @@ public class MainActivity extends ActionBarActivity
 			SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
 			snooze.show();
 		} else {
-			upgradeDialog("Users of Urgent Call Pro can snooze alerts for a period of time.\n\nUsers of Urgent Call Lite must turn the application off and on manually.");
+			UpgradeDialog.upgradeDialog(this,
+					"Users of Urgent Call Pro can snooze alerts for a period of time.\n\n"
+					+ "Users of Urgent Call Lite mustturn the application off and on manually.");
 		}
 	}
 	
@@ -94,7 +96,7 @@ public class MainActivity extends ActionBarActivity
 		long snoozeTime = hours * 3600000 + minutes * 60000 + 500;
 			//TODO: Hack! Added 1/2 s to make snooze time show up correctly when first set.
 		PrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
-		setStateText(pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON));
+		setStateText();
 	}	
 	
 
@@ -124,22 +126,14 @@ public class MainActivity extends ActionBarActivity
 		
 		stateBar.setMax(max);
 		stateBar.setProgress(getStateIndex(state) * res);
-		setStateText(state);
+		setStateText();
 		
 		stateBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				int snap = (seekBar.getProgress() + res/2) / res;
 				int state = Constants.SIMPLE_STATES[snap];
-				if (!(getResources().getBoolean(R.bool.paid_version)) && (state == Constants.SIMPLE_STATE_SOME)) {
-					upgradeDialog("Users of Urgent Call Pro may trigger alerts for specific users.\n\n"
-							+ "Urgent Call Lite can only be turned on or off for all users.");
-					state = PrefHelper.getState(getApplicationContext());
-					snap = getStateIndex(state);
-				}
 				seekBar.setProgress(snap * res);
-				editor.putInt(Constants.SIMPLE_STATE, state);
-				editor.commit();	
 			}
 			
 			@Override
@@ -149,14 +143,16 @@ public class MainActivity extends ActionBarActivity
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				int state = Constants.SIMPLE_STATES[(seekBar.getProgress() + res/2) / res];
-				setStateText(state);
+				editor.putInt(Constants.SIMPLE_STATE, state);
+				editor.commit();
+				setStateText();
 			}
 		});
 		
 			
 	}
 	
-	public void setStateText(int progress) {
+	public void setStateText() {
 		if (PrefHelper.isSnoozing(getApplicationContext())) {
 			stateText.setText("SNOOZING");
 			stateText.setTextColor(Color.RED);
@@ -164,34 +160,31 @@ public class MainActivity extends ActionBarActivity
 			footerText2.setText(setCountdown());
 			footerText3.setText("");
 		} else {
-			switch (progress) {
-			case Constants.SIMPLE_STATE_OFF:
+			int state = PrefHelper.getState(getApplicationContext());
+			int list = PrefHelper.getListMode(getApplicationContext());
+			
+			if (state == Constants.SIMPLE_STATE_OFF) {
 				stateText.setText("OFF");
 				stateText.setTextColor(Color.RED);
 				footerText1.setText("No calls");
 				footerText2.setText("trigger an alert");
-				footerText3.setText("");				
-				break;
-			case Constants.SIMPLE_STATE_ON:
+				footerText3.setText("");	
+			} else if (state == Constants.SIMPLE_STATE_ON && list == Constants.LIST_NONE) {
 				stateText.setText("ON");
 				stateText.setTextColor(Color.GREEN);
 				footerText1.setText(callsMin());
 				footerText2.setText("trigger an alert");
 				footerText3.setText("from any caller");
-				break;
-			case Constants.SIMPLE_STATE_SOME:
+			} else {
 				stateText.setText("ON FOR SOME");
 				stateText.setTextColor(Color.YELLOW);
 				footerText1.setText(callsMin());
 				footerText2.setText("trigger an alert");
-				if (PrefHelper.getListMode(getApplicationContext()) == Constants.LIST_WHITELIST) {
+				if (list == Constants.LIST_WHITELIST) {
 					footerText3.setText("from whitelisted callers only");
 				} else {
 					footerText3.setText("from all except blacklisted callers");
 				}
-				break;
-			default:
-				break;
 			}
 		}	
 	}
@@ -209,35 +202,7 @@ public class MainActivity extends ActionBarActivity
 		return -1;
 	}
 	
-	public void upgradeDialog(String messageText) {
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-		alertDialogBuilder
-			.setTitle("Pro Version Only")
-			.setMessage(messageText)
-			.setCancelable(false)
-			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-			})
-			.setNeutralButton("Upgrade", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					String packageName = "com.mmarvick.urgentcall_pro";
-					try {
-					    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
-					} catch (android.content.ActivityNotFoundException anfe) {
-					    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)));
-					}
-				}
-			});
-		
-		AlertDialog alertDialog = alertDialogBuilder.create();
-		alertDialog.show();
-		
-		
-	}
 
 	public void checkTwoVersions() {
 		List<PackageInfo> pkgs = getPackageManager().getInstalledPackages(0);

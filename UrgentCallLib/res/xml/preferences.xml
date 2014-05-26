@@ -20,11 +20,16 @@
     
     <ListPreference
         android:key="LIST_TYPE"
-        android:title="Blacklist/Whitelist Mode"
-        android:dialogTitle="Select mode when Urgent Call is only on for some"
+        android:title="Filter Callers"
+        android:dialogTitle="Who should be able to trigger an Urgent Call alert?"
         android:entries="@array/pref_listType_entries"
         android:entryValues="@array/pref_listType_values"
         android:defaultValue="0"
+        />
+    
+    <Preference
+        android:key="LIST_TYPE_LITE"
+        android:title="Filter Callers"
         />
     
     <Preference android:key="EDIT_WHITELIST" 

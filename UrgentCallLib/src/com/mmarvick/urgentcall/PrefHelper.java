@@ -13,21 +13,21 @@ public class PrefHelper {
 	}
 	
 	public static int getListMode(Context context) {
-		String listMode = getPrefs(context).getString(Constants.LIST_TYPE, "" + Constants.LIST_WHITELIST);
+		String listMode = getPrefs(context).getString(Constants.LIST_TYPE, "" + Constants.LIST_NONE);
 		return Integer.parseInt(listMode);
 	}
 	
 	public static int getCallQty(Context context) {
-		return getCallValue(context, Constants.CALL_QTY);
+		return getCallValue(context, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT);
 		
 	}
 	
 	public static int getCallMins(Context context) {
-		return getCallValue(context, Constants.CALL_MIN);
+		return getCallValue(context, Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT);
 	}	
 	
-	public static int getCallValue(Context context, String name) {
-		String value = getPrefs(context).getString(name, "" + Constants.CALL_MIN_DEFAULT);
+	public static int getCallValue(Context context, String name, int def) {
+		String value = getPrefs(context).getString(name, "" + def);
 		return Integer.parseInt(value);
 	}	
 	

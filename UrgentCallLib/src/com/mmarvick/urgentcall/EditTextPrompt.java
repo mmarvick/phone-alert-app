@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 public class EditTextPrompt {
-	public EditTextPrompt(final Context context, final int min, final int max, final String name, final String title) {
+	public EditTextPrompt(final Context context, final int min, final int max, final String name, final int def, final String title) {
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptView = li.inflate(R.layout.edit_text_prompt,  null);
 		
@@ -17,7 +17,7 @@ public class EditTextPrompt {
 		alertDialogBuilder.setView(promptView);
 		
 		final EditText userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
-		String setText = "" + PrefHelper.getCallValue(context, name);
+		String setText = "" + PrefHelper.getCallValue(context, name, def);
 		userInput.setText(setText);
 		userInput.setSelection(setText.length());
 		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

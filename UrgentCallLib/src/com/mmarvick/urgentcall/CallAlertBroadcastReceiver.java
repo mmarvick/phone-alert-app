@@ -33,6 +33,8 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		editor = prefs.edit();
 		dbHelper = new RulesDbHelper(context);
 		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		
+		Log.e("PHONE STATE:", "" + state);
 				
 		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 			saveState(context);
@@ -47,7 +49,6 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 					alertAction(context);
 				} 					
 			}
-		//TODO: MAKE THIS WORK FOR WHEN CALL IS IGNORED
 		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
 			resetAction(context);
 		}

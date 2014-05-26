@@ -87,6 +87,9 @@ public class RulesDbHelper {
 		Cursor cursor = mContentResolver.query(uri,
 				new String[] {Phone.LOOKUP_KEY},
 				null, null, null);
+		if (cursor.getCount() == 0) {
+			return null;
+		}
 		cursor.moveToFirst();
 		return cursor.getString(cursor.getColumnIndex(Phone.LOOKUP_KEY));
 	}

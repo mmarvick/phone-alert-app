@@ -1,7 +1,5 @@
 package com.mmarvick.urgentcall;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -11,23 +9,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.preference.EditTextPreference;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -51,7 +43,6 @@ public class MainActivity extends ActionBarActivity
 	private TextView footerText3;
 	private TextView footerTextCallsNum;
 	private TextView footerTextCallsText;
-	private TextView footerTextInBetween;
 	private TextView footerTextMinsNum; 
 	private TextView footerTextMinsText; 
 
@@ -204,7 +195,6 @@ public class MainActivity extends ActionBarActivity
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				int snap = (seekBar.getProgress() + res/2) / res;
-				int state = Constants.SIMPLE_STATES[snap];
 				seekBar.setProgress(snap * res);
 			}
 			

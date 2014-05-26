@@ -7,15 +7,11 @@ import com.mmarvick.urgentcall.R;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.NavUtils;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,11 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class ContactListFragment extends ListFragment {
@@ -65,9 +58,7 @@ public class ContactListFragment extends ListFragment {
 		super.onResume();
 		loadContacts();
 		
-		final ListView lv = getListView();
 		ContactsArrayAdapter adapter = new ContactsArrayAdapter(getActivity(), mContactNames);
-
 		setListAdapter(adapter);
 	}	
 

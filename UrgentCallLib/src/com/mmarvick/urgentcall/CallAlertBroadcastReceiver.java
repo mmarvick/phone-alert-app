@@ -2,23 +2,16 @@ package com.mmarvick.urgentcall;
 
 import java.util.Date;
 
-import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
-import android.sax.StartElementListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	public final String SETTING_VOLUME = "volume";

@@ -14,7 +14,6 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
-import android.widget.Toast;
 
 public class RulesDbHelper {
 	

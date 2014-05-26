@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class PrefHelper {
 	public static int getState(Context context) {
@@ -55,9 +54,5 @@ public class PrefHelper {
 	
 	private static SharedPreferences getPrefs(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context);
-	}
-	
-	private static SharedPreferences.Editor getEditor(SharedPreferences pref) {
-		return pref.edit();
 	}
 }

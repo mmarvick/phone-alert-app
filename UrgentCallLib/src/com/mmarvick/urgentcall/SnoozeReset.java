@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
 
 public class SnoozeReset extends BroadcastReceiver {
 

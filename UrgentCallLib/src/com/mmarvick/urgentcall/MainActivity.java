@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -86,7 +87,9 @@ public class MainActivity extends ActionBarActivity
 		footerText2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				endSnooze();
+				if (PrefHelper.isSnoozing(getApplicationContext())) {
+					endSnooze();
+				}
 			}
 		});
 	}
@@ -107,9 +110,16 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	public void check() {
+		Log.e("check!", "checked");
 		setStateText();
 		if (!PrefHelper.isSnoozing(getApplicationContext()) && endSnoozeDialog != null) {
 			endSnoozeDialog.cancel();
+		}
+		
+		if (PrefHelper.isSnoozing(getApplicationContext())) {
+			footerText2.setClickable(true);
+		} else {
+			footerText2.setClickable(false);
 		}
 	}	
 	
@@ -215,11 +225,14 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	public void setStateText() {
+		Log.e("Set", "StateTexxt set");
 		if (PrefHelper.isSnoozing(getApplicationContext())) {
+			Log.e("If", "If executes");
 			stateText.setText("SNOOZING");
 			stateText.setTextColor(Color.RED);
 			footerOneText();
 			footerText2.setText(setCountdown());
+			Log.e("Countdown", setCountdown());
 			footerText3.setText("");
 		} else {
 			int state = PrefHelper.getState(getApplicationContext());
@@ -356,6 +369,7 @@ public class MainActivity extends ActionBarActivity
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 				}
+				if (isCancelled()) break;
 			}
 			return true;
 		}

@@ -3,12 +3,14 @@ package com.mmarvick.urgentcall;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-public class EditTextPrompt {
+public class EditTextPrompt {	
 	public EditTextPrompt(final Context context, final int min, final int max, final String name, final int def, final String title) {
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptView = li.inflate(R.layout.edit_text_prompt,  null);
@@ -20,8 +22,7 @@ public class EditTextPrompt {
 		String setText = "" + PrefHelper.getCallValue(context, name, def);
 		userInput.setText(setText);
 		userInput.setSelection(setText.length());
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
 		
 		alertDialogBuilder
 			.setTitle(title)
@@ -38,7 +39,8 @@ public class EditTextPrompt {
 						}						
 					} catch (NumberFormatException e) {
 						
-					}	
+					}
+
 				}
 			})
 			.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -46,10 +48,19 @@ public class EditTextPrompt {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.cancel();
-					
 				}
 			});
 		
-		alertDialogBuilder.create().show();
+		AlertDialog dialog = alertDialogBuilder.create();
+		
+		//Show the keyboard when opened
+		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+		
+		dialog.show();
+		
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.showSoftInput(userInput, InputMethodManager.SHOW_IMPLICIT);
+
 	}
+
 }

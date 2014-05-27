@@ -48,7 +48,7 @@
 	        android:layout_height="wrap_content"
 	        android:textSize="@dimen/large_textSize"
 	        android:layout_gravity="center_vertical"
-	        android:textColor="@color/holo_blue_dark" />	
+	        android:textColor="@color/holo_blue_light" />	
 
 	    <TextView
 	        android:id="@+id/textView_callsText"
@@ -70,7 +70,7 @@
 	        android:layout_height="wrap_content"
 	        android:textSize="@dimen/large_textSize"
 	        android:layout_gravity="center_vertical"
-	        android:textColor="@color/holo_blue_dark" />    
+	        android:textColor="@color/holo_blue_light" />    
 	        
 	    <TextView
 	        android:id="@+id/textView_minsText"

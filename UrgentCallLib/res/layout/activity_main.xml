@@ -47,7 +47,8 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:textSize="@dimen/large_textSize"
-	        android:layout_gravity="center_vertical" />	
+	        android:layout_gravity="center_vertical"
+	        android:textColor="@color/holo_blue_dark" />	
 
 	    <TextView
 	        android:id="@+id/textView_callsText"
@@ -60,7 +61,7 @@
 	        android:id="@+id/textView_footer1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	         android:textSize="@dimen/normal_textSize"
+	        android:textSize="@dimen/normal_textSize"
 	        android:layout_gravity="center_vertical|center_horizontal" />	
 	    
 	    <TextView
@@ -68,7 +69,8 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:textSize="@dimen/large_textSize"
-	        android:layout_gravity="center_vertical" />	    
+	        android:layout_gravity="center_vertical"
+	        android:textColor="@color/holo_blue_dark" />    
 	        
 	    <TextView
 	        android:id="@+id/textView_minsText"

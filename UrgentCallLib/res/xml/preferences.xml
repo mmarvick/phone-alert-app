@@ -8,6 +8,7 @@
         android:defaultValue="3"
         android:inputType="number"
         range:min="1"
+        range:max="15"
         />
     
     <com.mmarvick.urgentcall.MinMaxEditTextPreference
@@ -16,6 +17,7 @@
         android:defaultValue="15"
         android:inputType="number"
         range:min="1"
+        range:max="60"
         />
     
     <ListPreference

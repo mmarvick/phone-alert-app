@@ -52,10 +52,10 @@ public class EditTextPrompt {
 						value = Integer.parseInt(userInput.getText().toString());
 						if (value < min) {
 							value = min;
-							alertRange();
+							alertRange(value);
 						} else if (value > max) {
 							value = max;
-							alertRange();
+							alertRange(value);
 						}
 						PrefHelper.setCallValue(context, name, value);					
 					} catch (NumberFormatException e) {
@@ -84,12 +84,12 @@ public class EditTextPrompt {
 
 	}
 	
-	private void alertRange() {
+	private void alertRange(int value) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 		
 		alertDialogBuilder
 			.setTitle("Out of range")
-			.setMessage(title + " must be between " + min + " and " + max + ".")
+			.setMessage(title + " must be between " + min + " and " + max + ". The value is being set to " + value + ".")
 			.setCancelable(false)
 			.setPositiveButton("OK", null);
 		

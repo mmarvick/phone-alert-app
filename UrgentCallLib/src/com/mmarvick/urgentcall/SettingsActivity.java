@@ -15,6 +15,8 @@ import android.preference.PreferenceScreen;
 public class SettingsActivity extends PreferenceActivity 
 			implements OnSharedPreferenceChangeListener {
 	PreferenceScreen prefScreen;
+	Preference callMins;
+	Preference callQty;
 	Preference listSelect;
 	Preference listSelectLite;
 	Preference whitelistPref;
@@ -60,6 +62,30 @@ public class SettingsActivity extends PreferenceActivity
 				}
 			});
         }
+        
+        callMins = findPreference("CALL_MIN");
+        callQty = findPreference("CALL_QTY");
+        
+        callMins.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new EditTextPrompt(SettingsActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
+
+				return true;
+			}
+		});
+        
+        callQty.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new EditTextPrompt(SettingsActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
+				return true;
+			}
+		});
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar ab = getActionBar();

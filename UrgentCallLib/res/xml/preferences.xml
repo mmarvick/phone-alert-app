@@ -2,22 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:range="http://schemas.android.com/apk/lib/com.mmarvick.urgentcall"
     android:key="PREFERENCES" >
-    <com.mmarvick.urgentcall.MinMaxEditTextPreference
+    <Preference
         android:key="CALL_QTY"
         android:title="Number of Calls"
-        android:defaultValue="3"
-        android:inputType="number"
-        range:min="2"
-        range:max="9"
         />
     
-    <com.mmarvick.urgentcall.MinMaxEditTextPreference
+    <Preference
         android:key="CALL_MIN"
         android:title="Minutes for Calls"
-        android:defaultValue="15"
-        android:inputType="number"
-        range:min="1"
-        range:max="60"
         />
     
     <ListPreference

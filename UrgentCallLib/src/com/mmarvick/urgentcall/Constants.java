@@ -11,10 +11,17 @@ public class Constants {
 	public final static String SNOOZE_TIME = "SNOOZE";
 	
 	public final static String CALL_QTY = "CALL_QTY";
-	public final static String CALL_MIN = "CALL_MIN";
-	
+	public final static String CALL_QTY_TITLE = "Number of calls";
+	public final static int CALL_QTY_MIN = 2;
+	public final static int CALL_QTY_MAX = 9;
 	public final static int CALL_QTY_DEFAULT = 3;
+	
+	public final static String CALL_MIN = "CALL_MIN";
+	public final static String CALL_MIN_TITLE = "Number of minutes";
+	public final static int CALL_MIN_MIN = 1;
+	public final static int CALL_MIN_MAX = 60;
 	public final static int CALL_MIN_DEFAULT = 15;
+	
 	
 	public final static String LIST_TYPE = "LIST_TYPE";
 	public final static int LIST_NONE = 0;

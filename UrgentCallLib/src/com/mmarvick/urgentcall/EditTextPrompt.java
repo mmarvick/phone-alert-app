@@ -4,14 +4,25 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-public class EditTextPrompt {	
+public class EditTextPrompt {
+	private int min;
+	private int max;
+	private String title;
+	private Context context;
+	
 	public EditTextPrompt(final Context context, final int min, final int max, final String name, final int def, final String title) {
+		this.min = min;
+		this.max = max;
+		this.title = title;
+		this.context = context;
+		
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptView = li.inflate(R.layout.edit_text_prompt,  null);
 		
@@ -20,8 +31,13 @@ public class EditTextPrompt {
 		
 		final EditText userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
 		String setText = "" + PrefHelper.getCallValue(context, name, def);
+		
+		//Set initial EditText text and move cursor to the end
 		userInput.setText(setText);
 		userInput.setSelection(setText.length());
+		
+		//Set max length of the EditText
+		userInput.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int) Math.floor(Math.log10(max) + 1))});
 
 		
 		alertDialogBuilder
@@ -34,9 +50,14 @@ public class EditTextPrompt {
 					
 					try {
 						value = Integer.parseInt(userInput.getText().toString());
-						if (value >= min && value <= max) {
-							PrefHelper.setCallValue(context, name, value);
-						}						
+						if (value < min) {
+							value = min;
+							alertRange();
+						} else if (value > max) {
+							value = max;
+							alertRange();
+						}
+						PrefHelper.setCallValue(context, name, value);					
 					} catch (NumberFormatException e) {
 						
 					}
@@ -61,6 +82,19 @@ public class EditTextPrompt {
 		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(userInput, InputMethodManager.SHOW_IMPLICIT);
 
+	}
+	
+	private void alertRange() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		
+		alertDialogBuilder
+			.setTitle("Out of range")
+			.setMessage(title + " must be between " + min + " and " + max + ".")
+			.setCancelable(false)
+			.setPositiveButton("OK", null);
+		
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
 	}
 
 }

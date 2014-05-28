@@ -71,8 +71,8 @@ public class MainActivity extends ActionBarActivity
 			
 			@Override
 			public void onClick(View view) {
-				new EditTextPrompt(MainActivity.this, 2, 9, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT,
-						"Number of calls");
+				new EditTextPrompt(MainActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
 				
 			}
 		});
@@ -81,8 +81,8 @@ public class MainActivity extends ActionBarActivity
 			
 			@Override
 			public void onClick(View view) {
-				new EditTextPrompt(MainActivity.this, 1, 60, Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT,
-						"Minutes for calls");
+				new EditTextPrompt(MainActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
 				
 			}
 		});

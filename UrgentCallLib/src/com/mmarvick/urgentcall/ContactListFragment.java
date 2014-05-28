@@ -2,6 +2,7 @@ package com.mmarvick.urgentcall;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.mmarvick.urgentcall.R;
 
@@ -13,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,9 +39,6 @@ public class ContactListFragment extends ListFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		
-		dbHelper = new RulesDbHelper(getActivity().getApplicationContext());
-		
 		state = getActivity().getIntent().getIntExtra(Constants.LIST_TYPE, Constants.LIST_WHITELIST);
 		
 		getListView().setFooterDividersEnabled(true);
@@ -56,19 +55,31 @@ public class ContactListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		dbHelper = new RulesDbHelper(getActivity().getApplicationContext());
 		loadContacts();
 		
 		ContactsArrayAdapter adapter = new ContactsArrayAdapter(getActivity(), mContactNames);
 		setListAdapter(adapter);
-	}	
+	}
+	
+	@Override
+	public void onPause() {
+		dbHelper.close();
+		super.onPause();
+	}
 
 	private void loadContacts() {
+		String[][] namesLookupsString;
 		if (state == Constants.LIST_WHITELIST) { 
-			mContactLookups = dbHelper.getContactLookups(true);
+			namesLookupsString = dbHelper.getNamesLookups(true);
 		} else if (state == Constants.LIST_BLACKLIST) {
-			mContactLookups = dbHelper.getContactLookups(false);
+			namesLookupsString = dbHelper.getNamesLookups(false);
+		} else {
+			return;
 		}
-		mContactNames = dbHelper.getNames(mContactLookups);
+		Log.e("Data:", Arrays.deepToString(namesLookupsString));
+		mContactLookups = namesLookupsString[0];
+		mContactNames = namesLookupsString[1];
 	}
 	
 	private void createUser() {

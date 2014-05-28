@@ -20,11 +20,11 @@ public class RulesDbHelper {
 	Context context;
 	SQLiteDatabase mRulesDb;
 	ContentResolver mContentResolver;
+	RulesDbOpenHelper mDbHelper;
 	
 	public RulesDbHelper(Context context) {
 		this.context = context;
-		RulesDbOpenHelper mDbHelper = new RulesDbOpenHelper(context);
-		mRulesDb = mDbHelper.getReadableDatabase();
+		mDbHelper = new RulesDbOpenHelper(context);
 		mContentResolver = context.getContentResolver();
 	}
 	
@@ -39,6 +39,7 @@ public class RulesDbHelper {
 	}
 	
 	private String[] getContactLookups(String moreWhere) {
+		open();
 		ArrayList<String> contactIDs = new ArrayList<String>();
 		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules WHERE " + moreWhere, null);
 		
@@ -57,16 +58,6 @@ public class RulesDbHelper {
 		return lookups;		
 	}
 	
-	public String[] getNames(String[] lookups) {
-		String[] names = new String[lookups.length];
-		
-		for (int i = 0; i < lookups.length; i++) {
-			names[i] = getName(lookups[i]);
-		}
-		
-		return names;
-	}
-	
 	public String getName(String lookup) {
 		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
 				new String[] {Phone.DISPLAY_NAME},
@@ -76,7 +67,35 @@ public class RulesDbHelper {
 		return cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));	
 	}
 	
+	public String[][] getNamesLookups(boolean state) {
+		String[] lookups = getContactLookups(state);
+		if (lookups.length == 0) return new String[][] {new String[0], new String[0]};
+		
+		String where = Data.LOOKUP_KEY + "='" + lookups[0] + "'";
+		for (int i = 1; i < lookups.length; i++) {
+			where += " OR " + Data.LOOKUP_KEY + "='" + lookups[i] + "'";
+		}
+		
+		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
+				new String[] {Data.LOOKUP_KEY, Phone.DISPLAY_NAME},
+				where,
+				null,
+				Phone.DISPLAY_NAME + " ASC");
+		
+		String[][] data = new String[2][cursor.getCount()];
+		
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			data[0][cursor.getPosition()] = cursor.getString(cursor.getColumnIndex(Data.LOOKUP_KEY));
+			data[1][cursor.getPosition()] = cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME));
+			cursor.moveToNext();
+		}
+		
+		return data;
+	}
+	
 	public boolean isInDb(String lookup) {
+		open();
 		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, null, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
 		return c.getCount() > 0;
 	}
@@ -94,6 +113,7 @@ public class RulesDbHelper {
 	}
 	
 	public boolean getState(String lookup) {
+		open();
 		String[] columns = new String[] {RulesEntry.COLUMN_NAME_ON};
 		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, columns, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
 		c.moveToFirst();
@@ -101,6 +121,7 @@ public class RulesDbHelper {
 	}
 	
 	public void makeContact(String lookup, boolean state) {
+		open();
 		if (!isInDb(lookup)) {
 			ContentValues values = new ContentValues();
 			values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);		
@@ -113,8 +134,19 @@ public class RulesDbHelper {
 	}
 	
 	public void deleteContact(String lookup) {
+		open();
 		if (isInDb(lookup)) {
 			mRulesDb.delete(RulesEntry.TABLE_NAME, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "=?", new String[] {lookup});
 		}
+	}
+	
+	public void open() {
+		if (mRulesDb == null || !(mRulesDb.isOpen())) {
+			mRulesDb = mDbHelper.getReadableDatabase();
+		}
+	}
+	
+	public void close() {
+		mRulesDb.close();
 	}
 }

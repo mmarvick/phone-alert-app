@@ -14,7 +14,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +39,7 @@ public class MainActivity extends ActionBarActivity
 	private Editor editor;
 	private CheckSnooze checker;
 	private AlertDialog endSnoozeDialog;
+	private ShareActionProvider mShareActionProvider;
 	
 	private TextView stateText;
 	private TextView footerTextMain;
@@ -68,7 +71,7 @@ public class MainActivity extends ActionBarActivity
 			
 			@Override
 			public void onClick(View view) {
-				new EditTextPrompt(MainActivity.this, 1, 15, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT,
+				new EditTextPrompt(MainActivity.this, 2, 9, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT,
 						"Number of calls");
 				
 			}
@@ -110,7 +113,6 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	public void check() {
-		Log.e("check!", "checked");
 		setStateText();
 		if (!PrefHelper.isSnoozing(getApplicationContext()) && endSnoozeDialog != null) {
 			endSnoozeDialog.cancel();
@@ -225,7 +227,6 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	public void setStateText() {
-		Log.e("Set", "StateTexxt set");
 		if (PrefHelper.isSnoozing(getApplicationContext())) {
 			Log.e("If", "If executes");
 			stateText.setText("SNOOZING");
@@ -337,7 +338,21 @@ public class MainActivity extends ActionBarActivity
 	    // Inflate the menu items for use in the action bar
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.main_activity_actions, menu);
+
 	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	private void share() {
+		Intent shareIntent = new Intent();
+		shareIntent.setAction(Intent.ACTION_SEND);
+		shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Reach me in an emergency!");
+		String message = "Ring my cellphone even if muted by calling " + PrefHelper.getCallQty(getApplicationContext());
+		message += " times in " + PrefHelper.getCallMins(getApplicationContext()) + " minutes. To also be";
+		message += " reachable in an emergency, add this app: http://goo.gl/aK3Ic7";
+		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+		//sendIntent.setType("vnd.android-dir/mms-sms");
+		shareIntent.setType("text/plain");
+		startActivity(shareIntent);
 	}
 	
 	@Override
@@ -353,6 +368,9 @@ public class MainActivity extends ActionBarActivity
 			} else {
 				showSnooze();
 			}
+			return true;
+		} else if (itemId == R.id.action_share) {
+			share();
 			return true;
 		}
 		else {

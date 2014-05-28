@@ -352,7 +352,7 @@ public class MainActivity extends ActionBarActivity
 		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
 		//sendIntent.setType("vnd.android-dir/mms-sms");
 		shareIntent.setType("text/plain");
-		startActivity(shareIntent);
+		startActivity(Intent.createChooser(shareIntent, "Share app info"));
 	}
 	
 	@Override

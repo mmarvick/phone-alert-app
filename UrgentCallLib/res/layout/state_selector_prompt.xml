@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RadioGroup
+        android:id="@+id/selector_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/selection_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="On for everyone" />
+
+        <RadioButton
+            android:id="@+id/selection_whitelist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="On for whitelisted callers only" />
+
+        <RadioButton
+            android:id="@+id/selection_blacklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="On for everyone except blacklisted callers" />
+        
+        <RadioButton
+            android:id="@+id/selection_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Off for everyone" />
+            
+    </RadioGroup>
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button_whitelist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="Edit Whitelist..." />
+
+        <Button
+            android:id="@+id/button_blacklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="Edit Blacklist..." />
+        
+    </LinearLayout>
+
+</LinearLayout>

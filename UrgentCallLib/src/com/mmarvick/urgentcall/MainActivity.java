@@ -44,11 +44,12 @@ public class MainActivity extends ActionBarActivity
 	private TextView stateText;
 	private TextView footerTextMain;
 	private TextView footerText2;
-	private TextView footerText3;
 	private TextView footerTextCallsNum;
 	private TextView footerTextCallsText;
 	private TextView footerTextMinsNum; 
 	private TextView footerTextMinsText; 
+	private TextView footerTextForText;
+	private TextView footerTextForSelection;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +62,12 @@ public class MainActivity extends ActionBarActivity
 		stateText = (TextView) findViewById(R.id.simpleStateText);	
 		footerTextMain = (TextView) findViewById(R.id.textView_footer1);
 		footerText2 = (TextView) findViewById(R.id.textView_footer2);
-		footerText3 = (TextView) findViewById(R.id.textView_footer3);	
 		footerTextCallsNum = (TextView) findViewById(R.id.textView_callsNumber);
 		footerTextCallsText = (TextView) findViewById(R.id.textView_callsText);
 		footerTextMinsNum = (TextView) findViewById(R.id.textView_minsNumber);
 		footerTextMinsText = (TextView) findViewById(R.id.textView_minsText);
+		footerTextForText = (TextView) findViewById(R.id.textView_forText);
+		footerTextForSelection = (TextView) findViewById(R.id.textView_forSelection);
 		
 		footerTextCallsNum.setOnClickListener(new OnClickListener() {
 			
@@ -95,11 +97,25 @@ public class MainActivity extends ActionBarActivity
 				}
 			}
 		});
+		
+		footerTextForSelection.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				new StatePrompt(MainActivity.this);
+			}
+		});
+		
+		stateText.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				new StatePrompt(MainActivity.this);
+			}
+		});
 	}
 	
 	@Override
 	protected void onResume() {
-		initializeState();
+		check();
 		checker = new CheckSnooze();
 		checker.execute();
 		checkTwoVersions();
@@ -188,44 +204,6 @@ public class MainActivity extends ActionBarActivity
 		
 	}
 	
-	private void initializeState() {
-		
-		final SeekBar stateBar = (SeekBar) findViewById(R.id.simpleState);
-		
-		final int res = 100;
-		final int states = Constants.SIMPLE_STATES.length;
-		
-		final int max = (states - 1) * res;
-		
-		int state = pref.getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
-		
-		stateBar.setMax(max);
-		stateBar.setProgress(getStateIndex(state) * res);
-		setStateText();
-		
-		stateBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				int snap = (seekBar.getProgress() + res/2) / res;
-				seekBar.setProgress(snap * res);
-			}
-			
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) { }
-			
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				int state = Constants.SIMPLE_STATES[(seekBar.getProgress() + res/2) / res];
-				editor.putInt(Constants.SIMPLE_STATE, state);
-				editor.commit();
-				setStateText();
-			}
-		});
-		
-			
-	}
-	
 	public void setStateText() {
 		if (PrefHelper.isSnoozing(getApplicationContext())) {
 			Log.e("If", "If executes");
@@ -234,7 +212,8 @@ public class MainActivity extends ActionBarActivity
 			footerOneText();
 			footerText2.setText(setCountdown());
 			Log.e("Countdown", setCountdown());
-			footerText3.setText("");
+			footerTextForText.setText("");
+			footerTextForSelection.setText("");
 		} else {
 			int state = PrefHelper.getState(getApplicationContext());
 			int list = PrefHelper.getListMode(getApplicationContext());
@@ -244,22 +223,21 @@ public class MainActivity extends ActionBarActivity
 				stateText.setTextColor(Color.RED);
 				footerOneText();
 				footerText2.setText("trigger an alert");
-				footerText3.setText("");	
-			} else if (state == Constants.SIMPLE_STATE_ON && list == Constants.LIST_NONE) {
+				footerTextForText.setText("");
+				footerTextForSelection.setText("");;	
+			} else {
 				stateText.setText("ON");
 				stateText.setTextColor(Color.GREEN);
 				footerOneText();
 				footerText2.setText("triggers an alert");
-				footerText3.setText("from any caller");
-			} else {
-				stateText.setText("ON FOR SOME");
-				stateText.setTextColor(Color.YELLOW);
-				footerOneText();
-				footerText2.setText("triggers an alert");
-				if (list == Constants.LIST_WHITELIST) {
-					footerText3.setText("from whitelisted callers only");
+				footerTextForText.setText("from ");
+				if (state == Constants.SIMPLE_STATE_ON) {
+					footerTextForSelection.setText("any caller");
+				}
+				if (state == Constants.SIMPLE_STATE_WHITELIST) {
+					footerTextForSelection.setText("whitelisted callers only");
 				} else {
-					footerText3.setText("from all except blacklisted callers");
+					footerTextForSelection.setText("all except blacklisted callers");
 				}
 			}
 		}	

@@ -12,6 +12,12 @@ public class PrefHelper {
 		return getPrefs(context).getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
 	}
 	
+	public static void setState(Context context, int state) {
+		Editor editor = getPrefs(context).edit();
+		editor.putInt(Constants.SIMPLE_STATE, state);
+		editor.commit();
+	}
+	
 	public static int getListMode(Context context) {
 		String listMode = getPrefs(context).getString(Constants.LIST_TYPE, "" + Constants.LIST_NONE);
 		return Integer.parseInt(listMode);

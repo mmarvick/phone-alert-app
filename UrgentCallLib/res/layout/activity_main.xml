@@ -22,25 +22,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceMedium" />    
-
-    <SeekBar
-        android:id="@+id/simpleState"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/simpleStateText"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="20dp" />
+        android:textSize="@dimen/large_textSize" />    
     
     <LinearLayout
         android:id="@+id/layout_footer1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/simpleState"
+        android:layout_below="@id/simpleStateText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="60dp">
 
 	    <TextView
 	        android:id="@+id/textView_callsNumber"
@@ -62,7 +52,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:textSize="@dimen/normal_textSize"
-	        android:layout_gravity="center_vertical|center_horizontal" />	
+	        android:layout_gravity="center_vertical" />	
 	    
 	    <TextView
 	        android:id="@+id/textView_minsNumber"
@@ -89,14 +79,30 @@
         android:layout_below="@id/layout_footer1"
         android:layout_marginTop="16dp"
         android:textSize="@dimen/small_textSize" /> 
-           
-    <TextView
-        android:id="@+id/textView_footer3"
+    
+    <LinearLayout
+        android:id="@+id/layout_footer3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/textView_footer2"
-        android:layout_marginTop="16dp"
-        android:textSize="@dimen/small_textSize" /> 
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp">
+
+	    <TextView
+	        android:id="@+id/textView_forText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical"
+	        android:textSize="@dimen/small_textSize" />        
+        
+	    <TextView
+	        android:id="@+id/textView_forSelection"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical"
+	        android:textColor="@color/holo_blue_light"
+	        android:textSize="@dimen/small_textSize" /> 
+	        
+	</LinearLayout>
 
 </RelativeLayout>

@@ -56,12 +56,18 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 			return true;
 		case Constants.SIMPLE_STATE_OFF:
 			return false;
-		case Constants.SIMPLE_STATE_SOME:
+		case Constants.SIMPLE_STATE_WHITELIST:
 			if (lookup!=null && dbHelper.isInDb(lookup)) {
 				return dbHelper.getState(lookup);
 			} else {
-				return (PrefHelper.getState(context) == Constants.LIST_WHITELIST); 
+				return false; 
 			}
+		case Constants.SIMPLE_STATE_BLACKLIST:
+			if (lookup!=null && dbHelper.isInDb(lookup)) {
+				return dbHelper.getState(lookup);
+			} else {
+				return true; 
+			}			
 		default:
 			return true;
 		}

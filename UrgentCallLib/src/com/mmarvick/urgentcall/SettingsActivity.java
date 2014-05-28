@@ -15,12 +15,9 @@ import android.preference.PreferenceScreen;
 public class SettingsActivity extends PreferenceActivity 
 			implements OnSharedPreferenceChangeListener {
 	PreferenceScreen prefScreen;
+	Preference state;
 	Preference callMins;
 	Preference callQty;
-	Preference listSelect;
-	Preference listSelectLite;
-	Preference whitelistPref;
-	Preference blacklistPref;
 	
     @SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
@@ -32,39 +29,19 @@ public class SettingsActivity extends PreferenceActivity
         
         prefScreen = getPreferenceScreen();
         
-        whitelistPref = findPreference("EDIT_WHITELIST");
-        Intent whitelistIntent = new Intent(this, ContactListActivity.class);
-        whitelistIntent.putExtra(Constants.LIST_TYPE, Constants.LIST_WHITELIST);
-        whitelistPref.setIntent(whitelistIntent);
-        
-        blacklistPref = findPreference("EDIT_BLACKLIST");
-        Intent blacklistIntent = new Intent(this, ContactListActivity.class);
-        blacklistIntent.putExtra(Constants.LIST_TYPE, Constants.LIST_BLACKLIST);
-        blacklistPref.setIntent(blacklistIntent);
-        
-        listSelect = findPreference("LIST_TYPE");
-        listSelectLite = findPreference("LIST_TYPE_LITE");
-        
-        if (getResources().getBoolean(R.bool.paid_version)) {
-        	prefScreen.removePreference(listSelectLite);
-        }
-        else {
-        	prefScreen.removePreference(listSelect);
-        	
-        	listSelectLite.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-        		
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					UpgradeDialog.upgradeDialog(SettingsActivity.this, 
-							"Users of Urgent Call Pro can filter users with a whitelist or blacklist.\n\n"
-									+ "Users of Urgent Call Lite must leave the app on or off for all users.");
-					return true;
-				}
-			});
-        }
-        
+        state = findPreference("STATUS");
         callMins = findPreference("CALL_MIN");
         callQty = findPreference("CALL_QTY");
+        
+        state.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new StatePrompt(SettingsActivity.this);
+
+				return true;
+			}
+		});
         
         callMins.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -95,7 +72,6 @@ public class SettingsActivity extends PreferenceActivity
     
     @Override
     public void onResume() {
-    	setWhiteBlackList();
     	prefScreen.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     	super.onResume();
     }
@@ -105,32 +81,11 @@ public class SettingsActivity extends PreferenceActivity
         super.onPause();
         prefScreen.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }    
-    
-    private void setWhiteBlackList() {
-    	int mode = PrefHelper.getListMode(getApplicationContext());
-    	
-    	if (mode == Constants.LIST_NONE) {
-    		blacklistPref.setEnabled(false);
-    		whitelistPref.setEnabled(false);
-    	} else {
-    		blacklistPref.setEnabled(true);
-    		whitelistPref.setEnabled(true);
-    		
-    	}
-    	
-    	if (mode == Constants.LIST_BLACKLIST) {
-    		prefScreen.removePreference(whitelistPref);
-    		prefScreen.addPreference(blacklistPref);
-    	} else {
-    		prefScreen.removePreference(blacklistPref);
-    		prefScreen.addPreference(whitelistPref);
-    	}
-    }
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		setWhiteBlackList();
+		
 	}
    
 }

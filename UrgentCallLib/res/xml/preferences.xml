@@ -3,6 +3,11 @@
     xmlns:range="http://schemas.android.com/apk/lib/com.mmarvick.urgentcall"
     android:key="PREFERENCES" >
     <Preference
+        android:key="STATUS"
+        android:title="Urgent Call status"
+        />
+    
+    <Preference
         android:key="CALL_QTY"
         android:title="Number of Calls"
         />
@@ -11,29 +16,5 @@
         android:key="CALL_MIN"
         android:title="Minutes for Calls"
         />
-    
-    <ListPreference
-        android:key="LIST_TYPE"
-        android:title="Filter Callers"
-        android:dialogTitle="Who should be able to trigger an Urgent Call alert?"
-        android:entries="@array/pref_listType_entries"
-        android:entryValues="@array/pref_listType_values"
-        android:defaultValue="0"
-        />
-    
-    <Preference
-        android:key="LIST_TYPE_LITE"
-        android:title="Filter Callers"
-        />
-    
-    <Preference android:key="EDIT_WHITELIST" 
-        android:title="Edit Whitelist" >
-        
-    </Preference>
-    
-    <Preference android:key="EDIT_BLACKLIST" 
-        android:title="Edit Blacklist" >
-        
-    </Preference>
 
 </PreferenceScreen>

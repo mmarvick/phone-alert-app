@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 public class StatePrompt {
 	private final RadioButton onRadio;
@@ -62,7 +61,7 @@ public class StatePrompt {
 		select();
 		
 		alertDialogBuilder
-		.setTitle("Select Urgent Call state")
+		.setTitle("Who should be able to trigger an Urgent Call alert?")
 		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			
 			@Override

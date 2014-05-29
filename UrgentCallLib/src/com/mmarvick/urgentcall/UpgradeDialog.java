@@ -12,14 +12,15 @@ public class UpgradeDialog {
 
 		alertDialogBuilder
 			.setTitle("Pro Version Only")
-			.setMessage(messageText)
+			.setMessage(messageText + 
+					"\n\nWould you like to upgrade?")
 			.setCancelable(true)
-			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			.setNeutralButton("No Thanks", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					dialog.cancel();
 				}
 			})
-			.setNeutralButton("Upgrade", new DialogInterface.OnClickListener() {
+			.setPositiveButton("Upgrade", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					String packageName = "com.mmarvick.urgentcall_pro";

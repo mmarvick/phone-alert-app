@@ -3,6 +3,7 @@ package com.mmarvick.urgentcall;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,26 @@ public class StatePrompt {
 		offRadio = (RadioButton) promptView.findViewById(R.id.selection_off);
 		whitelistButton = (Button) promptView.findViewById(R.id.button_whitelist);
 		blacklistButton = (Button) promptView.findViewById(R.id.button_blacklist);
+
+		whitelistButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+		        Intent whitelistIntent = new Intent(context, ContactListActivity.class);
+		        whitelistIntent.putExtra(Constants.LIST_TYPE, Constants.LIST_WHITELIST);
+				context.startActivity(whitelistIntent);
+			}
+		});
+		
+		blacklistButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+		        Intent blacklistIntent = new Intent(context, ContactListActivity.class);
+		        blacklistIntent.putExtra(Constants.LIST_TYPE, Constants.LIST_BLACKLIST);
+				context.startActivity(blacklistIntent);
+			}
+		});
 		
 		if (!context.getResources().getBoolean(R.bool.paid_version)) {
 			whitelistButton.setEnabled(false);
@@ -43,7 +64,9 @@ public class StatePrompt {
 				
 				@Override
 				public void onClick(View arg0) {
-					UpgradeDialog.upgradeDialog(context, "");
+					UpgradeDialog.upgradeDialog(context,
+							"Users of Urgent Call Pro can filter users with a whitelist or blacklist.\n\n"
+							+ "Users of Urgent Call Lite must leave the app on or off for all users.");
 					select();
 				}
 			});
@@ -52,7 +75,9 @@ public class StatePrompt {
 				
 				@Override
 				public void onClick(View v) {
-					UpgradeDialog.upgradeDialog(context, "");
+					UpgradeDialog.upgradeDialog(context,
+							"Users of Urgent Call Pro can filter users with a whitelist or blacklist.\n\n"
+							+ "Users of Urgent Call Lite must leave the app on or off for all users.");
 					select();
 				}
 			});

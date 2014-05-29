@@ -148,7 +148,7 @@ public class MainActivity extends ActionBarActivity
 		} else {
 			UpgradeDialog.upgradeDialog(this,
 					"Users of Urgent Call Pro can snooze alerts for a period of time.\n\n"
-					+ "Users of Urgent Call Lite mustturn the application off and on manually.");
+					+ "Users of Urgent Call Lite must turn the application off and on manually.");
 		}
 	}
 	
@@ -324,8 +324,9 @@ public class MainActivity extends ActionBarActivity
 		Intent shareIntent = new Intent();
 		shareIntent.setAction(Intent.ACTION_SEND);
 		shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Reach me in an emergency!");
-		String message = "Ring my cellphone even if muted by calling " + PrefHelper.getCallQty(getApplicationContext());
-		message += " times in " + PrefHelper.getCallMins(getApplicationContext()) + " minutes. To also be";
+		String message = "Call me " + PrefHelper.getCallQty(getApplicationContext());
+		message += " times in " + PrefHelper.getCallMins(getApplicationContext()) + " minutes to ";
+		message += "ring my phone, even if silenced. To also be";
 		message += " reachable in an emergency, add this app: http://goo.gl/aK3Ic7";
 		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
 		//sendIntent.setType("vnd.android-dir/mms-sms");

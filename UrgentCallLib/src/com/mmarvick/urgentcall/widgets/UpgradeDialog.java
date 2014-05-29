@@ -24,12 +24,12 @@ public class UpgradeDialog {
 			.setPositiveButton("Upgrade", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
-					String packageName = context.getString(R.string.upgrade_url_package);
+					String packageName = context.getString(R.string.package_pro);
 					Uri uri;
 					try {
-						uri = Uri.parse(packageName + context.getString(R.string.upgrade_url_play_app));
+						uri = Uri.parse(context.getString(R.string.url_play_app) + packageName);
 					} catch (android.content.ActivityNotFoundException anfe) {
-						uri = Uri.parse(packageName + context.getString(R.string.upgrade_url_play_web));
+						uri = Uri.parse(context.getString(R.string.url_play_web) + packageName);
 					}
 					
 					context.startActivity(new Intent(Intent.ACTION_VIEW, uri));

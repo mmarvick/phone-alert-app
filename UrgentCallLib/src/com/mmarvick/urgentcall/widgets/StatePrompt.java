@@ -111,7 +111,7 @@ public class StatePrompt {
 			}
 		});
 	
-		AlertDialog dialog = alertDialogBuilder.create();
+		dialog = alertDialogBuilder.create();
 	}
 	
 	public void show() {

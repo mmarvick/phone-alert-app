@@ -1,4 +1,13 @@
-package com.mmarvick.urgentcall;
+package com.mmarvick.urgentcall.widgets;
+
+import com.mmarvick.urgentcall.Constants;
+import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.R.bool;
+import com.mmarvick.urgentcall.R.id;
+import com.mmarvick.urgentcall.R.layout;
+import com.mmarvick.urgentcall.R.string;
+import com.mmarvick.urgentcall.activities.ContactListActivity;
+import com.mmarvick.urgentcall.data.PrefHelper;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.mmarvick.urgentcall;
+package com.mmarvick.urgentcall.data;
 
 import android.provider.BaseColumns;
 

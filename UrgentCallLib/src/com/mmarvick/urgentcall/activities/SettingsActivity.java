@@ -1,4 +1,10 @@
-package com.mmarvick.urgentcall;
+package com.mmarvick.urgentcall.activities;
+
+import com.mmarvick.urgentcall.Constants;
+import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.R.xml;
+import com.mmarvick.urgentcall.widgets.EditTextPrompt;
+import com.mmarvick.urgentcall.widgets.StatePrompt;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;

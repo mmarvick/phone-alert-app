@@ -1,8 +1,8 @@
-package com.mmarvick.urgentcall;
+package com.mmarvick.urgentcall.data;
 
 import java.util.ArrayList;
 
-import com.mmarvick.urgentcall.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;

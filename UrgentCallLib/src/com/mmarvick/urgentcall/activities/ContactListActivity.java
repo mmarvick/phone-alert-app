@@ -1,6 +1,8 @@
-package com.mmarvick.urgentcall;
+package com.mmarvick.urgentcall.activities;
 
+import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.R.layout;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;

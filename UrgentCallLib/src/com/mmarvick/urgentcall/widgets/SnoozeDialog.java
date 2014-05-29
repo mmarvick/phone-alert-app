@@ -1,4 +1,4 @@
-package com.mmarvick.urgentcall;
+package com.mmarvick.urgentcall.widgets;
 
 import android.app.TimePickerDialog;
 import android.content.Context;

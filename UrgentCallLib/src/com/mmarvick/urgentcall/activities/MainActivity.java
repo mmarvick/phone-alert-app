@@ -1,4 +1,4 @@
-package com.mmarvick.urgentcall;
+package com.mmarvick.urgentcall.activities;
 
 import java.util.List;
 
@@ -22,6 +22,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.mmarvick.urgentcall.Constants;
+import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.R.bool;
+import com.mmarvick.urgentcall.R.id;
+import com.mmarvick.urgentcall.R.layout;
+import com.mmarvick.urgentcall.R.menu;
+import com.mmarvick.urgentcall.R.string;
+import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.widgets.EditTextPrompt;
+import com.mmarvick.urgentcall.widgets.SnoozeDialog;
+import com.mmarvick.urgentcall.widgets.StatePrompt;
+import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
 // Launcher icons created with Android Asset Studio
 // http://romannurik.github.io/AndroidAssetStudio

@@ -1,4 +1,6 @@
-package com.mmarvick.urgentcall;
+package com.mmarvick.urgentcall.data;
+
+import com.mmarvick.urgentcall.Constants;
 
 import android.content.Context;
 import android.content.SharedPreferences;

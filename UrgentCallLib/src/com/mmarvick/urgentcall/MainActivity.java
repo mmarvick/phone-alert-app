@@ -6,25 +6,18 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -35,11 +28,8 @@ import com.mmarvick.urgentcall.Constants;
 
 public class MainActivity extends ActionBarActivity
 				implements TimePickerDialog.OnTimeSetListener {
-	private SharedPreferences pref;
-	private Editor editor;
 	private CheckSnooze checker;
 	private AlertDialog endSnoozeDialog;
-	private ShareActionProvider mShareActionProvider;
 	
 	private TextView stateText;
 	private TextView footerTextMain;
@@ -55,9 +45,6 @@ public class MainActivity extends ActionBarActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		editor = pref.edit();
 		
 		stateText = (TextView) findViewById(R.id.simpleStateText);	
 		footerTextMain = (TextView) findViewById(R.id.textView_footer1);
@@ -146,9 +133,7 @@ public class MainActivity extends ActionBarActivity
 			SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
 			snooze.show();
 		} else {
-			UpgradeDialog.upgradeDialog(this,
-					"Users of Urgent Call Pro can snooze alerts for a period of time.\n\n"
-					+ "Users of Urgent Call Lite must turn the application off and on manually.");
+			UpgradeDialog.upgradeDialog(this, getString(R.string.upgrade_body_snooze));
 		}
 	}
 	
@@ -156,16 +141,16 @@ public class MainActivity extends ActionBarActivity
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		
 		alertDialogBuilder
-			.setTitle("Cancel Snooze?")
-			.setMessage("Do you want to cancel the current snooze?")
+			.setTitle(getString(R.string.cancel_snooze_title))
+			.setMessage(getString(R.string.cancel_snooze_body))
 			.setCancelable(true)
-			.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			.setPositiveButton(getString(R.string.cancel_snooze_yes), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					PrefHelper.setSnoozeTime(getApplicationContext(), 0);
 					check();
 				}
 			})
-			.setNeutralButton("No", new DialogInterface.OnClickListener() {
+			.setNeutralButton(getString(R.string.cancel_snooze_no), new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
@@ -206,7 +191,6 @@ public class MainActivity extends ActionBarActivity
 	
 	public void setStateText() {
 		if (PrefHelper.isSnoozing(getApplicationContext())) {
-			Log.e("If", "If executes");
 			stateText.setText("SNOOZING");
 			stateText.setTextColor(Color.RED);
 			footerOneText();
@@ -216,7 +200,6 @@ public class MainActivity extends ActionBarActivity
 			footerTextForSelection.setText("");
 		} else {
 			int state = PrefHelper.getState(getApplicationContext());
-			int list = PrefHelper.getListMode(getApplicationContext());
 			
 			if (state == Constants.SIMPLE_STATE_OFF) {
 				stateText.setText("OFF");
@@ -233,8 +216,7 @@ public class MainActivity extends ActionBarActivity
 				footerTextForText.setText("from ");
 				if (state == Constants.SIMPLE_STATE_ON) {
 					footerTextForSelection.setText("any caller");
-				}
-				if (state == Constants.SIMPLE_STATE_WHITELIST) {
+				} else if (state == Constants.SIMPLE_STATE_WHITELIST) {
 					footerTextForSelection.setText("whitelisted callers only");
 				} else {
 					footerTextForSelection.setText("all except blacklisted callers");
@@ -295,10 +277,10 @@ public class MainActivity extends ActionBarActivity
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			
 			alertDialogBuilder
-				.setTitle("Thank you!")
-				.setMessage("Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.")
+				.setTitle(getString(R.string.pro_installed_title))
+				.setMessage(getString(R.string.pro_installed_body))
 				.setCancelable(false)
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				.setPositiveButton(getString(R.string.pro_installed_ok), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						Uri pkg_uri = Uri.parse("package:com.mmarvick.urgentcall_lite");
 						Intent removeIntent = new Intent(Intent.ACTION_DELETE, pkg_uri);
@@ -323,15 +305,13 @@ public class MainActivity extends ActionBarActivity
 	private void share() {
 		Intent shareIntent = new Intent();
 		shareIntent.setAction(Intent.ACTION_SEND);
-		shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Reach me in an emergency!");
-		String message = "Call me " + PrefHelper.getCallQty(getApplicationContext());
-		message += " times in " + PrefHelper.getCallMins(getApplicationContext()) + " minutes to ";
-		message += "ring my phone, even if silenced. To also be";
-		message += " reachable in an emergency, add this app: http://goo.gl/aK3Ic7";
+		shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
+		String message = getString(R.string.share_1) + PrefHelper.getCallQty(getApplicationContext());
+		message += getString(R.string.share_2) + PrefHelper.getCallMins(getApplicationContext());
+		message += getString(R.string.share_3);
 		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
-		//sendIntent.setType("vnd.android-dir/mms-sms");
 		shareIntent.setType("text/plain");
-		startActivity(Intent.createChooser(shareIntent, "Share app info"));
+		startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
 	}
 	
 	@Override

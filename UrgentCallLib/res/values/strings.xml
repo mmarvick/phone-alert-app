@@ -2,16 +2,51 @@
 <resources>
 
     <string name="app_name">Urgent Call</string>
-    <string name="call_time">In this many minutes: </string>
-    <string name="call_qty">User must call this many times: </string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
-    <string name="cancel">Cancel</string>
+    <string name="title_activity_contact_list">Edit user settings&#8230;</string>
+    <string name="title_activity_simple_settings">Settings</string>
+    
     <string name="action_settings">Settings</string>
     <string name="action_snooze">Snooze</string>
     <string name="action_share">Share</string>
-    <string name="action_add_contact">Add a contact</string>
-    <string name="title_activity_contact_list">Edit user settings&#8230;</string>
-    <string name="title_activity_simple_settings">Settings</string>
+    <string name="action_add_contact">Add a contact</string>    
+    
+    <string name="status_heading">Urgent call is</string>
+    
+    <string name="preferences_status">Urgent Call status</string>
+    <string name="preferences_qty">Number of Calls</string>
+    <string name="preferences_min">Minutes for Calls</string>
+    
+    <string name="upgrade_title"></string>
+    <string name="upgrade_body_general"></string>
+    <string name="upgrade_body_snooze">
+    Users of Urgent Call Pro can snooze alerts for a period of time.\n\n\
+\	Users of Urgent Call Lite must turn the application off and on manually.</string>
+    <string name="upgrade_body_state">
+    Users of Urgent Call Pro can filter users with a whitelist or blacklist.\n\n\
+\	Users of Urgent Call Lite must leave the app on or off for all users.</string>
+    
+    <string name="cancel_snooze_title">Cancel Snooze?</string>
+    <string name="cancel_snooze_body">Do you want to cancel the current snooze?</string>
+    <string name="cancel_snooze_yes">Yes</string>
+    <string name="cancel_snooze_no">No</string>
+    
+    <string name="state_change_dialog_title">Who should be able to trigger an Urgent Call alert?</string>
+    <string name="state_change_dialog_on">On for everyone</string>
+    <string name="state_change_dialog_off">Off for everyone</string>
+    <string name="state_change_dialog_whitelist">On for whitelisted callers only</string>
+    <string name="state_change_dialog_blacklist">On for everyone except blacklisted callers</string>
+    <string name="state_change_dialog_ok">OK</string>
+    <string name="state_change_dialog_cancel">Cancel</string>
+    <string name="state_change_dialog_edit_whitelist_button">Edit whitelist&#8230;</string>
+    <string name="state_change_dialog_edit_blacklist_button">Edit blacklist&#8230;</string>
+    
+    <string name="pro_installed_title">Thank you!</string>
+    <string name="pro_installed_body">Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.</string>
+    <string name="pro_installed_ok">OK</string>
 
+    <string name="share_title">Share app info</string>
+    <string name="share_subject">Reach me in an emergency!</string>
+    <string name="share_1">Call me </string>
+    <string name="share_2"> times in </string>
+    <string name="share_3"> minutes to ring my phone, even if silenced. To also be reachable in an emergency, add this app: http://goo.gl/aK3Ic7</string>
 </resources>

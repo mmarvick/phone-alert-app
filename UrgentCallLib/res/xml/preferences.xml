@@ -4,17 +4,17 @@
     android:key="PREFERENCES" >
     <Preference
         android:key="STATUS"
-        android:title="Urgent Call status"
+        android:title="@string/preferences_status"
         />
     
     <Preference
         android:key="CALL_QTY"
-        android:title="Number of Calls"
+        android:title="@string/preferences_qty"
         />
     
     <Preference
         android:key="CALL_MIN"
-        android:title="Minutes for Calls"
+        android:title="@string/preferences_min"
         />
 
 </PreferenceScreen>

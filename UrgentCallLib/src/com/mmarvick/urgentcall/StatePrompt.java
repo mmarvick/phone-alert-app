@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -64,10 +63,7 @@ public class StatePrompt {
 				
 				@Override
 				public void onClick(View arg0) {
-					UpgradeDialog.upgradeDialog(context,
-							"Users of Urgent Call Pro can filter users with a whitelist or blacklist.\n\n"
-							+ "Users of Urgent Call Lite must leave the app on or off for all users.");
-					select();
+					upgradeNote();
 				}
 			});
 			
@@ -75,10 +71,7 @@ public class StatePrompt {
 				
 				@Override
 				public void onClick(View v) {
-					UpgradeDialog.upgradeDialog(context,
-							"Users of Urgent Call Pro can filter users with a whitelist or blacklist.\n\n"
-							+ "Users of Urgent Call Lite must leave the app on or off for all users.");
-					select();
+					upgradeNote();
 				}
 			});
 		}
@@ -86,8 +79,8 @@ public class StatePrompt {
 		select();
 		
 		alertDialogBuilder
-		.setTitle("Who should be able to trigger an Urgent Call alert?")
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		.setTitle(context.getString(R.string.state_change_dialog_title))
+		.setPositiveButton(context.getString(R.string.state_change_dialog_ok), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -103,7 +96,7 @@ public class StatePrompt {
 
 			}
 		})
-		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		.setNegativeButton(context.getString(R.string.state_change_dialog_cancel), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -117,10 +110,8 @@ public class StatePrompt {
 	
 	private void select() {
 		int state = PrefHelper.getState(context);
-		Log.e("State:", "" + state);
 		switch (state) {
 		case Constants.SIMPLE_STATE_ON:
-			Log.e("This evaluates...","Okay!");
 			onRadio.setChecked(true);
 			break;
 		case Constants.SIMPLE_STATE_OFF:
@@ -133,6 +124,11 @@ public class StatePrompt {
 			blacklistRadio.setChecked(true);
 			break;
 		}
+	}
+	
+	private void upgradeNote() {
+		UpgradeDialog.upgradeDialog(context, context.getString(R.string.upgrade_body_state));
+		select();
 	}
 
 }

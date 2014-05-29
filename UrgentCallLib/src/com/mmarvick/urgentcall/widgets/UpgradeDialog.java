@@ -1,5 +1,7 @@
 package com.mmarvick.urgentcall.widgets;
 
+import com.mmarvick.urgentcall.R;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,9 +13,8 @@ public class UpgradeDialog {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
 		alertDialogBuilder
-			.setTitle("Pro Version Only")
-			.setMessage(messageText + 
-					"\n\nWould you like to upgrade?")
+			.setTitle(context.getString(R.string.upgrade_title))
+			.setMessage(messageText + "\n\n" + context.getString(R.string.upgrade_body_general))
 			.setCancelable(true)
 			.setNeutralButton("No Thanks", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
@@ -23,18 +24,20 @@ public class UpgradeDialog {
 			.setPositiveButton("Upgrade", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
-					String packageName = "com.mmarvick.urgentcall_pro";
+					String packageName = context.getString(R.string.upgrade_url_package);
+					Uri uri;
 					try {
-					    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+						uri = Uri.parse(packageName + context.getString(R.string.upgrade_url_play_app));
 					} catch (android.content.ActivityNotFoundException anfe) {
-					    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)));
+						uri = Uri.parse(packageName + context.getString(R.string.upgrade_url_play_web));
 					}
+					
+					context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
 				}
 			});
 		
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
-		
-		
+
 	}
 }

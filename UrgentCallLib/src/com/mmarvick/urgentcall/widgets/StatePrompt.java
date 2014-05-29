@@ -2,10 +2,6 @@ package com.mmarvick.urgentcall.widgets;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.R.bool;
-import com.mmarvick.urgentcall.R.id;
-import com.mmarvick.urgentcall.R.layout;
-import com.mmarvick.urgentcall.R.string;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
 import com.mmarvick.urgentcall.data.PrefHelper;
 
@@ -27,6 +23,8 @@ public class StatePrompt {
 	private final Button whitelistButton;
 	private final Button blacklistButton;
 	private final Context context;
+	
+	private AlertDialog dialog;
 	
 	public StatePrompt(final Context context) {
 		LayoutInflater li = LayoutInflater.from(context);
@@ -114,6 +112,9 @@ public class StatePrompt {
 		});
 	
 		AlertDialog dialog = alertDialogBuilder.create();
+	}
+	
+	public void show() {
 		dialog.show();
 	}
 	

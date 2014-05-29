@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
@@ -23,14 +24,10 @@ import android.widget.TimePicker;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.R.bool;
-import com.mmarvick.urgentcall.R.id;
-import com.mmarvick.urgentcall.R.layout;
-import com.mmarvick.urgentcall.R.menu;
-import com.mmarvick.urgentcall.R.string;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.widgets.EditTextPrompt;
 import com.mmarvick.urgentcall.widgets.SnoozeDialog;
+import com.mmarvick.urgentcall.widgets.SnoozeEndDialog;
 import com.mmarvick.urgentcall.widgets.StatePrompt;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
@@ -40,7 +37,7 @@ import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 public class MainActivity extends ActionBarActivity
 				implements TimePickerDialog.OnTimeSetListener {
 	private CheckSnooze checker;
-	private AlertDialog endSnoozeDialog;
+	private SnoozeEndDialog endSnoozeDialog;
 	
 	private TextView stateText;
 	private TextView footerTextMain;
@@ -99,14 +96,14 @@ public class MainActivity extends ActionBarActivity
 		footerTextForSelection.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new StatePrompt(MainActivity.this);
+				new StatePrompt(MainActivity.this).show();
 			}
 		});
 		
 		stateText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new StatePrompt(MainActivity.this);
+				new StatePrompt(MainActivity.this).show();
 			}
 		});
 	}
@@ -149,30 +146,15 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	private void endSnooze() {
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-		
-		alertDialogBuilder
-			.setTitle(getString(R.string.cancel_snooze_title))
-			.setMessage(getString(R.string.cancel_snooze_body))
-			.setCancelable(true)
-			.setPositiveButton(getString(R.string.cancel_snooze_yes), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					PrefHelper.setSnoozeTime(getApplicationContext(), 0);
-					check();
-				}
-			})
-			.setNeutralButton(getString(R.string.cancel_snooze_no), new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-				
-			});
-		
-		endSnoozeDialog = alertDialogBuilder.create();
+		endSnoozeDialog = new SnoozeEndDialog(this);
 		endSnoozeDialog.show();
-
+		endSnoozeDialog.setOnDismissListener(new OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				check();
+			}
+		});
 	}
 	
 	@Override

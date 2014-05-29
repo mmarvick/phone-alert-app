@@ -2,7 +2,6 @@ package com.mmarvick.urgentcall.activities;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.R.xml;
 import com.mmarvick.urgentcall.widgets.EditTextPrompt;
 import com.mmarvick.urgentcall.widgets.StatePrompt;
 
@@ -42,7 +41,7 @@ public class SettingsActivity extends PreferenceActivity
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new StatePrompt(SettingsActivity.this);
+				new StatePrompt(SettingsActivity.this).show();
 
 				return true;
 			}

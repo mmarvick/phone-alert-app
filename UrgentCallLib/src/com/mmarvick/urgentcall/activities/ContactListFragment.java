@@ -6,9 +6,6 @@ import java.util.Arrays;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.R.id;
-import com.mmarvick.urgentcall.R.layout;
-import com.mmarvick.urgentcall.R.menu;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
 
 import android.net.Uri;

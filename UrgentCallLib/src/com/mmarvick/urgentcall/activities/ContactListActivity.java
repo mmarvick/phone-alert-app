@@ -2,7 +2,6 @@ package com.mmarvick.urgentcall.activities;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.R.layout;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -19,9 +18,9 @@ public class ContactListActivity extends ActionBarActivity {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		if (getIntent().getExtras().getInt(Constants.LIST_TYPE) == Constants.LIST_WHITELIST) {
-			actionBar.setTitle("Edit Whitelist");	
+			actionBar.setTitle(getString(R.string.title_activity_list_whitelist));	
 		} else {
-			actionBar.setTitle("Edit Blacklist");
+			actionBar.setTitle(getString(R.string.title_activity_list_blacklist));
 		}
 	}
 	

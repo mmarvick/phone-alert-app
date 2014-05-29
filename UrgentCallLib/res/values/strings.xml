@@ -13,7 +13,9 @@
     
     <string name="action_settings">Settings</string>
     <string name="action_snooze">Snooze</string>
+    <string name="action_rate">Rate</string>
     <string name="action_share">Share</string>
+    <string name="action_upgrade">Upgrade</string>
     <string name="action_add_contact">Add a contact</string>    
     
     <string name="status_heading">Urgent call is</string>
@@ -23,7 +25,10 @@
     <string name="preferences_min">Minutes for Calls</string>
     
     <string name="upgrade_title">Pro Version Only</string>
+    <string name="upgrade_title_menu">Upgrade to Pro</string>
     <string name="upgrade_body_general">Would you like to upgrade?</string>
+    <string name="upgrade_body_menu">
+    Upgrading to Urgent Call Pro gives you more control over who can trigger an alarm. You also get the ablity to easily snooze the alarms for a short period of time.</string>
     <string name="upgrade_body_snooze">
     Users of Urgent Call Pro can snooze alerts for a period of time.\n\n\
 \	Users of Urgent Call Lite must turn the application off and on manually.</string>
@@ -37,10 +42,10 @@
     <string name="cancel_snooze_dialog_yes">Yes</string>
     <string name="cancel_snooze_dialog_no">No</string>
     
-    <string name="rate_dialog_title"></string>
-    <string name="rate_dialog_body"></string>
-    <string name="rate_dialog_yes"></string>
-    <string name="rate_dialog_no"></string>    
+    <string name="rate_dialog_title">Rate Urgent Call</string>
+    <string name="rate_dialog_body">Would you like to rate this app? We\'d really appreciate it!</string>
+    <string name="rate_dialog_yes">Yes!</string>
+    <string name="rate_dialog_no">Maybe Later</string>    
     
     <string name="snooze_dialog_title">Snooze for&#8230;</string>
     

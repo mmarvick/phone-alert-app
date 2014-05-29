@@ -26,6 +26,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.widgets.EditTextPrompt;
+import com.mmarvick.urgentcall.widgets.RateDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeEndDialog;
 import com.mmarvick.urgentcall.widgets.StatePrompt;
@@ -324,8 +325,18 @@ public class MainActivity extends ActionBarActivity
 	    // Inflate the menu items for use in the action bar
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.main_activity_actions, menu);
-
-	    return super.onCreateOptionsMenu(menu);
+  
+	    // Call the super class
+	    boolean returnValue = super.onCreateOptionsMenu(menu);
+	    
+	    // Remove upgrade option in pro version
+		if (getResources().getBoolean(R.bool.paid_version)) {
+		    MenuItem upgrade = menu.findItem(R.id.action_upgrade);
+		    upgrade.setVisible(false);
+		    supportInvalidateOptionsMenu();
+		}
+		
+		return returnValue;
 	}
 	
 	private void share() {
@@ -357,8 +368,13 @@ public class MainActivity extends ActionBarActivity
 		} else if (itemId == R.id.action_share) {
 			share();
 			return true;
-		}
-		else {
+		} else if (itemId == R.id.action_rate) {
+			new RateDialog(this).show();
+			return true;
+		} else if (itemId == R.id.action_upgrade) {
+			UpgradeDialog.upgradeDialog(this, getString(R.string.upgrade_body_menu), getString(R.string.upgrade_title_menu));
+			return true;
+		} else {
 			return super.onOptionsItemSelected(item);
 		}
 	}

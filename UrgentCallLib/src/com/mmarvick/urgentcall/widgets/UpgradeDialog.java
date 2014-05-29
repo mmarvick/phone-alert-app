@@ -10,10 +10,14 @@ import android.net.Uri;
 
 public class UpgradeDialog {
 	public static void upgradeDialog(final Context context, String messageText) {
+		upgradeDialog(context, messageText, context.getString(R.string.upgrade_title));
+	}
+	
+	public static void upgradeDialog(final Context context, String messageText, String title) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
 		alertDialogBuilder
-			.setTitle(context.getString(R.string.upgrade_title))
+			.setTitle(title)
 			.setMessage(messageText + "\n\n" + context.getString(R.string.upgrade_body_general))
 			.setCancelable(true)
 			.setNeutralButton("No Thanks", new DialogInterface.OnClickListener() {

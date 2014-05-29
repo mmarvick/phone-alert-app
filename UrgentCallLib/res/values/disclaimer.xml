@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="disclaimer_version">1</integer>
+    <string name="disclaimer_title">Disclaimer</string>
+    <string name="disclaimer_agree">Agree</string>
+    <string name="disclaimer_disagree">Disagree</string>
+   <string name="disclaimer_body">Thank you for installing Urgent Call!\n\n\
+Before using this app, please agree to the very short terms and conditions below. This app is disabled until you agree with them.\n\n\
+This software and documentation are distributed and sold "as is" without any warranty as to their performance, merchantability, or fitness for any particular purpose. The user assumes the entire risk as to the quality and performance of the software and acknowledges that the software may not be free from defects. In no event shall anyone who has been involved in the creation, development, production, or delivery of this software be liable for any direct, indirect, incidental or consequential loss or damages, such as, but not limited to, human endangerment or loss of anticipated profits, benefits, or use resulting from the use of this software, or arising out of any breach of warranty, even if they have been advised of the possibility of such damage.
+	</string>
+</resources>

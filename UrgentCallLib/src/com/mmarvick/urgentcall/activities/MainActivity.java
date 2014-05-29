@@ -38,6 +38,8 @@ public class MainActivity extends ActionBarActivity
 				implements TimePickerDialog.OnTimeSetListener {
 	private CheckSnooze checker;
 	private SnoozeEndDialog endSnoozeDialog;
+	private AlertDialog disclaimerDialog;
+	private AlertDialog versionsDialog;
 	
 	private TextView stateText;
 	private TextView footerTextMain;
@@ -52,6 +54,8 @@ public class MainActivity extends ActionBarActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		checkTwoVersions();
+		checkDisclaimer();
 		setContentView(R.layout.activity_main);
 		
 		stateText = (TextView) findViewById(R.id.simpleStateText);	
@@ -110,10 +114,10 @@ public class MainActivity extends ActionBarActivity
 	
 	@Override
 	protected void onResume() {
+
 		check();
 		checker = new CheckSnooze();
 		checker.execute();
-		checkTwoVersions();
 		super.onResume();		
 	}
 	
@@ -281,8 +285,37 @@ public class MainActivity extends ActionBarActivity
 					}
 				});
 			
-			AlertDialog alertDialog = alertDialogBuilder.create();
-			alertDialog.show();
+			versionsDialog = alertDialogBuilder.create();
+			versionsDialog.show();
+		}
+	}
+	
+	public void checkDisclaimer() {
+		if (!(PrefHelper.disclaimerCheck(getApplicationContext()))) {
+			PrefHelper.disclaimerSaveBackup(getApplicationContext());
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			
+			alertDialogBuilder
+				.setTitle(getString(R.string.disclaimer_title))
+				.setMessage(getString(R.string.disclaimer_body))
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.disclaimer_agree), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						PrefHelper.disclaimerAgreed(getApplicationContext());
+						PrefHelper.disclaimerResumeBackup(getApplicationContext());
+					}
+				})
+				.setNegativeButton(getString(R.string.disclaimer_disagree), new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						finish();
+						
+					}
+				});
+			
+			disclaimerDialog = alertDialogBuilder.create();
+			disclaimerDialog.show();			
 		}
 	}
 

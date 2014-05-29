@@ -23,12 +23,15 @@ public class Constants {
 	public final static int CALL_MIN_MAX = 60;
 	public final static int CALL_MIN_DEFAULT = 15;
 	
-	
 	public final static String LIST_TYPE = "LIST_TYPE";
-	public final static int LIST_NONE = 0;
 	public final static int LIST_WHITELIST = 1;
 	public final static int LIST_BLACKLIST = 2;
 	
 	public final static String SETTING_VOLUME = "VOLUME";
 	public final static String SETTING_VOLUME_CHANGED = "VOLUME_CHANGED";
+	
+	public final static String DISCLAIMER_VERSION = "DISCLAIMER_VERSION";
+	public final static int DISCLAIMER_DEFAULT = 0;
+	public final static String DISCLAIMER_BACKUP_MODE = "DISCLAIMER_BACKUP";
+	public final static String DISCLAIMER_BACKUP_FLAG = "DISCLAIMER_BACKUP_FLAG";
 }

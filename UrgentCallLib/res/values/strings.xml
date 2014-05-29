@@ -55,4 +55,5 @@
     <string name="share_1">Call me </string>
     <string name="share_2"> times in </string>
     <string name="share_3"> minutes to ring my phone, even if silenced. To also be reachable in an emergency, add this app: http://goo.gl/aK3Ic7</string>
+    
 </resources>

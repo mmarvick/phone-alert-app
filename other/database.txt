@@ -1,0 +1,43 @@
+Version 5
+
+_ID
+	ID for row
+lookup
+	lookup from address book
+sys_type
+	is this a system type (default, unknown number, ...)
+	0 - no
+	1 - yes
+on_state
+	on for repeat calls?
+	0 - off
+	1 - on
+
+=============================================================================================
+
+Version 6
+
+_ID
+	ID for row
+lookup
+	lookup from address book
+on_state
+	on for repeated calls?
+	0 - off (blacklist)
+	1 - on (whitelist)
+	2 - default (neither list)
+msg_state
+	on for text message alert?
+	0 - off (blacklist)
+	1 - on (whitelist)
+	2 - default (neither list)
+single_call_state
+	on for single call?
+	1 - on
+	2 - default (never set -- this currently means off)
+
+
+from 5 to 6:
+	- drop sys_type
+	- create msg_state
+	- create single_call_state

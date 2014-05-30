@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -25,7 +26,14 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        
+         
+        <receiver android:name="com.mmarvick.urgentcall.background.TextAlertBroadcastReceiver"> 
+            <intent-filter> 
+                <action android:name=
+                    "android.provider.Telephony.SMS_RECEIVED" /> 
+            </intent-filter> 
+        </receiver>
+               
         <activity
             android:name="com.mmarvick.urgentcall.activities.MainActivity"
             android:label="@string/app_name"
@@ -71,6 +79,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         
         <service android:name="com.mmarvick.urgentcall.background.RingService" />
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+ 
+    <Preference
+        android:key="MSG_STATUS"
+        android:title="@string/preferences_message_status"
+        />
+    
+    <Preference
+        android:key="MSG_STRING"
+        android:title="@string/preferences_message_string"
+        />    
+
+</PreferenceScreen>

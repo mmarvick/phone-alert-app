@@ -3,6 +3,9 @@
 
     <string name="app_name">Urgent Call</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings_message">Settings - Message Alert</string>
+    <string name="title_activity_settings_single_call">Settings - Single Call Alert</string>
+    <string name="title_activity_settings_repeated_call">Settings - Repeated Call Alert</string>
     <string name="title_activity_list_whitelist">Edit Whitelist</string>
     <string name="title_activity_list_blacklist">Edit Blacklist</string>
     
@@ -21,6 +24,9 @@
     <string name="status_heading">Urgent call is</string>
     
     <string name="preferences_app_status">Urgent Call status</string>
+    <string name="preferences_msg_settings">Message Alert settings&#8230;</string>
+    <string name="preferences_rc_settings">Repeated Call Alert settings&#8230;</string>
+    <string name="preferences_sc_settings">Single Call Alert settings&#8230;</string>
     <string name="preferences_repeated_call_status">Repeated Call status</string>
     <string name="preferences_qty">Number of Calls</string>
     <string name="preferences_min">Minutes for Calls</string>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+  
+    <Preference
+        android:key="RC_STATUS"
+        android:title="@string/preferences_repeated_call_status"
+        />
+    
+    <Preference
+        android:key="CALL_QTY"
+        android:title="@string/preferences_qty"
+        />
+    
+    <Preference
+        android:key="CALL_MIN"
+        android:title="@string/preferences_min"
+        />    
+
+</PreferenceScreen>

@@ -11,7 +11,6 @@ import com.mmarvick.urgentcall.widgets.StateOnOffPrompt;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
@@ -21,11 +20,11 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
-public class SettingsActivity extends PreferenceActivity {
-	Preference appState;
-	Preference msgSettings;
-	Preference rcSettings;
-	Preference scSettings;
+public class SettingsRepeatedCallActivity extends PreferenceActivity {
+	PreferenceScreen prefScreen;
+	Preference repeatCallState;
+	Preference callMins;
+	Preference callQty;
 	
     @SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
@@ -33,55 +32,42 @@ public class SettingsActivity extends PreferenceActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+        addPreferencesFromResource(R.xml.preferences_repeat_call);
         
-        appState = findPreference("APP_STATUS");
-        msgSettings = findPreference("MSG_SETTINGS");
-        rcSettings = findPreference("RC_SETTINGS");
-        scSettings = findPreference("SC_SETTINGS");
+        repeatCallState = findPreference("RC_STATUS");
+        callMins = findPreference("CALL_MIN");
+        callQty = findPreference("CALL_QTY");
         
-        appState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        repeatCallState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new StateOnOffPrompt(SettingsActivity.this, Constants.OVERALL_STATE).show();
+				new StateListsPrompt(SettingsRepeatedCallActivity.this, RulesEntry.REPEATED_CALL_STATE).show();
 
 				return true;
 			}
 		});
         
-        msgSettings.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        callMins.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				Intent i = new Intent(SettingsActivity.this, SettingsMessageActivity.class);
-				startActivity(i);
+				new EditTextIntPrompt(SettingsRepeatedCallActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
 
 				return true;
 			}
 		});
         
-        rcSettings.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        callQty.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				Intent i = new Intent(SettingsActivity.this, SettingsRepeatedCallActivity.class);
-				startActivity(i);
-
+				new EditTextIntPrompt(SettingsRepeatedCallActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
 				return true;
 			}
-		});        
-        
-        scSettings.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				Intent i = new Intent(SettingsActivity.this, SettingsSingleCallActivity.class);
-				startActivity(i);
-
-				return true;
-			}
-		}); 
+		});
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar ab = getActionBar();

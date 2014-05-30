@@ -73,6 +73,42 @@
                 android:value="com.mmarvick.urgentcall.MainActivity" />
 
         </activity>
+
+        <activity
+            android:name="com.mmarvick.urgentcall.activities.SettingsMessageActivity"
+            android:label="@string/title_activity_settings_message"
+            android:parentActivityName="com.mmarvick.urgentcall.activities.SettingsActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mmarvick.urgentcall.activities.SettingsActivity" />
+
+        </activity>
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.activities.SettingsRepeatedCallActivity"
+            android:label="@string/title_activity_settings_repeated_call"
+            android:parentActivityName="com.mmarvick.urgentcall.activities.SettingsActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mmarvick.urgentcall.activities.SettingsActivity" />
+
+        </activity>  
+           
+        <activity
+            android:name="com.mmarvick.urgentcall.activities.SettingsSingleCallActivity"
+            android:label="@string/title_activity_settings_single_call"
+            android:parentActivityName="com.mmarvick.urgentcall.activities.SettingsActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mmarvick.urgentcall.activities.SettingsActivity" />
+
+        </activity>        
         
         <receiver android:name = "com.mmarvick.urgentcall.background.SnoozeReset" >
             <intent-filter>

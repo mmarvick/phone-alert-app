@@ -1,4 +1,4 @@
-Version 5
+Version 4
 
 _ID
 	ID for row
@@ -13,6 +13,22 @@ on_state
 	0 - off
 	1 - on
 
+============================================================================================
+
+Version 5
+
+_ID
+	ID for row
+lookup
+	lookup from address book
+on_state
+	on for repeat calls?
+	0 - off
+	1 - on
+
+from 4 to 5:
+	- drop sys_type
+
 =============================================================================================
 
 Version 6
@@ -26,18 +42,18 @@ on_state
 	0 - off (blacklist)
 	1 - on (whitelist)
 	2 - default (neither list)
-msg_state
-	on for text message alert?
-	0 - off (blacklist)
-	1 - on (whitelist)
-	2 - default (neither list)
 single_call_state
 	on for single call?
 	1 - on
 	2 - default (never set -- this currently means off)
+msg_state
+	on for text message alert?
+	0 - off (blacklist)
+	1 - on (whitelist)
+	2 - default (neither list)	
 
 
 from 5 to 6:
 	- drop sys_type
 	- create msg_state
-	- create single_call_state
+	- create single_call

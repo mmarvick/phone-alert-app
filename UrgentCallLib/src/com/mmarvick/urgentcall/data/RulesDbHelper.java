@@ -29,7 +29,7 @@ public class RulesDbHelper {
 	}
 	
 	public String[] getContactLookups(boolean state) {
-		String moreWhere = RulesDbContract.RulesEntry.COLUMN_NAME_ON + " = ";
+		String moreWhere = RulesDbContract.RulesEntry.COLUMN_NAME_REPEATED_CALL_ON + " = ";
 		if (state) {
 			moreWhere += "'1'";
 		} else {
@@ -114,10 +114,10 @@ public class RulesDbHelper {
 	
 	public boolean getState(String lookup) {
 		open();
-		String[] columns = new String[] {RulesEntry.COLUMN_NAME_ON};
+		String[] columns = new String[] {RulesEntry.COLUMN_NAME_REPEATED_CALL_ON};
 		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, columns, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
 		c.moveToFirst();
-		return c.getInt(c.getColumnIndex(RulesEntry.COLUMN_NAME_ON)) == 1;
+		return c.getInt(c.getColumnIndex(RulesEntry.COLUMN_NAME_REPEATED_CALL_ON)) == 1;
 	}
 	
 	public void makeContact(String lookup, boolean state) {
@@ -129,7 +129,7 @@ public class RulesDbHelper {
 		} 
 		ContentValues values = new ContentValues();
 		values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);
-		values.put(RulesEntry.COLUMN_NAME_ON, (state? 1:0));
+		values.put(RulesEntry.COLUMN_NAME_REPEATED_CALL_ON, (state? 1:0));
 		mRulesDb.update(RulesEntry.TABLE_NAME, values, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
 	}
 	

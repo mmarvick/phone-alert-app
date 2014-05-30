@@ -26,7 +26,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
-import com.mmarvick.urgentcall.widgets.EditTextPrompt;
+import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.RateDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeEndDialog;
@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity
 			
 			@Override
 			public void onClick(View view) {
-				new EditTextPrompt(MainActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+				new EditTextIntPrompt(MainActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
 						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
 				
 			}
@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity
 			
 			@Override
 			public void onClick(View view) {
-				new EditTextPrompt(MainActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+				new EditTextIntPrompt(MainActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
 						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
 				
 			}

@@ -28,7 +28,15 @@ public class PrefHelper {
 		editor.commit();
 	}
 	
-	//---------------------Functions related to repeated call settings ---------------------
+	public static String getMessageToken(Context context) {
+		return getPrefs(context).getString(Constants.MSG_MESSAGE, Constants.MSG_MESSAGE_DEFAULT);
+	}
+	
+	public static void setMessageToken(Context context, String value) {
+		Editor editor = getPrefs(context).edit();
+		editor.putString(Constants.MSG_MESSAGE, value);
+		editor.commit();
+	}
 	
 	public static int getRepeatedCallQty(Context context) {
 		return getRepeatedCallValue(context, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT);

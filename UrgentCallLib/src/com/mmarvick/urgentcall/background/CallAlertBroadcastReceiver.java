@@ -14,6 +14,8 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.provider.CallLog;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.widget.Toast;
 
 public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 
@@ -25,14 +27,16 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 		dbHelper = new RulesDbHelper(context);
 		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-				
+		
 		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
 			
 			if (PrefHelper.getState(context, Constants.OVERALL_STATE) == RulesEntry.STATE_ON
 					&& !PrefHelper.isSnoozing(context)) {
+				Toast.makeText(context, "State is on!", Toast.LENGTH_SHORT).show();
 			
 				if (repeatedAlert(context, incomingNumber) || singleAlert(context, incomingNumber)) {
+					Toast.makeText(context, "An alert will trigger!", Toast.LENGTH_SHORT).show();
 					alertAction(context);					
 				}
 			
@@ -49,6 +53,7 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 			int called = timesCalled(context, incomingNumber, allowedMins);
 			//TODO: this is buggy
 			if (called >= allowedCalls - 1) {
+				Toast.makeText(context, "Repeated alert!", Toast.LENGTH_SHORT).show();
 				return true;
 			}
 		}
@@ -57,7 +62,12 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private boolean singleAlert(Context context, String incomingNumber) {
-		return isOn(context, RulesEntry.SINGLE_CALL_STATE, incomingNumber);
+		if (isOn(context, RulesEntry.SINGLE_CALL_STATE, incomingNumber)) {
+			Toast.makeText(context, "Single alert!", Toast.LENGTH_SHORT).show();
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	private boolean isOn(Context context, String alertType, String incomingNumber) {

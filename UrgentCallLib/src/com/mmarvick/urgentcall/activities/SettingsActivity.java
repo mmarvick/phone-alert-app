@@ -3,7 +3,8 @@ package com.mmarvick.urgentcall.activities;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
-import com.mmarvick.urgentcall.widgets.EditTextPrompt;
+import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
+import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.StateListsPrompt;
 import com.mmarvick.urgentcall.widgets.StateOnOffListPrompt;
 import com.mmarvick.urgentcall.widgets.StateOnOffPrompt;
@@ -72,7 +73,7 @@ public class SettingsActivity extends PreferenceActivity
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new EditTextPrompt(SettingsActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+				new EditTextIntPrompt(SettingsActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
 						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
 
 				return true;
@@ -83,7 +84,7 @@ public class SettingsActivity extends PreferenceActivity
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new EditTextPrompt(SettingsActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+				new EditTextIntPrompt(SettingsActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
 						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
 				return true;
 			}
@@ -107,7 +108,18 @@ public class SettingsActivity extends PreferenceActivity
 
 				return true;
 			}
-		});        
+		}); 
+        
+        msgToken.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new EditTextStringPrompt(SettingsActivity.this, Constants.MSG_MESSAGE_MIN,
+						Constants.MSG_MESSAGE, Constants.MSG_MESSAGE_DEFAULT, Constants.MSG_MESSAGE_TITLE);
+
+				return true;
+			}
+		});
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar ab = getActionBar();

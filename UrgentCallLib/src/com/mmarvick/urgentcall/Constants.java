@@ -9,6 +9,9 @@ public class Constants {
 	public final static int URGENT_CALL_STATE_WHITELIST = 2;
 	public final static int URGENT_CALL_STATE_BLACKLIST = 3;
 	
+	public final static String ALERT_TYPE = "ALERT_TYPE";
+	public final static String USER_STATE = "USER_STATE";	
+	
 	public final static String SNOOZE_TIME = "SNOOZE";
 	
 	public final static String CALL_QTY = "CALL_QTY";
@@ -23,8 +26,10 @@ public class Constants {
 	public final static int CALL_MIN_MAX = 60;
 	public final static int CALL_MIN_DEFAULT = 15;
 	
-	public final static String ALERT_TYPE = "ALERT_TYPE";
-	public final static String USER_STATE = "USER_STATE";
+	public final static String MSG_MESSAGE = "MSG_MESSAGE";
+	public final static String MSG_MESSAGE_TITLE = "Message Key";
+	public final static String MSG_MESSAGE_DEFAULT = "Urgent!";
+	public final static int MSG_MESSAGE_MIN = 5;
 	
 	public final static String LIST_TYPE = "LIST_TYPE";
 	public final static int LIST_WHITELIST = 1;

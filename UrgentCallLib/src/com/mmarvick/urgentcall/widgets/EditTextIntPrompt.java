@@ -7,19 +7,20 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-public class EditTextPrompt {
+public class EditTextIntPrompt {
 	private int min;
 	private int max;
 	private String title;
 	private Context context;
 	
-	public EditTextPrompt(final Context context, final int min, final int max, final String name, final int def, final String title) {
+	public EditTextIntPrompt(final Context context, final int min, final int max, final String name, final int def, final String title) {
 		this.min = min;
 		this.max = max;
 		this.title = title;
@@ -32,6 +33,7 @@ public class EditTextPrompt {
 		alertDialogBuilder.setView(promptView);
 		
 		final EditText userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
+		userInput.setInputType(InputType.TYPE_CLASS_NUMBER);
 		String setText = "" + PrefHelper.getRepeatedCallValue(context, name, def);
 		
 		//Set initial EditText text and move cursor to the end

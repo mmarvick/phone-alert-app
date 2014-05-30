@@ -94,6 +94,8 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 	
 	private void alertAction(Context context) {
 		Toast.makeText(context, "Text alert!", Toast.LENGTH_SHORT).show();
+		Intent alarmService = new Intent(context, MessageAlarmService.class);
+		context.startService(alarmService);	
 	}
 	
 }

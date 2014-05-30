@@ -14,6 +14,17 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 public class PrefHelper {
+	public static int getView(Context context) {
+		return getPrefs(context).getInt(Constants.VIEW, Constants.VIEW_OLD);
+	}
+	
+	public static void setView(Context context, int view) {
+		Editor editor = getPrefs(context).edit();
+		editor.putInt(Constants.VIEW, view);
+		editor.commit();
+	}
+	
+	
 	public static int getState(Context context, String alertType) {
 		int def = Constants.URGENT_CALL_STATE_ON;
 		if (alertType == RulesEntry.SINGLE_CALL_STATE) {

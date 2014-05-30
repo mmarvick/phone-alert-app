@@ -46,7 +46,23 @@
             </intent-filter>
             
         </activity>
- 
+
+        <activity
+            android:name="com.mmarvick.urgentcall.activities.MainOldActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+   			android:configChanges="orientation|keyboardHidden" >
+            
+        </activity>
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.activities.MainNewActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+   			android:configChanges="orientation|keyboardHidden" >
+            
+        </activity>        
+        
         <activity
             android:name="com.mmarvick.urgentcall.activities.ContactListActivity"
             android:parentActivityName="com.mmarvick.urgentcall.activities.SettingsActivity" >
@@ -65,7 +81,7 @@
         <activity
             android:name="com.mmarvick.urgentcall.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.mmarvick.urgentcall.activities.MainActivity" >
+            android:parentActivityName="com.mmarvick.urgentcall.activities.MainOldActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
@@ -118,6 +134,8 @@
 
         
         <service android:name="com.mmarvick.urgentcall.background.RingService" />
+        
+        <service android:name="com.mmarvick.urgentcall.background.MessageAlarmService" />
 
     </application>
 

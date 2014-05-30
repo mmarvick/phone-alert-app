@@ -1,6 +1,9 @@
 package com.mmarvick.urgentcall;
 
 public class Constants {
+	public final static String VIEW = "VIEW";
+	public final static int VIEW_OLD = 0;
+	public final static int VIEW_NEW = 1;
 	
 	public final static String OVERALL_STATE = "STATE";
 	
@@ -30,6 +33,8 @@ public class Constants {
 	public final static String MSG_MESSAGE_TITLE = "Message Key";
 	public final static String MSG_MESSAGE_DEFAULT = "Urgent!";
 	public final static int MSG_MESSAGE_MIN = 5;
+	
+	public final static int MSG_ALARM_TIME = 10;
 	
 	public final static String LIST_TYPE = "LIST_TYPE";
 	public final static int LIST_WHITELIST = 1;

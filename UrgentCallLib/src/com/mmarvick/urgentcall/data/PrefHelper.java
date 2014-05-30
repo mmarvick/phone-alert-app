@@ -4,6 +4,7 @@ import java.util.prefs.PreferencesFactory;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,36 +14,37 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 public class PrefHelper {
-	public static int getState(Context context) {
-		return getPrefs(context).getInt(Constants.SIMPLE_STATE, Constants.SIMPLE_STATE_ON);
+	public static int getState(Context context, String alertType) {
+		int def = Constants.URGENT_CALL_STATE_ON;
+		if (alertType == RulesEntry.SINGLE_CALL_STATE) {
+			def = Constants.URGENT_CALL_STATE_WHITELIST;
+		}
+		return getPrefs(context).getInt(alertType, def);
 	}
 	
-	public static void setState(Context context, int state) {
+	public static void setState(Context context, String alertType, int state) {
 		Editor editor = getPrefs(context).edit();
-		editor.putInt(Constants.SIMPLE_STATE, state);
+		editor.putInt(alertType, state);
 		editor.commit();
 	}
 	
-	public static int getListMode(Context context) {
-		String listMode = getPrefs(context).getString(Constants.LIST_TYPE, "" + Constants.LIST_WHITELIST);
-		return Integer.parseInt(listMode);
-	}
+	//---------------------Functions related to repeated call settings ---------------------
 	
-	public static int getCallQty(Context context) {
-		return getCallValue(context, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT);
+	public static int getRepeatedCallQty(Context context) {
+		return getRepeatedCallValue(context, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT);
 		
 	}
 	
-	public static int getCallMins(Context context) {
-		return getCallValue(context, Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT);
+	public static int getRepeatedCallMins(Context context) {
+		return getRepeatedCallValue(context, Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT);
 	}	
 	
-	public static int getCallValue(Context context, String name, int def) {
+	public static int getRepeatedCallValue(Context context, String name, int def) {
 		String value = getPrefs(context).getString(name, "" + def);
 		return Integer.parseInt(value);
 	}	
 	
-	public static void setCallValue(Context context, String name, int value) {
+	public static void setRepeatedCallValue(Context context, String name, int value) {
 		Editor editor = getPrefs(context).edit();
 		editor.putString(name, "" + value);
 		editor.commit();
@@ -101,8 +103,8 @@ public class PrefHelper {
 		if (!prefs.getBoolean(Constants.DISCLAIMER_BACKUP_FLAG, false)) {
 			Editor edit = prefs.edit();
 			edit.putBoolean(Constants.DISCLAIMER_BACKUP_FLAG, true);
-			edit.putInt(Constants.DISCLAIMER_BACKUP_MODE, getState(context));
-			setState(context, Constants.SIMPLE_STATE_OFF);
+			edit.putInt(Constants.DISCLAIMER_BACKUP_MODE, getState(context, Constants.OVERALL_STATE));
+			setState(context, Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_OFF);
 			edit.commit();
 		}
 	}
@@ -110,7 +112,7 @@ public class PrefHelper {
 	public static void disclaimerResumeBackup(Context context) {
 		SharedPreferences prefs = getPrefs(context);
 		Editor edit = prefs.edit();
-		setState(context, prefs.getInt(Constants.DISCLAIMER_BACKUP_MODE, Constants.SIMPLE_STATE_ON));
+		setState(context, Constants.OVERALL_STATE, prefs.getInt(Constants.DISCLAIMER_BACKUP_MODE, Constants.URGENT_CALL_STATE_ON));
 		edit.putBoolean(Constants.DISCLAIMER_BACKUP_FLAG, false);
 		edit.commit();
 	}

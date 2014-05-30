@@ -2,8 +2,11 @@ package com.mmarvick.urgentcall.activities;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 import com.mmarvick.urgentcall.widgets.EditTextPrompt;
-import com.mmarvick.urgentcall.widgets.StatePrompt;
+import com.mmarvick.urgentcall.widgets.StateListsPrompt;
+import com.mmarvick.urgentcall.widgets.StateOnOffListPrompt;
+import com.mmarvick.urgentcall.widgets.StateOnOffPrompt;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -19,9 +22,13 @@ import android.preference.PreferenceScreen;
 public class SettingsActivity extends PreferenceActivity 
 			implements OnSharedPreferenceChangeListener {
 	PreferenceScreen prefScreen;
-	Preference state;
+	Preference appState;
+	Preference repeatCallState;
 	Preference callMins;
 	Preference callQty;
+	Preference singleCallState;
+	Preference msgState;
+	Preference msgToken;
 	
     @SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
@@ -33,15 +40,29 @@ public class SettingsActivity extends PreferenceActivity
         
         prefScreen = getPreferenceScreen();
         
-        state = findPreference("STATUS");
+        appState = findPreference("APP_STATUS");
+        repeatCallState = findPreference("RC_STATUS");
         callMins = findPreference("CALL_MIN");
         callQty = findPreference("CALL_QTY");
+        singleCallState = findPreference("SC_STATUS");
+        msgState = findPreference("MSG_STATUS");
+        msgToken = findPreference("MSG_STRING");
         
-        state.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        appState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new StatePrompt(SettingsActivity.this).show();
+				new StateOnOffPrompt(SettingsActivity.this, Constants.OVERALL_STATE).show();
+
+				return true;
+			}
+		});
+        
+        repeatCallState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new StateListsPrompt(SettingsActivity.this, RulesEntry.REPEATED_CALL_STATE).show();
 
 				return true;
 			}
@@ -68,11 +89,34 @@ public class SettingsActivity extends PreferenceActivity
 			}
 		});
         
+        singleCallState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new StateOnOffListPrompt(SettingsActivity.this, RulesEntry.SINGLE_CALL_STATE).show();
+
+				return true;
+			}
+		}); 
+        
+        msgState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new StateListsPrompt(SettingsActivity.this, RulesEntry.MSG_STATE).show();
+
+				return true;
+			}
+		});        
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar ab = getActionBar();
             ab.show();
         }
     }
+
+    
+    
     
     @Override
     public void onResume() {

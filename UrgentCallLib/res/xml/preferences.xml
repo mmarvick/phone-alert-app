@@ -2,9 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:range="http://schemas.android.com/apk/lib/com.mmarvick.urgentcall"
     android:key="PREFERENCES" >
+        <Preference
+        android:key="APP_STATUS"
+        android:title="@string/preferences_app_status"
+        />
+    
     <Preference
-        android:key="STATUS"
-        android:title="@string/preferences_status"
+        android:key="RC_STATUS"
+        android:title="@string/preferences_repeated_call_status"
         />
     
     <Preference
@@ -15,6 +20,21 @@
     <Preference
         android:key="CALL_MIN"
         android:title="@string/preferences_min"
+        />
+    
+    <Preference
+        android:key="SC_STATUS"
+        android:title="@string/preferences_single_call_status"
+        />    
+        
+    <Preference
+        android:key="MSG_STATUS"
+        android:title="@string/preferences_message_status"
+        />
+    
+    <Preference
+        android:key="MSG_STRING"
+        android:title="@string/preferences_message_string"
         />
 
 </PreferenceScreen>

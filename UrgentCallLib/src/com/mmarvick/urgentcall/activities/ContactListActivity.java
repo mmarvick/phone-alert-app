@@ -2,6 +2,7 @@ package com.mmarvick.urgentcall.activities;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -17,11 +18,18 @@ public class ContactListActivity extends ActionBarActivity {
 		
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		if (getIntent().getExtras().getInt(Constants.LIST_TYPE) == Constants.LIST_WHITELIST) {
-			actionBar.setTitle(getString(R.string.title_activity_list_whitelist));	
+		
+		String alertType = getIntent().getStringExtra(Constants.ALERT_TYPE);
+		String listType;
+		int userState = getIntent().getIntExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
+		
+		if (userState == RulesEntry.STATE_ON){
+			listType = "Whitelist";
 		} else {
-			actionBar.setTitle(getString(R.string.title_activity_list_blacklist));
+			listType = "Blacklist";
 		}
+		
+		actionBar.setTitle(alertType + " " + listType);	
 	}
 	
 	public void refresh() {

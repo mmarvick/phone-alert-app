@@ -28,47 +28,9 @@ public class RulesDbHelper {
 		mContentResolver = context.getContentResolver();
 	}
 	
-	public String[] getContactLookups(boolean state) {
-		String moreWhere = RulesDbContract.RulesEntry.COLUMN_NAME_REPEATED_CALL_ON + " = ";
-		if (state) {
-			moreWhere += "'1'";
-		} else {
-			moreWhere += "'0'";
-		}
-		return getContactLookups(moreWhere);
-	}
-	
-	private String[] getContactLookups(String moreWhere) {
-		open();
-		ArrayList<String> contactIDs = new ArrayList<String>();
-		Cursor c = mRulesDb.rawQuery("SELECT * FROM rules WHERE " + moreWhere, null);
+	public String[][] getNamesLookups(String alertType, int alertState) {
+		String[] lookups = getContactLookups(alertType, alertState);
 		
-		c.moveToFirst();
-		
-		while (!c.isAfterLast()) {
-			contactIDs.add(c.getString(c.getColumnIndex(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP)));
-			c.moveToNext();
-		}
-		
-		Object[] lookupObjects = contactIDs.toArray();
-		String[] lookups = new String[lookupObjects.length];
-		for (int i = 0; i < lookupObjects.length; i++)
-			lookups[i] = (String) lookupObjects[i];
-		
-		return lookups;		
-	}
-	
-	public String getName(String lookup) {
-		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
-				new String[] {Phone.DISPLAY_NAME},
-				Data.LOOKUP_KEY + "=?",
-				new String[] {lookup}, null);
-		cursor.moveToFirst();
-		return cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));	
-	}
-	
-	public String[][] getNamesLookups(boolean state) {
-		String[] lookups = getContactLookups(state);
 		if (lookups.length == 0) return new String[][] {new String[0], new String[0]};
 		
 		String where = Data.LOOKUP_KEY + "='" + lookups[0] + "'";
@@ -92,13 +54,70 @@ public class RulesDbHelper {
 		}
 		
 		return data;
+	}	
+	
+	private String[] getContactLookups(String alertType, int alertState) {
+		open();
+		ArrayList<String> contactIDs = new ArrayList<String>();
+		String query = "SELECT * FROM rules WHERE " + alertType + " = '" + alertState + "'";
+		Cursor c = mRulesDb.rawQuery(query, null);
+		
+		c.moveToFirst();
+		
+		while (!c.isAfterLast()) {
+			contactIDs.add(c.getString(c.getColumnIndex(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP)));
+			c.moveToNext();
+		}
+		
+		Object[] lookupObjects = contactIDs.toArray();
+		String[] lookups = new String[lookupObjects.length];
+		for (int i = 0; i < lookupObjects.length; i++)
+			lookups[i] = (String) lookupObjects[i];
+		
+		return lookups;			
 	}
 	
-	public boolean isInDb(String lookup) {
-		open();
-		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, null, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
-		return c.getCount() > 0;
+	public String getName(String lookup) {
+		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
+				new String[] {Phone.DISPLAY_NAME},
+				Data.LOOKUP_KEY + "=?",
+				new String[] {lookup}, null);
+		cursor.moveToFirst();
+		return cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));	
 	}
+	
+	// Returns RulesEntry.STATE_DEFAULT if the lookup is null, not in the database, or the value in the db
+	// is null or RulesEntry.STATE_DEFAULT for the alertType. Otherwise, returns the user state for that alertType.
+	public int getUserState(String alertType, String lookup) {
+		if (lookup == null) {
+			return RulesEntry.STATE_DEFAULT;
+		}
+		
+		open();
+		String[] columns = new String[] {alertType};
+		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, columns, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
+		if (c.getCount() == 0) {
+			return RulesEntry.STATE_DEFAULT;
+		}
+		c.moveToFirst();
+		if (c.isNull(c.getColumnIndex(alertType))) {
+			return RulesEntry.STATE_DEFAULT;
+		}
+		return c.getInt(c.getColumnIndex(alertType));
+	}
+	
+	public void setContactStateForAlert(String alertType, String lookup, int userState) {
+		open();
+		if (!isInDb(lookup)) {
+			ContentValues values = new ContentValues();
+			values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);		
+			mRulesDb.insert(RulesEntry.TABLE_NAME, null, values);
+		} 
+		ContentValues values = new ContentValues();
+		values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup); //TODO: Is this necessary?
+		values.put(alertType, userState);
+		mRulesDb.update(RulesEntry.TABLE_NAME, values, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
+	}	
 	
 	public String getLookupFromNumber(String phoneNumber) {
 		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
@@ -112,31 +131,17 @@ public class RulesDbHelper {
 		return cursor.getString(cursor.getColumnIndex(Phone.LOOKUP_KEY));
 	}
 	
-	public boolean getState(String lookup) {
-		open();
-		String[] columns = new String[] {RulesEntry.COLUMN_NAME_REPEATED_CALL_ON};
-		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, columns, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
-		c.moveToFirst();
-		return c.getInt(c.getColumnIndex(RulesEntry.COLUMN_NAME_REPEATED_CALL_ON)) == 1;
+	public void removeContactForAlertType(String alertType, String lookup) {
+		setContactStateForAlert(alertType, lookup, RulesEntry.STATE_DEFAULT);
 	}
 	
-	public void makeContact(String lookup, boolean state) {
+	private boolean isInDb(String lookup) {
 		open();
-		if (!isInDb(lookup)) {
-			ContentValues values = new ContentValues();
-			values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);		
-			mRulesDb.insert(RulesEntry.TABLE_NAME, null, values);
-		} 
-		ContentValues values = new ContentValues();
-		values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);
-		values.put(RulesEntry.COLUMN_NAME_REPEATED_CALL_ON, (state? 1:0));
-		mRulesDb.update(RulesEntry.TABLE_NAME, values, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
-	}
-	
-	public void deleteContact(String lookup) {
-		open();
-		if (isInDb(lookup)) {
-			mRulesDb.delete(RulesEntry.TABLE_NAME, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "=?", new String[] {lookup});
+		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, null, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
+		if (c.getCount() == 0) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 	

@@ -32,7 +32,7 @@ public class EditTextPrompt {
 		alertDialogBuilder.setView(promptView);
 		
 		final EditText userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
-		String setText = "" + PrefHelper.getCallValue(context, name, def);
+		String setText = "" + PrefHelper.getRepeatedCallValue(context, name, def);
 		
 		//Set initial EditText text and move cursor to the end
 		userInput.setText(setText);
@@ -59,7 +59,7 @@ public class EditTextPrompt {
 							value = max;
 							alertRange(value);
 						}
-						PrefHelper.setCallValue(context, name, value);					
+						PrefHelper.setRepeatedCallValue(context, name, value);					
 					} catch (NumberFormatException e) {
 						
 					}

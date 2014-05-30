@@ -18,9 +18,9 @@ public class RulesDbOpenHelper extends SQLiteOpenHelper {
 			"CREATE TABLE " + RulesEntry.TABLE_NAME + " (" +
 					RulesEntry._ID + " INTEGER PRIMARY KEY," +
 					RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + TEXT_TYPE + SEPARATOR +
-					RulesEntry.COLUMN_NAME_REPEATED_CALL_ON + INTEGER_TYPE + SEPARATOR +
-					RulesEntry.COLUMN_NAME_SINGLE_CALL_ON + INTEGER_TYPE + SEPARATOR +
-					RulesEntry.COLUMN_NAME_MSG_ON + INTEGER_TYPE +					
+					RulesEntry.REPEATED_CALL_STATE + INTEGER_TYPE + SEPARATOR +
+					RulesEntry.SINGLE_CALL_STATE + INTEGER_TYPE + SEPARATOR +
+					RulesEntry.MSG_STATE + INTEGER_TYPE +					
 					")";
 	
 	public static final String SQL_DELETE_TABLE =
@@ -28,11 +28,11 @@ public class RulesDbOpenHelper extends SQLiteOpenHelper {
 	
 	public static final String SQL_ADD_SINGLE_CALL_ON =
 			"ALTER TABLE " + RulesEntry.TABLE_NAME + " ADD " +
-					RulesEntry.COLUMN_NAME_SINGLE_CALL_ON + INTEGER_TYPE;
+					RulesEntry.SINGLE_CALL_STATE + INTEGER_TYPE;
 	
 	public static final String SQL_ADD_MSG_ON =
 			"ALTER TABLE " + RulesEntry.TABLE_NAME + " ADD " +
-					RulesEntry.COLUMN_NAME_MSG_ON + INTEGER_TYPE;	
+					RulesEntry.MSG_STATE + INTEGER_TYPE;	
 	
 	public RulesDbOpenHelper(Context context) {
 		super(context, DATABASE_FILE, null, DATABASE_VERSION);

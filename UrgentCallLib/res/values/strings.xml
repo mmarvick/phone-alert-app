@@ -20,9 +20,13 @@
     
     <string name="status_heading">Urgent call is</string>
     
-    <string name="preferences_status">Urgent Call status</string>
+    <string name="preferences_app_status">Urgent Call status</string>
+    <string name="preferences_repeated_call_status">Repeated Call status</string>
     <string name="preferences_qty">Number of Calls</string>
     <string name="preferences_min">Minutes for Calls</string>
+    <string name="preferences_single_call_status">Single Call status</string>
+    <string name="preferences_message_status">Message Alert status</string>
+    <string name="preferences_message_string">Message Alert token</string>
     
     <string name="upgrade_title">Pro Version Only</string>
     <string name="upgrade_title_menu">Upgrade to Pro</string>

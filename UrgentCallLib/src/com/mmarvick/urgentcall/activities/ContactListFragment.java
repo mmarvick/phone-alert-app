@@ -2,11 +2,11 @@ package com.mmarvick.urgentcall.activities;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
+import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,12 +35,14 @@ public class ContactListFragment extends ListFragment {
 	private String[] mContactLookups;
 	
 	private RulesDbHelper dbHelper;
-	private int state;
+	private String alertType;
+	private int userState;
 	
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		state = getActivity().getIntent().getIntExtra(Constants.LIST_TYPE, Constants.LIST_WHITELIST);
+		alertType = getActivity().getIntent().getStringExtra(Constants.ALERT_TYPE);
+		userState = getActivity().getIntent().getIntExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
 		
 		getListView().setFooterDividersEnabled(true);
 		
@@ -72,14 +73,7 @@ public class ContactListFragment extends ListFragment {
 
 	private void loadContacts() {
 		String[][] namesLookupsString;
-		if (state == Constants.LIST_WHITELIST) { 
-			namesLookupsString = dbHelper.getNamesLookups(true);
-		} else if (state == Constants.LIST_BLACKLIST) {
-			namesLookupsString = dbHelper.getNamesLookups(false);
-		} else {
-			return;
-		}
-		Log.e("Data:", Arrays.deepToString(namesLookupsString));
+		namesLookupsString = dbHelper.getNamesLookups(alertType, userState);
 		mContactLookups = namesLookupsString[0];
 		mContactNames = namesLookupsString[1];
 	}
@@ -99,14 +93,8 @@ public class ContactListFragment extends ListFragment {
 				Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
 				cursor.moveToFirst();
 				String lookup = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-
-				if (dbHelper.isInDb(lookup)) {
-					//TODO: alert
-				} else {
-					//just add
-				}
 				
-				dbHelper.makeContact(lookup, (state == Constants.LIST_WHITELIST));
+				dbHelper.setContactStateForAlert(alertType, lookup, userState);
 
 			}
 		}
@@ -159,7 +147,7 @@ public class ContactListFragment extends ListFragment {
 				public void onClick(View arg0) {
 					String lookup = mContactLookups[position];
 					
-					dbHelper.deleteContact(lookup);
+					dbHelper.removeContactForAlertType(alertType, lookup);
 					((ContactListActivity) getActivity()).refresh();
 					
 				};	

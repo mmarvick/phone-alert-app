@@ -1,13 +1,13 @@
 package com.mmarvick.urgentcall;
 
 public class Constants {
-	public final static String SIMPLE_STATE = "STATE";
-	public final static int SIMPLE_STATE_OFF = 0;
-	public final static int SIMPLE_STATE_ON = 1;
-	public final static int SIMPLE_STATE_WHITELIST = 2;
-	public final static int SIMPLE_STATE_BLACKLIST = 3;
-	public final static int[] SIMPLE_STATES = {SIMPLE_STATE_OFF,
-		SIMPLE_STATE_ON};
+	
+	public final static String OVERALL_STATE = "STATE";
+	
+	public final static int URGENT_CALL_STATE_OFF = 0;
+	public final static int URGENT_CALL_STATE_ON = 1;
+	public final static int URGENT_CALL_STATE_WHITELIST = 2;
+	public final static int URGENT_CALL_STATE_BLACKLIST = 3;
 	
 	public final static String SNOOZE_TIME = "SNOOZE";
 	
@@ -22,6 +22,9 @@ public class Constants {
 	public final static int CALL_MIN_MIN = 1;
 	public final static int CALL_MIN_MAX = 60;
 	public final static int CALL_MIN_DEFAULT = 15;
+	
+	public final static String ALERT_TYPE = "ALERT_TYPE";
+	public final static String USER_STATE = "USER_STATE";
 	
 	public final static String LIST_TYPE = "LIST_TYPE";
 	public final static int LIST_WHITELIST = 1;

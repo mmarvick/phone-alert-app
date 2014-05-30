@@ -25,11 +25,12 @@ import android.widget.TimePicker;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 import com.mmarvick.urgentcall.widgets.EditTextPrompt;
 import com.mmarvick.urgentcall.widgets.RateDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeEndDialog;
-import com.mmarvick.urgentcall.widgets.StatePrompt;
+import com.mmarvick.urgentcall.widgets.StateListsPrompt;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
 // Launcher icons created with Android Asset Studio
@@ -101,14 +102,14 @@ public class MainActivity extends ActionBarActivity
 		footerTextForSelection.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new StatePrompt(MainActivity.this).show();
+				new StateListsPrompt(MainActivity.this, RulesEntry.REPEATED_CALL_STATE).show();
 			}
 		});
 		
 		stateText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new StatePrompt(MainActivity.this).show();
+				new StateListsPrompt(MainActivity.this, RulesEntry.REPEATED_CALL_STATE).show();
 			}
 		});
 	}
@@ -197,9 +198,9 @@ public class MainActivity extends ActionBarActivity
 			footerTextForText.setText("");
 			footerTextForSelection.setText("");
 		} else {
-			int state = PrefHelper.getState(getApplicationContext());
+			int state = PrefHelper.getState(getApplicationContext(), RulesEntry.REPEATED_CALL_STATE);
 			
-			if (state == Constants.SIMPLE_STATE_OFF) {
+			if (state == Constants.URGENT_CALL_STATE_OFF) {
 				stateText.setText("OFF");
 				stateText.setTextColor(Color.RED);
 				footerOneText();
@@ -212,9 +213,9 @@ public class MainActivity extends ActionBarActivity
 				footerOneText();
 				footerText2.setText("triggers an alert");
 				footerTextForText.setText("from ");
-				if (state == Constants.SIMPLE_STATE_ON) {
+				if (state == Constants.URGENT_CALL_STATE_ON) {
 					footerTextForSelection.setText("any caller");
-				} else if (state == Constants.SIMPLE_STATE_WHITELIST) {
+				} else if (state == Constants.URGENT_CALL_STATE_WHITELIST) {
 					footerTextForSelection.setText("whitelisted callers only");
 				} else {
 					footerTextForSelection.setText("all except blacklisted callers");
@@ -231,32 +232,23 @@ public class MainActivity extends ActionBarActivity
 			footerTextMinsText.setText("");
 			footerTextMain.setText("No alerts for");
 		} else {
-			int state = PrefHelper.getState(getApplicationContext());
-			if (state == Constants.SIMPLE_STATE_OFF) {
+			int state = PrefHelper.getState(getApplicationContext(), RulesEntry.REPEATED_CALL_STATE);
+			if (state == Constants.URGENT_CALL_STATE_OFF) {
 				footerTextCallsNum.setText("");
 				footerTextCallsText.setText("");
 				footerTextMinsNum.setText("");
 				footerTextMinsText.setText("");
 				footerTextMain.setText("No calls");
 			} else {
-				footerTextCallsNum.setText("" + PrefHelper.getCallQty(getApplicationContext()));
+				footerTextCallsNum.setText("" + PrefHelper.getRepeatedCallQty(getApplicationContext()));
 				footerTextCallsText.setText(" calls");
 				footerTextMain.setText(" in ");
-				footerTextMinsNum.setText("" + PrefHelper.getCallMins(getApplicationContext()));
+				footerTextMinsNum.setText("" + PrefHelper.getRepeatedCallMins(getApplicationContext()));
 				footerTextMinsText.setText(" minutes");
 			}
 		}
 
 	}
-	
-	public int getStateIndex(int state) {
-		for (int i = 0; i < Constants.SIMPLE_STATES.length; i++) {
-			if (Constants.SIMPLE_STATES[i] == state) return i;
-		}
-		return -1;
-	}
-	
-
 
 	public void checkTwoVersions() {
 		List<PackageInfo> pkgs = getPackageManager().getInstalledPackages(0);
@@ -343,8 +335,8 @@ public class MainActivity extends ActionBarActivity
 		Intent shareIntent = new Intent();
 		shareIntent.setAction(Intent.ACTION_SEND);
 		shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
-		String message = getString(R.string.share_1) + PrefHelper.getCallQty(getApplicationContext());
-		message += getString(R.string.share_2) + PrefHelper.getCallMins(getApplicationContext());
+		String message = getString(R.string.share_1) + PrefHelper.getRepeatedCallQty(getApplicationContext());
+		message += getString(R.string.share_2) + PrefHelper.getRepeatedCallMins(getApplicationContext());
 		message += getString(R.string.share_3);
 		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
 		shareIntent.setType("text/plain");

@@ -105,6 +105,11 @@ public class MainNewActivity extends ActionBarActivity
 		
 	}
 	
+	@Override
+	public void onResume() {
+		updateSettings();
+	}
+	
 	public void setTab(int tab) {
 		mViewPager.setCurrentItem(tab);;
 	}
@@ -119,9 +124,9 @@ public class MainNewActivity extends ActionBarActivity
 		}
 	}
 	
-	public void settingsUpdated() {
+	public void updateSettings() {
 		for (int i = 0; i < fragments.size(); i++) {
-			fragments.get(i).settingsUpdated();
+			fragments.get(i).fragUpdateSettings();
 		}
 	}
 	

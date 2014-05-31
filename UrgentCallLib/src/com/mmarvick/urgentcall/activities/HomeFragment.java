@@ -22,20 +22,13 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class HomeFragment extends TabFragment {
-	private MainNewActivity mActivity;
 	private LinearLayout mLayoutMsgState;
 	private LinearLayout mLayoutRCState;
 	private LinearLayout mLayoutSCState;
 	private TextView mTextMsgState;
 	private TextView mTextRCState;
 	private TextView mTextSCState;
-	private Button mButtonAppState;
-
-	@Override
-	public void onAttach(Activity activity) {
-		mActivity = (MainNewActivity) activity;
-		super.onAttach(activity);
-	}		
+	private Button mButtonAppState;		
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,7 +47,7 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				mActivity.setTab(MainNewActivity.TAB_MSG);
+				getMainActivity().setTab(MainNewActivity.TAB_MSG);
 			}
 		});
 		
@@ -62,7 +55,7 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				mActivity.setTab(MainNewActivity.TAB_CALL);
+				getMainActivity().setTab(MainNewActivity.TAB_CALL);
 			}
 		});
 		
@@ -70,7 +63,7 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				mActivity.setTab(MainNewActivity.TAB_CALL);
+				getMainActivity().setTab(MainNewActivity.TAB_CALL);
 			}
 		});		
 		
@@ -78,33 +71,23 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				if (PrefHelper.isSnoozing(mActivity.getApplicationContext())) {
-					mActivity.endSnooze();
+				if (PrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
+					getMainActivity().endSnooze();
 				}
-				else if (PrefHelper.getState(mActivity.getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-					PrefHelper.setState(mActivity.getApplicationContext(), Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_ON);
+				else if (PrefHelper.getState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_ON);
 				} else {
-					PrefHelper.setState(mActivity.getApplicationContext(), Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_OFF);
+					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_OFF);
 				}
-				setButtonState();
+				getMainActivity().updateSettings();
 			}
 		});
-		setText();
+		
 		return view;
     }
 	
-	public void settingsUpdated() {
-		setText();
-	}
-	
 	@Override
-	public void onResume() {
-		setText();
-		super.onResume();
-	}
-	
-	public void setText() {
-		Log.e("Text", "Was set");
+	public void fragUpdateSettings() {
 		setStateText(mTextMsgState, RulesEntry.MSG_STATE);
 		setStateText(mTextRCState, RulesEntry.REPEATED_CALL_STATE);
 		setStateText(mTextSCState, RulesEntry.SINGLE_CALL_STATE);
@@ -113,26 +96,26 @@ public class HomeFragment extends TabFragment {
 	
 	public void setStateText(TextView textView, String alertType) {
 		if (textView != null) {
-			if (PrefHelper.getState(mActivity.getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
-				textView.setText(mActivity.getString(R.string.status_nocaps_off));
+			if (PrefHelper.getState(getMainActivity().getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
+				textView.setText(getMainActivity().getString(R.string.status_nocaps_off));
 				textView.setTextColor(Color.RED);
 			} else {
-				textView.setText(mActivity.getString(R.string.status_nocaps_on));
+				textView.setText(getMainActivity().getString(R.string.status_nocaps_on));
 				textView.setTextColor(Color.GREEN);
 			}
 		}
 	}
 	
 	private void setButtonState() {
-		if (PrefHelper.isSnoozing(mActivity.getApplicationContext())) {
-			mButtonAppState.setText(mActivity.getString(R.string.status_allcaps_snoozing));
+		if (PrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
+			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_snoozing));
 			mButtonAppState.setTextColor(Color.RED);			
 		}
-		else if (PrefHelper.getState(mActivity.getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-			mButtonAppState.setText(mActivity.getString(R.string.status_allcaps_off));
+		else if (PrefHelper.getState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_off));
 			mButtonAppState.setTextColor(Color.RED);
 		} else {
-			mButtonAppState.setText(mActivity.getString(R.string.status_allcaps_on));
+			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_on));
 			mButtonAppState.setTextColor(Color.GREEN);
 		}
 	}

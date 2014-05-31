@@ -84,7 +84,7 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 	
 	private boolean messageAlert(Context context, String incomingNumber, String message) {
 		if (isOn(context, RulesEntry.MSG_STATE, incomingNumber)) {
-			if (message.contains(PrefHelper.getMessageToken(context))) {
+			if (message.toLowerCase().contains(PrefHelper.getMessageToken(context).toLowerCase())) {
 				return true;
 			}
 		}

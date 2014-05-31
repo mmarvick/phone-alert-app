@@ -108,6 +108,7 @@ public class MainNewActivity extends ActionBarActivity
 	@Override
 	public void onResume() {
 		updateSettings();
+		super.onResume();
 	}
 	
 	public void setTab(int tab) {
@@ -126,7 +127,10 @@ public class MainNewActivity extends ActionBarActivity
 	
 	public void updateSettings() {
 		for (int i = 0; i < fragments.size(); i++) {
-			fragments.get(i).fragUpdateSettings();
+			TabFragment frag = fragments.get(i);
+			if (frag.isUpdatable()) {
+				frag.fragUpdateSettings();
+			}
 		}
 	}
 	

@@ -3,6 +3,8 @@ package com.mmarvick.urgentcall.widgets;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
+import com.mmarvick.urgentcall.activities.MainNewActivity;
+import com.mmarvick.urgentcall.activities.TabFragment;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 
@@ -26,13 +28,14 @@ public class StateListsPrompt {
 	private final Context context;
 	private final String alertType;
 	
-	private AlertDialog dialog;
-	
-	public StateListsPrompt(final Context context, final String alertType) {
+	private AlertDialog.Builder alertDialogBuilder;
+	private OnOptionsChangedListener mOnOptionsChangedListener;
+
+	public StateListsPrompt(final Context context, final String alertType, final MainNewActivity updater) {
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptView = li.inflate(R.layout.dialog_state_lists,  null);	
 		
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setView(promptView);
 		
 		this.context = context;
@@ -105,7 +108,8 @@ public class StateListsPrompt {
 				} else if (offRadio.isChecked()) {
 					PrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_OFF);
 				}
-
+				
+				if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
 			}
 		})
 		.setNegativeButton(context.getString(R.string.state_change_dialog_cancel), new DialogInterface.OnClickListener() {
@@ -116,11 +120,11 @@ public class StateListsPrompt {
 			}
 		});
 	
-		dialog = alertDialogBuilder.create();
+		
 	}
 	
 	public void show() {
-		dialog.show();
+		alertDialogBuilder.create().show();
 	}
 	
 	private void select() {
@@ -144,6 +148,10 @@ public class StateListsPrompt {
 	private void upgradeNote() {
 		UpgradeDialog.upgradeDialog(context, context.getString(R.string.upgrade_body_state));
 		select();
+	}
+	
+	public void setOnOptionsChangedListener(OnOptionsChangedListener listener) {
+		mOnOptionsChangedListener = listener;
 	}
 
 }

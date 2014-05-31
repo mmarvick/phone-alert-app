@@ -5,12 +5,19 @@ import android.support.v4.app.Fragment;
 
 public class TabFragment extends Fragment {
 	private MainNewActivity mActivity;
-	
-	public void fragUpdateSettings() {
-		mActivity.updateSettings();
+	private boolean mCanUpdate = false;
+
+	public boolean isUpdatable() {
+		return mCanUpdate;
 	}
 	
-	public void settingsUpdated() {};
+	public void setUpdatable(boolean canUpdate) {
+		mCanUpdate = canUpdate;
+	}
+	
+	public void fragUpdateSettings() {
+		setUpdatable(true);
+	}
 	
 	@Override
 	public void onAttach(Activity activity) {

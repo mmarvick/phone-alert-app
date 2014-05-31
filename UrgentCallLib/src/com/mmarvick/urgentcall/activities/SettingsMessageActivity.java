@@ -39,7 +39,7 @@ public class SettingsMessageActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new StateListsPrompt(SettingsMessageActivity.this, RulesEntry.MSG_STATE).show();
+				new StateListsPrompt(SettingsMessageActivity.this, RulesEntry.MSG_STATE, null).show();
 
 				return true;
 			}

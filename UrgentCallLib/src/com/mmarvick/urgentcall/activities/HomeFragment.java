@@ -83,15 +83,18 @@ public class HomeFragment extends TabFragment {
 			}
 		});
 		
+		fragUpdateSettings();
 		return view;
     }
 	
 	@Override
 	public void fragUpdateSettings() {
+		setUpdatable(true);
 		setStateText(mTextMsgState, RulesEntry.MSG_STATE);
 		setStateText(mTextRCState, RulesEntry.REPEATED_CALL_STATE);
 		setStateText(mTextSCState, RulesEntry.SINGLE_CALL_STATE);
 		setButtonState();
+		super.fragUpdateSettings();
 	}
 	
 	public void setStateText(TextView textView, String alertType) {

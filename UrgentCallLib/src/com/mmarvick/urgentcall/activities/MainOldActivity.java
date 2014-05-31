@@ -102,14 +102,14 @@ public class MainOldActivity extends ActionBarActivity
 		footerTextForSelection.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new StateListsPrompt(MainOldActivity.this, RulesEntry.REPEATED_CALL_STATE).show();
+				new StateListsPrompt(MainOldActivity.this, RulesEntry.REPEATED_CALL_STATE, null).show();
 			}
 		});
 		
 		stateText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new StateListsPrompt(MainOldActivity.this, RulesEntry.REPEATED_CALL_STATE).show();
+				new StateListsPrompt(MainOldActivity.this, RulesEntry.REPEATED_CALL_STATE, null).show();
 			}
 		});
 	}

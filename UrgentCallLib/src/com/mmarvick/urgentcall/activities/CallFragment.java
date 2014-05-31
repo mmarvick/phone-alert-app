@@ -25,8 +25,9 @@ public class CallFragment extends TabFragment {
 		return fragmentView;
     }
 	
-	public void settingsUpdated() {
-		
+	@Override
+	public void fragUpdateSettings() {
+		super.fragUpdateSettings();
 	}
 
 }

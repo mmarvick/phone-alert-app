@@ -21,7 +21,16 @@
     <string name="action_upgrade">Upgrade</string>
     <string name="action_add_contact">Add a contact</string>    
     
-    <string name="status_heading">Urgent call is</string>
+    <string name="status_heading">Urgent Call is</string>
+    <string name="status_home_msg_name">Message Alerts are&#160;</string>
+    <string name="status_home_rc_name">Repeated Call Alerts are&#160;</string>
+    <string name="status_home_sc_name">Single Call Alerts are&#160;</string>
+    
+    <string name="status_allcaps_on">ON</string>
+    <string name="status_allcaps_off">OFF</string>
+    <string name="status_allcaps_snoozing">SNOOZING</string>
+    <string name="status_nocaps_on">on</string>
+    <string name="status_nocaps_off">off</string>
     
     <string name="preferences_app_status">Urgent Call status</string>
     <string name="preferences_msg_settings">Message Alert settings&#8230;</string>

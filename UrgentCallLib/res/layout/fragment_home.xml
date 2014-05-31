@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${packageName}.${activityClass}" >
+    
+    <TextView
+        android:id="@+id/textView_home_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="@string/status_heading"
+        android:textSize="@dimen/normal_textSize" />
+
+    <Button
+        android:id="@+id/button_home_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_home_heading"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="@dimen/large_textSize" /> 
+           
+    <LinearLayout
+        android:id="@+id/linearLayout_home_sc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp" >
+
+	    <TextView
+	        android:id="@+id/textView_home_sc_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/status_home_sc_name"
+	        android:textSize="@dimen/small_textSize" />          
+        
+	     <TextView
+	        android:id="@+id/textView_home_sc_state"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/small_textSize" />      
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/linearLayout_home_rc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/linearLayout_home_sc"
+        android:layout_marginBottom="10dp" >
+
+	    <TextView
+	        android:id="@+id/textView_home_rc_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/status_home_rc_name"
+	        android:textSize="@dimen/small_textSize" />        
+	        
+	    <TextView
+	        android:id="@+id/textView_home_rc_state"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/small_textSize" />     
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/linearLayout_home_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/linearLayout_home_rc"
+        android:layout_marginBottom="10dp" >
+
+	    <TextView
+	        android:id="@+id/textView_home_msg_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/status_home_msg_name"
+	        android:textSize="@dimen/small_textSize" />        
+	        
+	    <TextView
+	        android:id="@+id/textView_home_msg_state"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/small_textSize" />     
+    
+	</LinearLayout>
+
+
+
+</RelativeLayout>

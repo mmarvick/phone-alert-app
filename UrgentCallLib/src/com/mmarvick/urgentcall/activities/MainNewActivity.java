@@ -1,5 +1,8 @@
 package com.mmarvick.urgentcall.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
@@ -13,22 +16,138 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class MainNewActivity extends ActionBarActivity 
 	implements TimePickerDialog.OnTimeSetListener{
 	
+	public ArrayList<TabFragment> fragments;
+	public String[] fragmentTitles;
+	
+	private MyPagerAdapter mAdapter;
 	private SnoozeEndDialog endSnoozeDialog;
+	private ViewPager mViewPager;
+	
+	public static final int TAB_HOME = 0;
+	public static final int TAB_MSG = 1;
+	public static final int TAB_CALL = 2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_main);
+
+		fragments = new ArrayList<TabFragment>();
+		fragments.add((TabFragment) (new HomeFragment()));
+		fragments.add((TabFragment) (new MessageFragment()));	
+		fragments.add((TabFragment) (new CallFragment()));
+		fragmentTitles = new String[] {"Home", "Message\nAlert", "Call\nAlert"};
+		
+		final ActionBar actionBar = getSupportActionBar();
+		
+		mAdapter = new MyPagerAdapter(getSupportFragmentManager());
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager.setAdapter(mAdapter);
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int position) {
+				getSupportActionBar().setSelectedNavigationItem(position);
+			}
+		});
+		
+
+		
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		
+		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+
+			@Override
+			public void onTabReselected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onTabSelected(Tab tab, FragmentTransaction ft) {
+				mViewPager.setCurrentItem(tab.getPosition());
+				
+			}
+
+			@Override
+			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		
+		for (int i = 0; i < fragmentTitles.length; i++) {
+			actionBar.addTab(
+					actionBar.newTab()
+							.setText(fragmentTitles[i])
+							.setTabListener(tabListener));
+		}
+		
 	}
+	
+	public void setTab(int tab) {
+		mViewPager.setCurrentItem(tab);;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		int tab = mViewPager.getCurrentItem();
+		if (tab == TAB_CALL || tab == TAB_MSG) {
+			mViewPager.setCurrentItem(TAB_HOME);
+		} else {
+			super.onBackPressed();
+		}
+	}
+	
+	public void settingsUpdated() {
+		for (int i = 0; i < fragments.size(); i++) {
+			fragments.get(i).settingsUpdated();
+		}
+	}
+	
+	public class MyPagerAdapter extends FragmentPagerAdapter {
+		
+		public MyPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+		
+		@Override
+		public Fragment getItem(int position) {
+			return fragments.get(position);
+		}
+
+		@Override
+		public int getCount() {
+			return fragments.size();
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 
 	private void showSnooze() {
 		if (getResources().getBoolean(R.bool.paid_version)) {
@@ -39,7 +158,7 @@ public class MainNewActivity extends ActionBarActivity
 		}
 	}
 	
-	private void endSnooze() {
+	public void endSnooze() {
 		endSnoozeDialog = new SnoozeEndDialog(this);
 		endSnoozeDialog.show();
 		endSnoozeDialog.setOnDismissListener(new OnDismissListener() {

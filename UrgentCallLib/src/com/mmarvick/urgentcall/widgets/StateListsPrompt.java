@@ -30,7 +30,7 @@ public class StateListsPrompt {
 	
 	public StateListsPrompt(final Context context, final String alertType) {
 		LayoutInflater li = LayoutInflater.from(context);
-		View promptView = li.inflate(R.layout.state_lists_prompt,  null);	
+		View promptView = li.inflate(R.layout.dialog_state_lists,  null);	
 		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setView(promptView);

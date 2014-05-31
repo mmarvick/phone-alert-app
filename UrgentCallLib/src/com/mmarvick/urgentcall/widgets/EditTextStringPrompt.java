@@ -24,7 +24,7 @@ public class EditTextStringPrompt {
 		this.context = context;
 		
 		LayoutInflater li = LayoutInflater.from(context);
-		View promptView = li.inflate(R.layout.edit_text_prompt,  null);
+		View promptView = li.inflate(R.layout.dialog_edit_text,  null);
 		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setView(promptView);

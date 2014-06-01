@@ -6,7 +6,7 @@
     tools:context="${packageName}.${activityClass}" >
     
     <TextView
-        android:id="@+id/textView_msg_heading"
+        android:id="@+id/textView_msg_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -19,10 +19,55 @@
         android:id="@+id/button_msg_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_msg_heading"
+        android:layout_below="@id/textView_msg_state"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
         android:textSize="@dimen/large_textSize" /> 
         
+    <TextView
+        android:id="@+id/textView_msg_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_msg_state"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:text="@string/message_text_intro"
+        android:textSize="@dimen/small_textSize" />
+    
+    <TextView
+        android:id="@+id/textView_msg_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_msg_heading"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="@dimen/small_textSize" /> 
+
+    <TextView
+        android:id="@+id/textView_msg_trigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_msg_key"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+		android:text="@string/message_text_will_trigger"
+        android:textSize="@dimen/small_textSize" />        
+    
+    <TextView
+        android:id="@+id/textView_msg_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_msg_trigger"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textSize="@dimen/small_textSize" /> 
+        
+ 
+                
 </RelativeLayout>

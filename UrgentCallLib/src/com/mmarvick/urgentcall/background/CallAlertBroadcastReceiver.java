@@ -47,7 +47,7 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private boolean repeatedAlert(Context context, String incomingNumber) {
-		if (isOn(context, RulesEntry.REPEATED_CALL_STATE, incomingNumber)) {
+		if (isOn(context, RulesEntry.RC_STATE, incomingNumber)) {
 			int allowedMins = PrefHelper.getRepeatedCallMins(context);
 			int allowedCalls = PrefHelper.getRepeatedCallQty(context);;
 			int called = timesCalled(context, incomingNumber, allowedMins);

@@ -102,14 +102,14 @@ public class MainOldActivity extends ActionBarActivity
 		footerTextForSelection.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new StateListsPrompt(MainOldActivity.this, RulesEntry.REPEATED_CALL_STATE, null).show();
+				new StateListsPrompt(MainOldActivity.this, RulesEntry.RC_STATE, null).show();
 			}
 		});
 		
 		stateText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new StateListsPrompt(MainOldActivity.this, RulesEntry.REPEATED_CALL_STATE, null).show();
+				new StateListsPrompt(MainOldActivity.this, RulesEntry.RC_STATE, null).show();
 			}
 		});
 	}
@@ -198,7 +198,7 @@ public class MainOldActivity extends ActionBarActivity
 			footerTextForText.setText("");
 			footerTextForSelection.setText("");
 		} else {
-			int state = PrefHelper.getState(getApplicationContext(), RulesEntry.REPEATED_CALL_STATE);
+			int state = PrefHelper.getState(getApplicationContext(), RulesEntry.RC_STATE);
 			
 			if (state == Constants.URGENT_CALL_STATE_OFF) {
 				stateText.setText("OFF");
@@ -232,7 +232,7 @@ public class MainOldActivity extends ActionBarActivity
 			footerTextMinsText.setText("");
 			footerTextMain.setText("No alerts for");
 		} else {
-			int state = PrefHelper.getState(getApplicationContext(), RulesEntry.REPEATED_CALL_STATE);
+			int state = PrefHelper.getState(getApplicationContext(), RulesEntry.RC_STATE);
 			if (state == Constants.URGENT_CALL_STATE_OFF) {
 				footerTextCallsNum.setText("");
 				footerTextCallsText.setText("");

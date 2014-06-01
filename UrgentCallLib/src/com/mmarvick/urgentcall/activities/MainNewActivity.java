@@ -29,6 +29,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,6 +45,10 @@ public class MainNewActivity extends ActionBarActivity
 	private SnoozeEndDialog endSnoozeDialog;
 	private ViewPager mViewPager;
 	
+	private boolean mCanChangeTabs;
+	
+	private ActionBar actionBar;
+	
 	public static final int TAB_HOME = 0;
 	public static final int TAB_MSG = 1;
 	public static final int TAB_CALL = 2;
@@ -54,10 +61,8 @@ public class MainNewActivity extends ActionBarActivity
 		fragments = new ArrayList<TabFragment>();
 		fragments.add((TabFragment) (new HomeFragment()));
 		fragments.add((TabFragment) (new MessageFragment()));	
-		fragments.add((TabFragment) (new CallFragment()));
-		fragmentTitles = new String[] {"Home", "Message\nAlert", "Call\nAlert"};
-		
-		final ActionBar actionBar = getSupportActionBar();
+		fragments.add((TabFragment) (new RepeatCallFragment()));
+		fragmentTitles = new String[] {"Home", "Text", "Repeat\nCall", "Single\nCall"};
 		
 		mAdapter = new MyPagerAdapter(getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -70,7 +75,7 @@ public class MainNewActivity extends ActionBarActivity
 			}
 		});
 		
-
+		actionBar = getSupportActionBar();
 		
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
@@ -85,7 +90,6 @@ public class MainNewActivity extends ActionBarActivity
 			@Override
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
 				mViewPager.setCurrentItem(tab.getPosition());
-				
 			}
 
 			@Override
@@ -126,6 +130,8 @@ public class MainNewActivity extends ActionBarActivity
 	}
 	
 	public void updateSettings() {
+		//disableEnableWhenOff();
+		
 		for (int i = 0; i < fragments.size(); i++) {
 			TabFragment frag = fragments.get(i);
 			if (frag.isUpdatable()) {
@@ -133,6 +139,20 @@ public class MainNewActivity extends ActionBarActivity
 			}
 		}
 	}
+	
+	/*private void disableEnableWhenOff() {
+		if (PrefHelper.isSnoozing(getApplicationContext())
+				|| PrefHelper.getState(getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+			mViewPager.setCurrentItem(TAB_HOME);
+			mCanChangeTabs = false;
+			for (int i = 0; i < fragments.size(); i++) {
+				//actionBar.getTabAt(i).setEnabled(false);
+			}
+			
+		} else {
+			mCanChangeTabs = true;
+		}
+	}*/
 	
 	public class MyPagerAdapter extends FragmentPagerAdapter {
 		

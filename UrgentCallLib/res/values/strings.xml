@@ -22,9 +22,26 @@
     <string name="action_add_contact">Add a contact</string>    
     
     <string name="status_heading">Urgent Call is</string>
-    <string name="status_home_msg_name">Message Alerts are&#160;</string>
-    <string name="status_home_rc_name">Repeated Call Alerts are&#160;</string>
+    <string name="status_home_msg_name">Text Alerts are&#160;</string>
+    <string name="status_home_rc_name">Repeat Call Alerts are&#160;</string>
     <string name="status_home_sc_name">Single Call Alerts are&#160;</string>
+    
+    <string name="message_text_intro">text messages containing</string>
+    <string name="message_text_will_trigger">will trigger an alarm</string>
+    <string name="message_text_anyone">from anyone</string>
+    <string name="message_text_whitelist_before">from&#160;</string>
+    <string name="message_text_whitelist_after">&#160;whitelisted users only</string>
+    <string name="message_text_blacklist_before">from everyone except&#160;</string>
+    <string name="message_text_blacklist_after">&#160;blacklisted users</string>
+    
+    <string name="rc_text_calls">&#160;calls in&#160;</string>
+    <string name="rc_text_mins">&#160;minutes</string>
+    <string name="rc_text_will_trigger">will trigger an alarm</string>
+    <string name="rc_text_anyone">from anyone</string>
+    <string name="rc_text_whitelist_before">from&#160;</string>
+    <string name="rc_text_whitelist_after">&#160;whitelisted users only</string>
+    <string name="rc_text_blacklist_before">from everyone except&#160;</string>
+    <string name="rc_text_blacklist_after">&#160;blacklisted users</string>      
     
     <string name="status_allcaps_on">ON</string>
     <string name="status_allcaps_off">OFF</string>

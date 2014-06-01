@@ -14,6 +14,7 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
+import android.util.Log;
 
 public class RulesDbHelper {
 	
@@ -76,6 +77,16 @@ public class RulesDbHelper {
 		
 		return lookups;			
 	}
+	
+	public int getCount(String alertType, int alertState) {
+		open();
+		String query = "SELECT * FROM rules WHERE " + alertType + " = '" + alertState + "'";
+		Cursor c = mRulesDb.rawQuery(query, null);
+		
+		Log.e("Count", ""+ c.getCount());	
+		
+		return getContactLookups(alertType, alertState).length;
+	}	
 	
 	public String getName(String lookup) {
 		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,

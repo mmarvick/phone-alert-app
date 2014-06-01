@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${packageName}.${activityClass}" >
+    
+    <TextView
+        android:id="@+id/textView_rc_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="@string/status_home_rc_name"
+        android:textSize="@dimen/normal_textSize" />
+
+    <Button
+        android:id="@+id/button_rc_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_rc_state"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="@dimen/large_textSize" /> 
+        
+    <LinearLayout
+        android:id="@+id/linearLayout_rc_call_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_rc_state"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp">
+
+	    <TextView
+	        android:id="@+id/textView_rc_call_number"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/large_textSize"
+	        android:layout_gravity="center_vertical"
+	        android:textColor="@color/holo_blue_light" />	
+
+	    <TextView
+	        android:id="@+id/textView_rc_call_number_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/normal_textSize"
+	        android:text="@string/rc_text_calls"
+	        android:layout_gravity="center_vertical" />
+	    
+	    <TextView
+	        android:id="@+id/textView_rc_call_time"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/large_textSize"
+	        android:layout_gravity="center_vertical"
+	        android:textColor="@color/holo_blue_light" />    
+	        
+	    <TextView
+	        android:id="@+id/textView_rc_call_time_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/normal_textSize"
+	        android:text="@string/rc_text_mins"
+	        android:layout_gravity="center_vertical" />	  
+	               
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_rc_trigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayout_rc_call_settings"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+		android:text="@string/rc_text_will_trigger"
+        android:textSize="@dimen/small_textSize" />        
+    
+    <TextView
+        android:id="@+id/textView_rc_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_rc_trigger"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textSize="@dimen/small_textSize" /> 
+        
+ 
+                
+</RelativeLayout>

@@ -91,7 +91,7 @@ public class HomeFragment extends TabFragment {
 	public void fragUpdateSettings() {
 		setUpdatable(true);
 		setStateText(mTextMsgState, RulesEntry.MSG_STATE);
-		setStateText(mTextRCState, RulesEntry.REPEATED_CALL_STATE);
+		setStateText(mTextRCState, RulesEntry.RC_STATE);
 		setStateText(mTextSCState, RulesEntry.SINGLE_CALL_STATE);
 		setButtonState();
 		super.fragUpdateSettings();

@@ -18,7 +18,7 @@ public class RulesDbOpenHelper extends SQLiteOpenHelper {
 			"CREATE TABLE " + RulesEntry.TABLE_NAME + " (" +
 					RulesEntry._ID + " INTEGER PRIMARY KEY," +
 					RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + TEXT_TYPE + SEPARATOR +
-					RulesEntry.REPEATED_CALL_STATE + INTEGER_TYPE + SEPARATOR +
+					RulesEntry.RC_STATE + INTEGER_TYPE + SEPARATOR +
 					RulesEntry.SINGLE_CALL_STATE + INTEGER_TYPE + SEPARATOR +
 					RulesEntry.MSG_STATE + INTEGER_TYPE +					
 					")";

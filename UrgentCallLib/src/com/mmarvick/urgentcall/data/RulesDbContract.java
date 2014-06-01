@@ -8,7 +8,7 @@ public class RulesDbContract {
 	public static abstract class RulesEntry implements BaseColumns{
 		public static final String TABLE_NAME = "rules";
 		public static final String COLUMN_NAME_CONTACT_LOOKUP = "lookup";
-		public static final String REPEATED_CALL_STATE = "on_state";
+		public static final String RC_STATE = "on_state";
 		public static final String SINGLE_CALL_STATE = "single_call_state";
 		public static final String MSG_STATE = "msg_state";
 		

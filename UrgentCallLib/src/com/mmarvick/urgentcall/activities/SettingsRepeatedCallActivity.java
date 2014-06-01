@@ -42,7 +42,7 @@ public class SettingsRepeatedCallActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new StateListsPrompt(SettingsRepeatedCallActivity.this, RulesEntry.REPEATED_CALL_STATE, null).show();
+				new StateListsPrompt(SettingsRepeatedCallActivity.this, RulesEntry.RC_STATE, null).show();
 
 				return true;
 			}

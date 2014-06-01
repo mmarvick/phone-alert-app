@@ -30,7 +30,7 @@ public class StateListsPrompt {
 	private AlertDialog.Builder alertDialogBuilder;
 	private OnOptionsChangedListener mOnOptionsChangedListener;
 
-	public StateListsPrompt(final Context context, final String alertType, final MainActivity updater) {
+	public StateListsPrompt(final Context context, final String alertType, String title) {
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptView = li.inflate(R.layout.dialog_state_lists,  null);	
 		
@@ -122,7 +122,7 @@ public class StateListsPrompt {
 		select();
 		
 		alertDialogBuilder
-		.setTitle(context.getString(R.string.state_change_dialog_title))
+		.setTitle(title)
 		.setPositiveButton(context.getString(R.string.state_change_dialog_ok), new DialogInterface.OnClickListener() {
 			
 			@Override

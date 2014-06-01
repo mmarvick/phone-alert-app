@@ -85,7 +85,8 @@ public class RepeatCallFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				StateListsPrompt rcStatePrompt = new StateListsPrompt(getMainActivity(), RulesEntry.RC_STATE, getMainActivity());
+				StateListsPrompt rcStatePrompt = new StateListsPrompt(getMainActivity(), RulesEntry.RC_STATE,
+						getMainActivity().getString(R.string.state_change_dialog_title_rc));
 				rcStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						
 						@Override

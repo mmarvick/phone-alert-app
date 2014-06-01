@@ -54,6 +54,8 @@ public class RulesDbHelper {
 			cursor.moveToNext();
 		}
 		
+		cursor.close();
+		
 		return data;
 	}	
 	
@@ -70,6 +72,8 @@ public class RulesDbHelper {
 			c.moveToNext();
 		}
 		
+		c.close();
+		
 		Object[] lookupObjects = contactIDs.toArray();
 		String[] lookups = new String[lookupObjects.length];
 		for (int i = 0; i < lookupObjects.length; i++)
@@ -82,10 +86,11 @@ public class RulesDbHelper {
 		open();
 		String query = "SELECT * FROM rules WHERE " + alertType + " = '" + alertState + "'";
 		Cursor c = mRulesDb.rawQuery(query, null);
+		int count = c.getCount();
 		
-		Log.e("Count", ""+ c.getCount());	
+		c.close();
 		
-		return getContactLookups(alertType, alertState).length;
+		return count;
 	}	
 	
 	public String getName(String lookup) {
@@ -94,7 +99,9 @@ public class RulesDbHelper {
 				Data.LOOKUP_KEY + "=?",
 				new String[] {lookup}, null);
 		cursor.moveToFirst();
-		return cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));	
+		String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+		cursor.close();
+		return name;	
 	}
 	
 	// Returns RulesEntry.STATE_DEFAULT if the lookup is null, not in the database, or the value in the db
@@ -114,7 +121,10 @@ public class RulesDbHelper {
 		if (c.isNull(c.getColumnIndex(alertType))) {
 			return RulesEntry.STATE_DEFAULT;
 		}
-		return c.getInt(c.getColumnIndex(alertType));
+		
+		int state = c.getInt(c.getColumnIndex(alertType));
+		c.close();
+		return state;
 	}
 	
 	public void setContactStateForAlert(String alertType, String lookup, int userState) {
@@ -139,7 +149,11 @@ public class RulesDbHelper {
 			return null;
 		}
 		cursor.moveToFirst();
-		return cursor.getString(cursor.getColumnIndex(Phone.LOOKUP_KEY));
+		
+		String lookup = cursor.getString(cursor.getColumnIndex(Phone.LOOKUP_KEY));
+		cursor.close();
+		
+		return lookup;
 	}
 	
 	public void removeContactForAlertType(String alertType, String lookup) {
@@ -149,7 +163,10 @@ public class RulesDbHelper {
 	private boolean isInDb(String lookup) {
 		open();
 		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, null, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
-		if (c.getCount() == 0) {
+		boolean isInDb = (c.getCount() == 0);
+		c.close();
+		
+		if (isInDb) {
 			return false;
 		} else {
 			return true;

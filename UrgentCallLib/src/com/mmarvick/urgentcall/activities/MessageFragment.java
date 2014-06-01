@@ -72,7 +72,8 @@ public class MessageFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				StateListsPrompt msgStatePrompt = new StateListsPrompt(getMainActivity(), RulesEntry.MSG_STATE, getMainActivity());
+				StateListsPrompt msgStatePrompt = new StateListsPrompt(getMainActivity(), RulesEntry.MSG_STATE,
+						getMainActivity().getString(R.string.state_change_dialog_title_msg));
 				msgStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						
 						@Override

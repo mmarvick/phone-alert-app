@@ -25,9 +25,14 @@ public class HomeFragment extends TabFragment {
 	private LinearLayout mLayoutMsgState;
 	private LinearLayout mLayoutRCState;
 	private LinearLayout mLayoutSCState;
+	private LinearLayout mLayoutAllOff;
 	private TextView mTextMsgState;
 	private TextView mTextRCState;
 	private TextView mTextSCState;
+	private TextView mTextAllOffState;
+	private TextView mTextSnoozeFor;
+	private TextView mTextSnoozeTime;
+	
 	private Button mButtonAppState;		
 	
 	@Override
@@ -38,9 +43,13 @@ public class HomeFragment extends TabFragment {
 		mLayoutMsgState = (LinearLayout) view.findViewById(R.id.linearLayout_home_msg);
 		mLayoutRCState = (LinearLayout) view.findViewById(R.id.linearLayout_home_rc);
 		mLayoutSCState = (LinearLayout) view.findViewById(R.id.linearLayout_home_sc);
+		mLayoutAllOff = (LinearLayout) view.findViewById(R.id.linearLayout_home_all_off);
 		mTextMsgState = (TextView) view.findViewById(R.id.textView_home_msg_state);
 		mTextRCState = (TextView) view.findViewById(R.id.textView_home_rc_state);
 		mTextSCState = (TextView) view.findViewById(R.id.textView_home_sc_state);
+		mTextAllOffState = (TextView) view.findViewById(R.id.textView_home_all_off_state);
+		mTextSnoozeFor = (TextView) view.findViewById(R.id.textView_home_snooze_for);
+		mTextSnoozeTime = (TextView) view.findViewById(R.id.textView_home_snooze_time);
 		mButtonAppState = (Button) view.findViewById(R.id.button_home_state);
 		
 		mLayoutMsgState.setOnClickListener(new OnClickListener() {
@@ -94,6 +103,10 @@ public class HomeFragment extends TabFragment {
 		setStateText(mTextMsgState, RulesEntry.MSG_STATE);
 		setStateText(mTextRCState, RulesEntry.RC_STATE);
 		setStateText(mTextSCState, RulesEntry.SC_STATE);
+		setSnoozeTime();
+		
+		mTextAllOffState.setTextColor(Color.RED);
+		
 		setButtonState();
 		super.fragUpdateSettings();
 	}
@@ -116,10 +129,20 @@ public class HomeFragment extends TabFragment {
 			mLayoutMsgState.setVisibility(View.INVISIBLE);
 			mLayoutRCState.setVisibility(View.INVISIBLE);
 			mLayoutSCState.setVisibility(View.INVISIBLE);
+			mLayoutAllOff.setVisibility(View.VISIBLE);			
 		} else {
 			mLayoutMsgState.setVisibility(View.VISIBLE);
 			mLayoutRCState.setVisibility(View.VISIBLE);
 			mLayoutSCState.setVisibility(View.VISIBLE);
+			mLayoutAllOff.setVisibility(View.INVISIBLE);
+		}
+		
+		if (PrefHelper.isSnoozing(getMainActivity())) {
+			mTextSnoozeFor.setVisibility(View.VISIBLE);
+			mTextSnoozeTime.setVisibility(View.VISIBLE);
+		} else {
+			mTextSnoozeFor.setVisibility(View.INVISIBLE);
+			mTextSnoozeTime.setVisibility(View.INVISIBLE);			
 		}
 	}	
 	
@@ -136,4 +159,19 @@ public class HomeFragment extends TabFragment {
 			mButtonAppState.setTextColor(Color.GREEN);
 		}
 	}
+	
+	public void setSnoozeTime() {
+		if (PrefHelper.isSnoozing(getMainActivity())) {
+			long time = PrefHelper.snoozeRemaining(getMainActivity());
+			long allsec = time / 1000;
+			long sec = allsec % 60;
+			long min = (allsec % 3600) / 60;
+			long hour = allsec / 3600;
+			String extraMin = ((min<10) ? "0" : "");
+			String extraSec = ((sec<10) ? "0" : "");
+			String clock = hour + ":" + extraMin + min + ":" + extraSec + sec;
+			mTextSnoozeTime.setText(clock);
+		}
+	}
+	
 }

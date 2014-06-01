@@ -167,9 +167,10 @@ public class HomeFragment extends TabFragment {
 			long sec = allsec % 60;
 			long min = (allsec % 3600) / 60;
 			long hour = allsec / 3600;
-			String extraMin = ((min<10) ? "0" : "");
-			String extraSec = ((sec<10) ? "0" : "");
-			String clock = hour + ":" + extraMin + min + ":" + extraSec + sec;
+			String minText = ((min<10 & hour > 0) ? "0" : "") + min + ":";
+			String secText = ((sec<10) ? "0" : "") + sec;
+			String hourText = ((hour == 0) ? "" : hour + ":");
+			String clock = hourText + minText + secText;
 			mTextSnoozeTime.setText(clock);
 		}
 	}

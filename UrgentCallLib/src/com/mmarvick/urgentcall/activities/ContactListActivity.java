@@ -21,6 +21,7 @@ public class ContactListActivity extends ActionBarActivity {
 		
 		String alertType = getIntent().getStringExtra(Constants.ALERT_TYPE);
 		String listType;
+		String alertTypeDescrip;
 		int userState = getIntent().getIntExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
 		
 		if (userState == RulesEntry.STATE_ON){
@@ -29,7 +30,17 @@ public class ContactListActivity extends ActionBarActivity {
 			listType = "Blacklist";
 		}
 		
-		actionBar.setTitle(alertType + " " + listType);	
+		if (alertType.equals(RulesEntry.MSG_STATE)) {
+			alertTypeDescrip = "Message Alert";
+		} else if (alertType.equals(RulesEntry.RC_STATE)) {
+			alertTypeDescrip = "Repeat Call Alert";
+		} else if (alertType.equals(RulesEntry.SC_STATE)) {
+			alertTypeDescrip = "Single Call Alert";
+		} else {
+			alertTypeDescrip = alertType;
+		}
+		
+		actionBar.setTitle(alertTypeDescrip + " " + listType);	
 	}
 	
 	public void refresh() {

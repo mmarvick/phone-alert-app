@@ -79,6 +79,7 @@ public class HomeFragment extends TabFragment {
 				} else {
 					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_OFF);
 				}
+				
 				getMainActivity().updateSettings();
 			}
 		});
@@ -89,7 +90,7 @@ public class HomeFragment extends TabFragment {
 	
 	@Override
 	public void fragUpdateSettings() {
-		setUpdatable(true);
+		showTextViews();
 		setStateText(mTextMsgState, RulesEntry.MSG_STATE);
 		setStateText(mTextRCState, RulesEntry.RC_STATE);
 		setStateText(mTextSCState, RulesEntry.SC_STATE);
@@ -97,7 +98,7 @@ public class HomeFragment extends TabFragment {
 		super.fragUpdateSettings();
 	}
 	
-	public void setStateText(TextView textView, String alertType) {
+	public void setStateText(TextView textView, String alertType) {		
 		if (textView != null) {
 			if (PrefHelper.getState(getMainActivity().getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
 				textView.setText(getMainActivity().getString(R.string.status_nocaps_off));
@@ -108,6 +109,19 @@ public class HomeFragment extends TabFragment {
 			}
 		}
 	}
+	
+	private void showTextViews() {
+		int state = PrefHelper.getState(getMainActivity(), Constants.OVERALL_STATE);
+		if (state == Constants.URGENT_CALL_STATE_OFF || PrefHelper.isSnoozing(getMainActivity())) {
+			mLayoutMsgState.setVisibility(View.INVISIBLE);
+			mLayoutRCState.setVisibility(View.INVISIBLE);
+			mLayoutSCState.setVisibility(View.INVISIBLE);
+		} else {
+			mLayoutMsgState.setVisibility(View.VISIBLE);
+			mLayoutRCState.setVisibility(View.VISIBLE);
+			mLayoutSCState.setVisibility(View.VISIBLE);
+		}
+	}	
 	
 	private void setButtonState() {
 		if (PrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {

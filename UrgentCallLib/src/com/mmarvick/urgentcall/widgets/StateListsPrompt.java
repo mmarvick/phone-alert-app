@@ -21,8 +21,7 @@ import android.widget.RadioButton;
 public class StateListsPrompt {
 	private final RadioButton onRadio;
 	private final RadioButton whitelistRadio;
-	private final RadioButton blacklistRadio;
-	private final RadioButton offRadio;
+	private final RadioButton blacklistRadio;;
 	private final Button whitelistButton;
 	private final Button blacklistButton;
 	private final Context context;
@@ -44,7 +43,6 @@ public class StateListsPrompt {
 		onRadio = (RadioButton) promptView.findViewById(R.id.selection_on);
 		whitelistRadio = (RadioButton) promptView.findViewById(R.id.selection_whitelist);
 		blacklistRadio = (RadioButton) promptView.findViewById(R.id.selection_blacklist);
-		offRadio = (RadioButton) promptView.findViewById(R.id.selection_off);
 		whitelistButton = (Button) promptView.findViewById(R.id.button_whitelist);
 		blacklistButton = (Button) promptView.findViewById(R.id.button_blacklist);
 
@@ -89,6 +87,36 @@ public class StateListsPrompt {
 					upgradeNote();
 				}
 			});
+		} else {
+			onRadio.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					whitelistButton.setVisibility(View.GONE);
+					blacklistButton.setVisibility(View.GONE);
+					
+				}
+			});
+			
+			whitelistRadio.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					whitelistButton.setVisibility(View.VISIBLE);
+					blacklistButton.setVisibility(View.GONE);			
+					
+				}
+			});
+			
+			blacklistRadio.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					whitelistButton.setVisibility(View.GONE);
+					blacklistButton.setVisibility(View.VISIBLE);
+					
+				}
+			});
 		}
 		
 		select();
@@ -105,18 +133,9 @@ public class StateListsPrompt {
 					PrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_WHITELIST);
 				} else if (blacklistRadio.isChecked()) {
 					PrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_BLACKLIST);
-				} else if (offRadio.isChecked()) {
-					PrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_OFF);
-				}
+				} 
 				
 				if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
-			}
-		})
-		.setNegativeButton(context.getString(R.string.state_change_dialog_cancel), new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
 			}
 		});
 	
@@ -132,15 +151,18 @@ public class StateListsPrompt {
 		switch (state) {
 		case Constants.URGENT_CALL_STATE_ON:
 			onRadio.setChecked(true);
-			break;
-		case Constants.URGENT_CALL_STATE_OFF:
-			offRadio.setChecked(true);
+			whitelistButton.setVisibility(View.GONE);
+			blacklistButton.setVisibility(View.GONE);
 			break;
 		case Constants.URGENT_CALL_STATE_WHITELIST:
 			whitelistRadio.setChecked(true);
+			whitelistButton.setVisibility(View.VISIBLE);
+			blacklistButton.setVisibility(View.GONE);			
 			break;
 		case Constants.URGENT_CALL_STATE_BLACKLIST:
 			blacklistRadio.setChecked(true);
+			whitelistButton.setVisibility(View.GONE);
+			blacklistButton.setVisibility(View.VISIBLE);			
 			break;
 		}
 	}

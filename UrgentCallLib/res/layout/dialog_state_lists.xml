@@ -27,34 +27,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/state_change_dialog_blacklist" />
-        
-        <RadioButton
-            android:id="@+id/selection_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/state_change_dialog_off" />
             
     </RadioGroup>
-    
-    <LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/button_whitelist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:text="@string/state_change_dialog_edit_whitelist_button" />
+    <Button
+        android:id="@+id/button_whitelist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:text="@string/state_change_dialog_edit_whitelist_button" />
 
-        <Button
-            android:id="@+id/button_blacklist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:text="@string/state_change_dialog_edit_blacklist_button" />
+    <Button
+        android:id="@+id/button_blacklist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:text="@string/state_change_dialog_edit_blacklist_button" />
         
-    </LinearLayout>
 
 </LinearLayout>

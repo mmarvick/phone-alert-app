@@ -94,10 +94,10 @@
     <string name="snooze_dialog_title">Snooze for&#8230;</string>
     
     <string name="state_change_dialog_title">Who should be able to trigger an Urgent Call alert?</string>
-    <string name="state_change_dialog_on">On for everyone</string>
+    <string name="state_change_dialog_on">Everyone</string>
     <string name="state_change_dialog_off">Off for everyone</string>
-    <string name="state_change_dialog_whitelist">On for whitelisted callers only</string>
-    <string name="state_change_dialog_blacklist">On for everyone except blacklisted callers</string>
+    <string name="state_change_dialog_whitelist">Whitelisted callers only</string>
+    <string name="state_change_dialog_blacklist">Everyone except blacklisted callers</string>
     <string name="state_change_dialog_ok">OK</string>
     <string name="state_change_dialog_cancel">Cancel</string>
     <string name="state_change_dialog_edit_whitelist_button">Edit whitelist&#8230;</string>

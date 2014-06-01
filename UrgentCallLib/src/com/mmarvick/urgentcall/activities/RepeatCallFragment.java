@@ -5,6 +5,7 @@ import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.StateListsPrompt;
 
@@ -58,7 +59,27 @@ public class RepeatCallFragment extends TabFragment {
 				getMainActivity().updateSettings();
 				
 			}
-		});		
+		});	
+		
+		mTextViewCallNumber.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				new EditTextIntPrompt(getMainActivity(), Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
+				
+			}
+		});
+		
+		mTextViewCallTime.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				new EditTextIntPrompt(getMainActivity(), Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
+				
+			}
+		});
 		
 		mTextViewFrom.setOnClickListener(new OnClickListener() {
 			

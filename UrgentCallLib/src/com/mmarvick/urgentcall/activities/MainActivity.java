@@ -240,11 +240,12 @@ public class MainActivity extends ActionBarActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    int itemId = item.getItemId();
-		if (itemId == R.id.action_settings) {
+		/*if (itemId == R.id.action_settings) {
 			Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
 			startActivity(i);
 			return true;
-		} else if (itemId == R.id.action_snooze) {
+		} else */
+		if (itemId == R.id.action_snooze) {
 			if (PrefHelper.isSnoozing(getApplicationContext())) {
 				endSnooze();
 			} else {
@@ -259,10 +260,6 @@ public class MainActivity extends ActionBarActivity
 			return true;
 		} else if (itemId == R.id.action_upgrade) {
 			UpgradeDialog.upgradeDialog(this, getString(R.string.upgrade_body_menu), getString(R.string.upgrade_title_menu));
-			return true;
-		} else if (itemId == R.id.action_switch) {
-			PrefHelper.setView(getApplicationContext(), Constants.VIEW_OLD);
-			finish();
 			return true;
 		} else {
 			return super.onOptionsItemSelected(item);

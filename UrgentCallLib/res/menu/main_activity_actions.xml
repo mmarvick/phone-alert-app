@@ -7,10 +7,6 @@
 	    android:title="@string/action_snooze"
 	    yourapp:showAsAction="ifRoom" />
  	
- 	<item android:id="@+id/action_switch"
- 	    android:title="Switch views..."
- 	    yourapp:showAsAction="collapseActionView" />
- 	
 	<item
 	     android:id="@+id/action_share"
 	     android:icon="@drawable/ic_action_share"

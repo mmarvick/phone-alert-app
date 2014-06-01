@@ -25,25 +25,25 @@
     <string name="message_text_will_trigger">will trigger an alarm</string>
     <string name="message_text_anyone">from anyone</string>
     <string name="message_text_whitelist_before">from&#160;</string>
-    <string name="message_text_whitelist_after">&#160;whitelisted texters only</string>
+    <string name="message_text_whitelist_after">&#160;allowed texters only</string>
     <string name="message_text_blacklist_before">from everyone except&#160;</string>
-    <string name="message_text_blacklist_after">&#160;blacklisted texters</string>
+    <string name="message_text_blacklist_after">&#160;blocked texters</string>
     <string name="message_text_turned_off">text alerts are caused by a text message with a key word or phrase</string>
     
     <string name="rc_text_calls">&#160;calls in&#160;</string>
     <string name="rc_text_mins">&#160;minutes</string>
     <string name="rc_text_will_trigger">will trigger an alarm</string>
-    <string name="rc_text_anyone">from anyone</string>
+    <string name="rc_text_anyone">from any caller</string>
     <string name="rc_text_whitelist_before">from&#160;</string>
-    <string name="rc_text_whitelist_after">&#160;whitelisted callers only</string>
+    <string name="rc_text_whitelist_after">&#160;allowed callers only</string>
     <string name="rc_text_blacklist_before">from everyone except&#160;</string>
-    <string name="rc_text_blacklist_after">&#160;blacklisted callers</string> 
+    <string name="rc_text_blacklist_after">&#160;blocked callers</string> 
     <string name="rc_text_turned_off">repeated call alerts are caused by multiple calls from a person in a short time</string>
     
     <string name="sc_text_intro">a single call</string>
     <string name="sc_text_will_trigger">will trigger an alarm</string>
     <string name="sc_text_whitelist_before">from&#160;</string>
-    <string name="sc_text_whitelist_after">&#160;whitelisted users only</string>
+    <string name="sc_text_whitelist_after">&#160;allowed users only</string>
     <string name="sc_text_turned_off">single call alerts allow the most important people to get to you in just one call</string> 
     
     <string name="status_allcaps_on">ON</string>
@@ -52,16 +52,11 @@
     <string name="status_nocaps_on">on</string>
     <string name="status_nocaps_off">off</string>
     
-    <string name="preferences_app_status">Urgent Call status</string>
-    <string name="preferences_msg_settings">Message Alert settings&#8230;</string>
-    <string name="preferences_rc_settings">Repeated Call Alert settings&#8230;</string>
-    <string name="preferences_sc_settings">Single Call Alert settings&#8230;</string>
-    <string name="preferences_repeated_call_status">Repeated Call status</string>
-    <string name="preferences_qty">Number of Calls</string>
-    <string name="preferences_min">Minutes for Calls</string>
-    <string name="preferences_single_call_status">Single Call status</string>
-    <string name="preferences_message_status">Message Alert status</string>
-    <string name="preferences_message_string">Message Alert token</string>
+    <string name="list_fragment_list_allowed">Allowed for</string>
+    <string name="list_fragment_list_blocked">Blocked from</string>
+    <string name="list_fragment_alert_msg">Message Alerts</string>
+    <string name="list_fragment_alert_rc">Repeat Call Alerts</string>
+    <string name="list_fragment_alert_sc">Single Call Alerts</string>
     
     <string name="upgrade_title">Pro Version Only</string>
     <string name="upgrade_title_menu">Upgrade to Pro</string>
@@ -72,9 +67,10 @@
     Users of Urgent Call Pro can snooze alerts for a period of time.\n\n\
 \	Users of Urgent Call Lite must turn the application off and on manually.</string>
     <string name="upgrade_body_state">
-    Users of Urgent Call Pro can filter users with a whitelist or blacklist.\n\n\
+    Users of Urgent Call Pro can filter users with an allow list or block list.\n\n\
 \	Users of Urgent Call Lite must leave the app on or off for all users.</string>
 
+    <string name="snooze_dialog_title">Snooze for&#8230;</string> 
     
     <string name="cancel_snooze_dialog_title">Cancel Snooze?</string>
     <string name="cancel_snooze_dialog_body">Do you want to cancel the current snooze?</string>
@@ -85,17 +81,19 @@
     <string name="rate_dialog_body">Would you like to rate this app? We\'d really appreciate it!</string>
     <string name="rate_dialog_yes">Yes!</string>
     <string name="rate_dialog_no">Maybe Later</string>    
-    
-    <string name="snooze_dialog_title">Snooze for&#8230;</string>
-    
+      
     <string name="state_change_dialog_title_msg">Message alerts on for&#8230;</string>
     <string name="state_change_dialog_title_rc">Repeat call alerts on for&#8230;</string>
     <string name="state_change_dialog_on">Everyone</string>
-    <string name="state_change_dialog_whitelist">Whitelisted callers only</string>
-    <string name="state_change_dialog_blacklist">Everyone except blacklisted callers</string>
+    <string name="state_change_dialog_whitelist">Allowed callers only</string>
+    <string name="state_change_dialog_blacklist">Everyone except blocked callers</string>
     <string name="state_change_dialog_ok">OK</string>
-    <string name="state_change_dialog_edit_whitelist_button">Edit whitelist&#8230;</string>
-    <string name="state_change_dialog_edit_blacklist_button">Edit blacklist&#8230;</string>
+    <string name="state_change_dialog_edit_whitelist_button">Allowed Contacts&#8230;</string>
+    <string name="state_change_dialog_edit_blacklist_button">Blocked Contacts&#8230;</string>
+    
+    <string name="tab_change_prohibitted_dialog_title">Urgent Call is off</string>
+    <string name="tab_change_prohibitted_dialog_message">Urgent Call must be turned on in order to change the settings of individual alerts.</string>
+    <string name="tab_change_prohibitted_dialog_ok">OK</string>
     
     <string name="pro_installed_title">Thank you!</string>
     <string name="pro_installed_body">Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.</string>

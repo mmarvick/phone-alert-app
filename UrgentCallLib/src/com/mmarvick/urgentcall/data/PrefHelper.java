@@ -28,7 +28,7 @@ public class PrefHelper {
 	public static int getState(Context context, String alertType) {
 		int def = Constants.URGENT_CALL_STATE_ON;
 		if (alertType == RulesEntry.SC_STATE) {
-			def = Constants.URGENT_CALL_STATE_WHITELIST;
+			def = Constants.URGENT_CALL_STATE_OFF;
 		}
 		return getPrefs(context).getInt(alertType, def);
 	}

@@ -13,8 +13,11 @@ import com.mmarvick.urgentcall.widgets.SnoozeDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeEndDialog;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.AsyncTask;
@@ -50,7 +53,7 @@ public class MainActivity extends ActionBarActivity
 	private MyViewPager mViewPager;
 	private PeriodicChecker mChecker;
 	
-	private boolean mCanChangeTabs;
+	private boolean mCanChangeTabs = true;
 	
 	private ActionBar actionBar;
 	
@@ -96,7 +99,35 @@ public class MainActivity extends ActionBarActivity
 
 			@Override
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				mViewPager.setCurrentItem(tab.getPosition());
+				if (mCanChangeTabs) {
+					mViewPager.setCurrentItem(tab.getPosition());
+				} else if (!mCanChangeTabs && tab.getPosition() != TAB_HOME) {
+					AlertDialog.Builder dialogBuilder = new Builder(MainActivity.this);
+					dialogBuilder.setTitle(getString(R.string.tab_change_prohibitted_dialog_title))
+						.setMessage(getString(R.string.tab_change_prohibitted_dialog_message))
+						.setCancelable(true)
+						.setPositiveButton(R.string.tab_change_prohibitted_dialog_ok, new OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						});
+					
+					
+					AlertDialog dialog = dialogBuilder.create();
+					dialog.setOnDismissListener(new OnDismissListener() {
+						
+						@Override
+						public void onDismiss(DialogInterface dialog) {
+							actionBar.selectTab(actionBar.getTabAt(TAB_HOME));
+							mViewPager.setCurrentItem(TAB_HOME);
+							
+						}
+					});
+					
+					dialog.show();
+				}
 			}
 
 			@Override
@@ -167,9 +198,11 @@ public class MainActivity extends ActionBarActivity
 				|| PrefHelper.getState(getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mViewPager.setCurrentItem(TAB_HOME);
 			mViewPager.setScrollable(false);
+			mCanChangeTabs = false;
 			
 		} else {
 			mViewPager.setScrollable(true);
+			mCanChangeTabs = true;
 		}
 	}
 	

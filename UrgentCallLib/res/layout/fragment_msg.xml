@@ -35,7 +35,7 @@
         android:layout_below="@+id/button_msg_state"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="@string/message_text_intro"
         android:textSize="@dimen/small_textSize" />
     
@@ -80,7 +80,7 @@
         android:layout_below="@id/button_msg_state"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
 		android:text="@string/message_text_turned_off"
         android:textSize="@dimen/small_textSize" />     
         

@@ -20,27 +20,29 @@ public class ContactListActivity extends ActionBarActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		String alertType = getIntent().getStringExtra(Constants.ALERT_TYPE);
-		String listType;
-		String alertTypeDescrip;
+		String listType = "";
+		String alertTypeDescrip = "";
 		int userState = getIntent().getIntExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
 		
-		if (userState == RulesEntry.STATE_ON){
-			listType = "Whitelist";
-		} else {
-			listType = "Blacklist";
+		switch (userState) {
+		case (RulesEntry.STATE_ON):
+			listType = getString(R.string.list_fragment_list_allowed);
+			break;
+		case (RulesEntry.STATE_OFF):
+			listType = getString(R.string.list_fragment_list_blocked);
+			break;
 		}
+		
 		
 		if (alertType.equals(RulesEntry.MSG_STATE)) {
-			alertTypeDescrip = "Message Alert";
+			alertTypeDescrip = getString(R.string.list_fragment_alert_msg);
 		} else if (alertType.equals(RulesEntry.RC_STATE)) {
-			alertTypeDescrip = "Repeat Call Alert";
+			alertTypeDescrip = getString(R.string.list_fragment_alert_rc);
 		} else if (alertType.equals(RulesEntry.SC_STATE)) {
-			alertTypeDescrip = "Single Call Alert";
-		} else {
-			alertTypeDescrip = alertType;
+			alertTypeDescrip = getString(R.string.list_fragment_alert_sc);
 		}
 		
-		actionBar.setTitle(alertTypeDescrip + " " + listType);	
+		actionBar.setTitle(listType + " " + alertTypeDescrip);	
 	}
 	
 	public void refresh() {

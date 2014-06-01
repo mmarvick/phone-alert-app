@@ -91,8 +91,10 @@
     <string name="state_change_dialog_edit_whitelist_button">Allowed Contacts&#8230;</string>
     <string name="state_change_dialog_edit_blacklist_button">Blocked Contacts&#8230;</string>
     
-    <string name="tab_change_prohibitted_dialog_title">Urgent Call is off</string>
-    <string name="tab_change_prohibitted_dialog_message">Urgent Call must be turned on in order to change the settings of individual alerts.</string>
+    <string name="tab_change_prohibitted_dialog_off_title">Urgent Call is off</string>
+    <string name="tab_change_prohibitted_dialog_off_message">Urgent Call must be turned on in order to change the settings of individual alerts.</string>
+	<string name="tab_change_prohibitted_dialog_snooze_title">Urgent Call is snoozing</string>
+    <string name="tab_change_prohibitted_dialog_snooze_message">Urgent Call must be active in order to change the settings of individual alerts.</string>    
     <string name="tab_change_prohibitted_dialog_ok">OK</string>
     
     <string name="pro_installed_title">Thank you!</string>

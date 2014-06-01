@@ -20,6 +20,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.pm.PackageInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -67,6 +69,9 @@ public class MainActivity extends ActionBarActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		checkDisclaimer();		
+
+		
 		fragments = new ArrayList<TabFragment>();
 		fragments.add((TabFragment) (new HomeFragment()));
 		fragments.add((TabFragment) (new MessageFragment()));	
@@ -103,8 +108,7 @@ public class MainActivity extends ActionBarActivity
 					mViewPager.setCurrentItem(tab.getPosition());
 				} else if (!mCanChangeTabs && tab.getPosition() != TAB_HOME) {
 					AlertDialog.Builder dialogBuilder = new Builder(MainActivity.this);
-					dialogBuilder.setTitle(getString(R.string.tab_change_prohibitted_dialog_title))
-						.setMessage(getString(R.string.tab_change_prohibitted_dialog_message))
+					dialogBuilder
 						.setCancelable(true)
 						.setPositiveButton(R.string.tab_change_prohibitted_dialog_ok, new OnClickListener() {
 							
@@ -113,6 +117,14 @@ public class MainActivity extends ActionBarActivity
 								dialog.dismiss();
 							}
 						});
+					
+					if (PrefHelper.isSnoozing(getApplicationContext())) {
+						dialogBuilder.setTitle(getString(R.string.tab_change_prohibitted_dialog_snooze_title))
+						.setMessage(getString(R.string.tab_change_prohibitted_dialog_snooze_message));						
+					} else {
+						dialogBuilder.setTitle(getString(R.string.tab_change_prohibitted_dialog_off_title))
+							.setMessage(getString(R.string.tab_change_prohibitted_dialog_off_message));
+					}
 					
 					
 					AlertDialog dialog = dialogBuilder.create();
@@ -149,6 +161,7 @@ public class MainActivity extends ActionBarActivity
 	
 	@Override
 	public void onResume() {
+		checkTwoVersions();
 		updateSettings();
 		super.onResume();
 	}
@@ -333,5 +346,68 @@ public class MainActivity extends ActionBarActivity
 			return null;
 		}
 	}
+	
+	public void checkTwoVersions() {
+		List<PackageInfo> pkgs = getPackageManager().getInstalledPackages(0);
+		boolean lite = false;
+		boolean pro = false;
+		
+		for (int i = 0; i < pkgs.size(); i++) {
+			if (pkgs.get(i).packageName.equals("com.mmarvick.urgentcall_lite")) {
+				lite = true;
+			} else if (pkgs.get(i).packageName.equals("com.mmarvick.urgentcall_pro")) {
+				pro = true;
+			}
+		}
+		
+		if (lite && pro) {
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			
+			alertDialogBuilder
+				.setTitle(getString(R.string.pro_installed_title))
+				.setMessage(getString(R.string.pro_installed_body))
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.pro_installed_ok), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						Uri pkg_uri = Uri.parse("package:com.mmarvick.urgentcall_lite");
+						Intent removeIntent = new Intent(Intent.ACTION_DELETE, pkg_uri);
+						startActivity(removeIntent);
+					}
+				});
+			
+			AlertDialog versionsDialog = alertDialogBuilder.create();
+			versionsDialog.show();
+		}
+	}
+	
+	public void checkDisclaimer() {
+		if (!(PrefHelper.disclaimerCheck(getApplicationContext()))) {
+			PrefHelper.disclaimerSaveBackup(getApplicationContext());
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			
+			alertDialogBuilder
+				.setTitle(getString(R.string.disclaimer_title))
+				.setMessage(getString(R.string.disclaimer_body))
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.disclaimer_agree), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						PrefHelper.disclaimerAgreed(getApplicationContext());
+						PrefHelper.disclaimerResumeBackup(getApplicationContext());
+						updateSettings();
+					}
+				})
+				.setNegativeButton(getString(R.string.disclaimer_disagree), new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						finish();
+						
+					}
+				});
+			
+			AlertDialog disclaimerDialog = alertDialogBuilder.create();
+			disclaimerDialog.show();			
+		}
+	}	
 	
 }

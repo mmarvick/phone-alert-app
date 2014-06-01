@@ -47,7 +47,7 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				getMainActivity().setTab(MainNewActivity.TAB_MSG);
+				getMainActivity().setTab(MainActivity.TAB_MSG);
 			}
 		});
 		
@@ -55,7 +55,7 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				getMainActivity().setTab(MainNewActivity.TAB_RC);
+				getMainActivity().setTab(MainActivity.TAB_RC);
 			}
 		});
 		
@@ -63,7 +63,7 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				getMainActivity().setTab(MainNewActivity.TAB_SC);
+				getMainActivity().setTab(MainActivity.TAB_SC);
 			}
 		});		
 		

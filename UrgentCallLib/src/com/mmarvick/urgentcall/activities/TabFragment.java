@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 
 public class TabFragment extends Fragment {
-	private MainNewActivity mActivity;
+	private MainActivity mActivity;
 	private boolean mCanUpdate = false;
 
 	public boolean isUpdatable() {
@@ -21,11 +21,11 @@ public class TabFragment extends Fragment {
 	
 	@Override
 	public void onAttach(Activity activity) {
-		mActivity = (MainNewActivity) activity;
+		mActivity = (MainActivity) activity;
 		super.onAttach(activity);
 	}
 	
-	public MainNewActivity getMainActivity() {
+	public MainActivity getMainActivity() {
 		return mActivity;
 	}
 }

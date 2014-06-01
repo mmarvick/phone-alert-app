@@ -3,7 +3,7 @@ package com.mmarvick.urgentcall.widgets;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
-import com.mmarvick.urgentcall.activities.MainNewActivity;
+import com.mmarvick.urgentcall.activities.MainActivity;
 import com.mmarvick.urgentcall.activities.TabFragment;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
@@ -31,7 +31,7 @@ public class StateListsPrompt {
 	private AlertDialog.Builder alertDialogBuilder;
 	private OnOptionsChangedListener mOnOptionsChangedListener;
 
-	public StateListsPrompt(final Context context, final String alertType, final MainNewActivity updater) {
+	public StateListsPrompt(final Context context, final String alertType, final MainActivity updater) {
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptView = li.inflate(R.layout.dialog_state_lists,  null);	
 		

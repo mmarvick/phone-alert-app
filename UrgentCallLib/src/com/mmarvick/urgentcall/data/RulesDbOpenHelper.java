@@ -19,7 +19,7 @@ public class RulesDbOpenHelper extends SQLiteOpenHelper {
 					RulesEntry._ID + " INTEGER PRIMARY KEY," +
 					RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + TEXT_TYPE + SEPARATOR +
 					RulesEntry.RC_STATE + INTEGER_TYPE + SEPARATOR +
-					RulesEntry.SINGLE_CALL_STATE + INTEGER_TYPE + SEPARATOR +
+					RulesEntry.SC_STATE + INTEGER_TYPE + SEPARATOR +
 					RulesEntry.MSG_STATE + INTEGER_TYPE +					
 					")";
 	
@@ -28,7 +28,7 @@ public class RulesDbOpenHelper extends SQLiteOpenHelper {
 	
 	public static final String SQL_ADD_SINGLE_CALL_ON =
 			"ALTER TABLE " + RulesEntry.TABLE_NAME + " ADD " +
-					RulesEntry.SINGLE_CALL_STATE + INTEGER_TYPE;
+					RulesEntry.SC_STATE + INTEGER_TYPE;
 	
 	public static final String SQL_ADD_MSG_ON =
 			"ALTER TABLE " + RulesEntry.TABLE_NAME + " ADD " +

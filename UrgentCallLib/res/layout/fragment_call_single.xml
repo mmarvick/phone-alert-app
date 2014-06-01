@@ -6,65 +6,53 @@
     tools:context="${packageName}.${activityClass}" >
     
     <TextView
-        android:id="@+id/textView_msg_state"
+        android:id="@+id/textView_sc_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:layout_marginTop="18dp"
-        android:text="@string/status_home_msg_name"
+        android:text="@string/status_home_sc_name"
         android:textSize="@dimen/normal_textSize" />
 
     <Button
-        android:id="@+id/button_msg_state"
+        android:id="@+id/button_sc_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_msg_state"
+        android:layout_below="@id/textView_sc_state"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
         android:textSize="@dimen/large_textSize" /> 
-        
-    <TextView
-        android:id="@+id/textView_msg_heading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_msg_state"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:text="@string/message_text_intro"
-        android:textSize="@dimen/small_textSize" />
-    
-    <TextView
-        android:id="@+id/textView_msg_key"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_msg_heading"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:textStyle="bold"
-        android:textColor="@color/holo_blue_light"
-        android:textSize="@dimen/small_textSize" /> 
 
     <TextView
-        android:id="@+id/textView_msg_trigger"
+        android:id="@+id/textView_sc_intro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_msg_key"
+        android:layout_below="@id/button_sc_state"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
-		android:text="@string/message_text_will_trigger"
+		android:text="@string/sc_text_intro"
+        android:textSize="@dimen/small_textSize" />       
+    
+    <TextView
+        android:id="@+id/textView_sc_trigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_sc_intro"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+		android:text="@string/sc_text_will_trigger"
         android:textSize="@dimen/small_textSize" />        
     
     <TextView
-        android:id="@+id/textView_msg_from"
+        android:id="@+id/textView_sc_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_msg_trigger"
+        android:layout_below="@id/textView_sc_trigger"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
@@ -72,15 +60,15 @@
         android:textSize="@dimen/small_textSize" /> 
         
     <TextView
-        android:id="@+id/textView_msg_turned_off"
+        android:id="@+id/textView_sc_turned_off"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button_msg_state"
+        android:layout_below="@id/button_sc_state"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:layout_marginTop="20dp"
-		android:text="@string/message_text_turned_off"
-        android:textSize="@dimen/small_textSize" />     
+		android:text="@string/sc_text_turned_off"
+        android:textSize="@dimen/small_textSize" /> 
         
  
                 

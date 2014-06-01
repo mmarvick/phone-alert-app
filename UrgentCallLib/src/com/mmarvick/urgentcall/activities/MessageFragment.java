@@ -5,6 +5,7 @@ import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
+import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.StateListsPrompt;
 
@@ -23,8 +24,9 @@ public class MessageFragment extends TabFragment {
 	private Button mButtonMsgState;
 	private TextView mTextViewMsgHeading;
 	private TextView mTextViewMsgKey;
-	private TextView mTextViewFrom;
 	private TextView mTextViewTrigger;
+	private TextView mTextViewFrom;
+	private TextView mTextViewTurnedOff;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,9 +36,39 @@ public class MessageFragment extends TabFragment {
 		mButtonMsgState = (Button) view.findViewById(R.id.button_msg_state);
 		mTextViewMsgHeading = (TextView) view.findViewById(R.id.textView_msg_heading);
 		mTextViewMsgKey = (TextView) view.findViewById(R.id.textView_msg_key);
-		mTextViewFrom = (TextView) view.findViewById(R.id.textView_msg_from);
 		mTextViewTrigger = (TextView) view.findViewById(R.id.textView_msg_trigger);
+		mTextViewFrom = (TextView) view.findViewById(R.id.textView_msg_from);
+		mTextViewTurnedOff = (TextView) view.findViewById(R.id.textView_msg_turned_off);
+
 		mButtonMsgState.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (PrefHelper.getState(getMainActivity(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+					int backupState = PrefHelper.getBackupState(getMainActivity(), RulesEntry.MSG_STATE);
+					PrefHelper.setState(getMainActivity(), RulesEntry.MSG_STATE, backupState);
+				} else {
+					PrefHelper.saveBackupState(getMainActivity(), RulesEntry.MSG_STATE);
+					PrefHelper.setState(getMainActivity(), RulesEntry.MSG_STATE, Constants.URGENT_CALL_STATE_OFF);
+				}
+				
+				getMainActivity().updateSettings();
+				
+			}
+		});
+		
+		mTextViewMsgKey.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				new EditTextStringPrompt(getMainActivity(), Constants.MSG_MESSAGE_MIN,
+						Constants.MSG_MESSAGE, Constants.MSG_MESSAGE_DEFAULT, Constants.MSG_MESSAGE_TITLE);
+				
+			}
+			
+		});
+		
+		mTextViewFrom.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -78,6 +110,8 @@ public class MessageFragment extends TabFragment {
 		RulesDbHelper dbHelper;
 		int state = PrefHelper.getState(getMainActivity(), RulesEntry.MSG_STATE);
 		
+		showTextViews();
+		
 		mTextViewMsgKey.setText(PrefHelper.getMessageToken(getMainActivity()));
 		
 		String fromMessage = "";
@@ -99,8 +133,26 @@ public class MessageFragment extends TabFragment {
 			fromMessage += getMainActivity().getString(R.string.message_text_blacklist_after);
 			dbHelper.close();
 			break;
-		}
+		}	
 		
 		mTextViewFrom.setText(fromMessage);
+	}
+	
+	private void showTextViews() {
+		int state = PrefHelper.getState(getMainActivity(), RulesEntry.MSG_STATE);
+		if (state == Constants.URGENT_CALL_STATE_ON || state == Constants.URGENT_CALL_STATE_WHITELIST
+				|| state == Constants.URGENT_CALL_STATE_BLACKLIST) {
+			mTextViewMsgHeading.setVisibility(View.VISIBLE);
+			mTextViewMsgKey.setVisibility(View.VISIBLE);
+			mTextViewTrigger.setVisibility(View.VISIBLE);
+			mTextViewFrom.setVisibility(View.VISIBLE);
+			mTextViewTurnedOff.setVisibility(View.INVISIBLE);
+		} else {
+			mTextViewMsgHeading.setVisibility(View.INVISIBLE);
+			mTextViewMsgKey.setVisibility(View.INVISIBLE);
+			mTextViewTrigger.setVisibility(View.INVISIBLE);
+			mTextViewFrom.setVisibility(View.INVISIBLE);
+			mTextViewTurnedOff.setVisibility(View.VISIBLE);
+		}
 	}
 }

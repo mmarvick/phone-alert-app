@@ -27,7 +27,7 @@ public class PrefHelper {
 	
 	public static int getState(Context context, String alertType) {
 		int def = Constants.URGENT_CALL_STATE_ON;
-		if (alertType == RulesEntry.SINGLE_CALL_STATE) {
+		if (alertType == RulesEntry.SC_STATE) {
 			def = Constants.URGENT_CALL_STATE_WHITELIST;
 		}
 		return getPrefs(context).getInt(alertType, def);
@@ -37,6 +37,20 @@ public class PrefHelper {
 		Editor editor = getPrefs(context).edit();
 		editor.putInt(alertType, state);
 		editor.commit();
+	}
+	
+	public static void saveBackupState(Context context, String alertType) {
+		Editor editor = getPrefs(context).edit();
+		editor.putInt(alertType + "_BACKUP", getState(context, alertType));
+		editor.commit();
+	}
+	
+	public static int getBackupState(Context context, String alertType) {
+		int def = Constants.URGENT_CALL_STATE_ON;
+		if (alertType == RulesEntry.SC_STATE) {
+			def = Constants.URGENT_CALL_STATE_WHITELIST;
+		}
+		return getPrefs(context).getInt(alertType + "_BACKUP", def);		
 	}
 	
 	public static String getMessageToken(Context context) {

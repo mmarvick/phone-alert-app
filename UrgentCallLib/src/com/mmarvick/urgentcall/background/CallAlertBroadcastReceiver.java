@@ -62,7 +62,7 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private boolean singleAlert(Context context, String incomingNumber) {
-		if (isOn(context, RulesEntry.SINGLE_CALL_STATE, incomingNumber)) {
+		if (isOn(context, RulesEntry.SC_STATE, incomingNumber)) {
 			Toast.makeText(context, "Single alert!", Toast.LENGTH_SHORT).show();
 			return true;
 		} else {

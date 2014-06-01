@@ -37,7 +37,7 @@ public class SettingsSingleCallActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new StateOnOffListPrompt(SettingsSingleCallActivity.this, RulesEntry.SINGLE_CALL_STATE).show();
+				new StateOnOffListPrompt(SettingsSingleCallActivity.this, RulesEntry.SC_STATE).show();
 
 				return true;
 			}

@@ -33,6 +33,7 @@
     <string name="message_text_whitelist_after">&#160;whitelisted users only</string>
     <string name="message_text_blacklist_before">from everyone except&#160;</string>
     <string name="message_text_blacklist_after">&#160;blacklisted users</string>
+    <string name="message_text_turned_off">turn on text alerts to be alerted when somebody sends you a text with a key word or phrase</string>
     
     <string name="rc_text_calls">&#160;calls in&#160;</string>
     <string name="rc_text_mins">&#160;minutes</string>
@@ -41,7 +42,14 @@
     <string name="rc_text_whitelist_before">from&#160;</string>
     <string name="rc_text_whitelist_after">&#160;whitelisted users only</string>
     <string name="rc_text_blacklist_before">from everyone except&#160;</string>
-    <string name="rc_text_blacklist_after">&#160;blacklisted users</string>      
+    <string name="rc_text_blacklist_after">&#160;blacklisted users</string> 
+    <string name="rc_text_turned_off">turn on repeated call alerts to be alerted when somebody calls you several times in quick succession</string>
+    
+    <string name="sc_text_intro">a single call</string>
+    <string name="sc_text_will_trigger">will trigger an alarm</string>
+    <string name="sc_text_whitelist_before">from&#160;</string>
+    <string name="sc_text_whitelist_after">&#160;whitelisted users only</string>
+    <string name="sc_text_turned_off">turn on single call alerts for special contacts who you want to hear the ring from the first time they call</string> 
     
     <string name="status_allcaps_on">ON</string>
     <string name="status_allcaps_off">OFF</string>

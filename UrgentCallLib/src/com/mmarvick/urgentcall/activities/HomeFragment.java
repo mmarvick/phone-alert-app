@@ -55,7 +55,7 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				getMainActivity().setTab(MainNewActivity.TAB_CALL);
+				getMainActivity().setTab(MainNewActivity.TAB_RC);
 			}
 		});
 		
@@ -63,7 +63,7 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				getMainActivity().setTab(MainNewActivity.TAB_CALL);
+				getMainActivity().setTab(MainNewActivity.TAB_SC);
 			}
 		});		
 		
@@ -92,7 +92,7 @@ public class HomeFragment extends TabFragment {
 		setUpdatable(true);
 		setStateText(mTextMsgState, RulesEntry.MSG_STATE);
 		setStateText(mTextRCState, RulesEntry.RC_STATE);
-		setStateText(mTextSCState, RulesEntry.SINGLE_CALL_STATE);
+		setStateText(mTextSCState, RulesEntry.SC_STATE);
 		setButtonState();
 		super.fragUpdateSettings();
 	}

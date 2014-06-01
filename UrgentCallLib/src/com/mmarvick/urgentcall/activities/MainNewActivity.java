@@ -51,7 +51,8 @@ public class MainNewActivity extends ActionBarActivity
 	
 	public static final int TAB_HOME = 0;
 	public static final int TAB_MSG = 1;
-	public static final int TAB_CALL = 2;
+	public static final int TAB_RC = 2;
+	public static final int TAB_SC = 3;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class MainNewActivity extends ActionBarActivity
 		fragments.add((TabFragment) (new HomeFragment()));
 		fragments.add((TabFragment) (new MessageFragment()));	
 		fragments.add((TabFragment) (new RepeatCallFragment()));
+		fragments.add((TabFragment) (new SingleCallFragment()));
 		fragmentTitles = new String[] {"Home", "Text", "Repeat\nCall", "Single\nCall"};
 		
 		mAdapter = new MyPagerAdapter(getSupportFragmentManager());
@@ -122,7 +124,7 @@ public class MainNewActivity extends ActionBarActivity
 	@Override
 	public void onBackPressed() {
 		int tab = mViewPager.getCurrentItem();
-		if (tab == TAB_CALL || tab == TAB_MSG) {
+		if (tab == TAB_RC || tab == TAB_MSG || tab == TAB_SC) {
 			mViewPager.setCurrentItem(TAB_HOME);
 		} else {
 			super.onBackPressed();
@@ -130,7 +132,7 @@ public class MainNewActivity extends ActionBarActivity
 	}
 	
 	public void updateSettings() {
-		//disableEnableWhenOff();
+		disableEnableWhenOff();
 		
 		for (int i = 0; i < fragments.size(); i++) {
 			TabFragment frag = fragments.get(i);
@@ -140,19 +142,19 @@ public class MainNewActivity extends ActionBarActivity
 		}
 	}
 	
-	/*private void disableEnableWhenOff() {
+	private void disableEnableWhenOff() {
 		if (PrefHelper.isSnoozing(getApplicationContext())
 				|| PrefHelper.getState(getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mViewPager.setCurrentItem(TAB_HOME);
-			mCanChangeTabs = false;
+			/* mCanChangeTabs = false;
 			for (int i = 0; i < fragments.size(); i++) {
 				//actionBar.getTabAt(i).setEnabled(false);
-			}
+			} */
 			
 		} else {
-			mCanChangeTabs = true;
+			//mCanChangeTabs = true;
 		}
-	}*/
+	}
 	
 	public class MyPagerAdapter extends FragmentPagerAdapter {
 		
@@ -171,11 +173,6 @@ public class MainNewActivity extends ActionBarActivity
 		}
 		
 	}
-	
-	
-	
-	
-	
 	
 
 	private void showSnooze() {

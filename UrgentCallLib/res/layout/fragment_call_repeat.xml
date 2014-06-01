@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
         android:layout_marginTop="18dp"
         android:text="@string/status_home_rc_name"
         android:textSize="@dimen/normal_textSize" />
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/button_rc_state"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp">
+        android:layout_marginTop="10dp">
 
 	    <TextView
 	        android:id="@+id/textView_rc_call_number"
@@ -86,6 +87,17 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
+        android:textSize="@dimen/small_textSize" /> 
+        
+    <TextView
+        android:id="@+id/textView_rc_turned_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_rc_state"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+		android:text="@string/rc_text_turned_off"
         android:textSize="@dimen/small_textSize" /> 
         
  

@@ -9,6 +9,7 @@ import com.mmarvick.urgentcall.data.PrefHelper;
 
 public class SnoozeEndDialog {
 	private AlertDialog dialog;
+	private OnOptionsChangedListener mOnOptionsChangedListener;
 	
 	public SnoozeEndDialog(final Context context) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -20,6 +21,7 @@ public class SnoozeEndDialog {
 			.setPositiveButton(context.getString(R.string.cancel_snooze_dialog_yes), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					PrefHelper.setSnoozeTime(context, 0);
+					mOnOptionsChangedListener.onOptionsChanged();
 				}
 			})
 			.setNeutralButton(context.getString(R.string.cancel_snooze_dialog_no), new DialogInterface.OnClickListener() {
@@ -42,8 +44,8 @@ public class SnoozeEndDialog {
 		dialog.cancel();
 	}
 	
-	public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-		dialog.setOnDismissListener(listener);;
+	public void setOnOptionsChangedListener(OnOptionsChangedListener listener) {
+		mOnOptionsChangedListener = listener;
 	}
 	
 }

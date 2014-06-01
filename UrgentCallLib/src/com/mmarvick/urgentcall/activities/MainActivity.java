@@ -6,6 +6,8 @@ import java.util.List;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.widgets.MyViewPager;
+import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.RateDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeEndDialog;
@@ -15,11 +17,13 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -43,7 +47,8 @@ public class MainActivity extends ActionBarActivity
 	
 	private MyPagerAdapter mAdapter;
 	private SnoozeEndDialog endSnoozeDialog;
-	private ViewPager mViewPager;
+	private MyViewPager mViewPager;
+	private PeriodicChecker mChecker;
 	
 	private boolean mCanChangeTabs;
 	
@@ -58,7 +63,7 @@ public class MainActivity extends ActionBarActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		fragments = new ArrayList<TabFragment>();
 		fragments.add((TabFragment) (new HomeFragment()));
 		fragments.add((TabFragment) (new MessageFragment()));	
@@ -67,7 +72,7 @@ public class MainActivity extends ActionBarActivity
 		fragmentTitles = new String[] {"Home", "Text", "Repeat\nCall", "Single\nCall"};
 		
 		mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager = (MyViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mAdapter);
 		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			
@@ -117,6 +122,15 @@ public class MainActivity extends ActionBarActivity
 		super.onResume();
 	}
 	
+	@Override
+	public void onPause() {
+		if (mChecker != null) {
+			mChecker.cancel(true);
+			mChecker = null;
+		}
+		super.onPause();
+	}
+	
 	public void setTab(int tab) {
 		mViewPager.setCurrentItem(tab);;
 	}
@@ -134,6 +148,12 @@ public class MainActivity extends ActionBarActivity
 	public void updateSettings() {
 		disableEnableWhenOff();
 		
+		if (PrefHelper.isSnoozing(getApplicationContext()) && (mChecker == null || mChecker.isCancelled())) {
+			mChecker = new PeriodicChecker();
+			mChecker.execute();
+			Log.e("Checker", "Checker made!");
+		}
+		
 		for (int i = 0; i < fragments.size(); i++) {
 			TabFragment frag = fragments.get(i);
 			if (frag.isUpdatable()) {
@@ -146,13 +166,10 @@ public class MainActivity extends ActionBarActivity
 		if (PrefHelper.isSnoozing(getApplicationContext())
 				|| PrefHelper.getState(getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mViewPager.setCurrentItem(TAB_HOME);
-			/* mCanChangeTabs = false;
-			for (int i = 0; i < fragments.size(); i++) {
-				//actionBar.getTabAt(i).setEnabled(false);
-			} */
+			mViewPager.setScrollable(false);
 			
 		} else {
-			//mCanChangeTabs = true;
+			mViewPager.setScrollable(true);
 		}
 	}
 	
@@ -187,13 +204,14 @@ public class MainActivity extends ActionBarActivity
 	public void endSnooze() {
 		endSnoozeDialog = new SnoozeEndDialog(this);
 		endSnoozeDialog.show();
-		endSnoozeDialog.setOnDismissListener(new OnDismissListener() {
+		endSnoozeDialog.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 			
 			@Override
-			public void onDismiss(DialogInterface dialog) {
-				
+			public void onOptionsChanged() {
+				updateSettings();
 			}
 		});
+
 	}	
 	
 	@Override
@@ -204,6 +222,7 @@ public class MainActivity extends ActionBarActivity
 			snoozeTime += 500;
 		}
 		PrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
+		updateSettings();
 	}	
 	
 	@Override
@@ -265,5 +284,21 @@ public class MainActivity extends ActionBarActivity
 			return super.onOptionsItemSelected(item);
 		}
 	}	
+	
+	private class PeriodicChecker extends AsyncTask<Void, Void, Void> {
+		protected Void doInBackground(Void... voids) {
+			while (!isCancelled() && PrefHelper.isSnoozing(getApplicationContext())) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				runOnUiThread(new Runnable() { public void run() {updateSettings();}});
+				Log.e("Time:",""+PrefHelper.snoozeRemaining(getApplicationContext()));
+			}
+			cancel(true);
+			return null;
+		}
+	}
 	
 }

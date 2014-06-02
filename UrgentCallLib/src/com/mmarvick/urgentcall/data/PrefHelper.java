@@ -1,7 +1,5 @@
 package com.mmarvick.urgentcall.data;
 
-import java.util.prefs.PreferencesFactory;
-
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;

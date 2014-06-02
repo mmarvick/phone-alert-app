@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
 
 public class RateDialog {
 	private AlertDialog dialog;

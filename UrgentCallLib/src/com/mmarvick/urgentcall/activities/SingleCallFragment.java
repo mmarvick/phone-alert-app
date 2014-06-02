@@ -5,20 +5,15 @@ import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
-import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
-import com.mmarvick.urgentcall.widgets.StateListsPrompt;
+import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -44,13 +39,19 @@ public class SingleCallFragment extends TabFragment {
 			@Override
 			public void onClick(View v) {
 
-				if (PrefHelper.getState(getMainActivity(), RulesEntry.SC_STATE) == Constants.URGENT_CALL_STATE_WHITELIST) {
-					PrefHelper.setState(getMainActivity(), RulesEntry.SC_STATE, Constants.URGENT_CALL_STATE_OFF);
+				if (getResources().getBoolean(R.bool.paid_version)) {
+					
+					if (PrefHelper.getState(getMainActivity(), RulesEntry.SC_STATE) == Constants.URGENT_CALL_STATE_WHITELIST) {
+						PrefHelper.setState(getMainActivity(), RulesEntry.SC_STATE, Constants.URGENT_CALL_STATE_OFF);
+					} else {
+						PrefHelper.setState(getMainActivity(), RulesEntry.SC_STATE, Constants.URGENT_CALL_STATE_WHITELIST);
+					}
+					
+					getMainActivity().updateSettings();
+					
 				} else {
-					PrefHelper.setState(getMainActivity(), RulesEntry.SC_STATE, Constants.URGENT_CALL_STATE_WHITELIST);
+					UpgradeDialog.upgradeDialog(getMainActivity(), getString(R.string.upgrade_body_sc));
 				}
-				
-				getMainActivity().updateSettings();
 			}
 		});	
 		

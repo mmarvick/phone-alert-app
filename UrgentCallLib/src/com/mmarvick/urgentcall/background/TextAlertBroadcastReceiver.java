@@ -1,7 +1,5 @@
 package com.mmarvick.urgentcall.background;
 
-import java.util.Date;
-
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
@@ -10,14 +8,9 @@ import com.mmarvick.urgentcall.data.RulesDbHelper;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.provider.CallLog;
 import android.telephony.SmsMessage;
-import android.telephony.TelephonyManager;
-import android.util.Log;
-import android.widget.Toast;
 
 public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 
@@ -44,7 +37,6 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 			
 		if (PrefHelper.getState(context, Constants.OVERALL_STATE) == RulesEntry.STATE_ON
 				&& !PrefHelper.isSnoozing(context)) {
-			Toast.makeText(context, "State is on!", Toast.LENGTH_SHORT).show();
 			
 			if (messageAlert(context, incomingNumber, message)) {
 				alertAction(context);					
@@ -93,7 +85,6 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private void alertAction(Context context) {
-		Toast.makeText(context, "Text alert!", Toast.LENGTH_SHORT).show();
 		Intent alarmService = new Intent(context, MessageAlarmService.class);
 		context.startService(alarmService);	
 	}

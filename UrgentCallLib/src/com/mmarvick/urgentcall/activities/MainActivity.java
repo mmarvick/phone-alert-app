@@ -27,8 +27,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -38,11 +36,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity 
 	implements TimePickerDialog.OnTimeSetListener{
@@ -239,12 +233,12 @@ public class MainActivity extends ActionBarActivity
 	
 
 	private void showSnooze() {
-		if (getResources().getBoolean(R.bool.paid_version)) {
+		//if (getResources().getBoolean(R.bool.paid_version)) {
 			SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
 			snooze.show();
-		} else {
-			UpgradeDialog.upgradeDialog(this, getString(R.string.upgrade_body_snooze));
-		}
+		//} else {
+		//	UpgradeDialog.upgradeDialog(this, getString(R.string.upgrade_body_snooze));
+		//}
 	}
 	
 	public void endSnooze() {

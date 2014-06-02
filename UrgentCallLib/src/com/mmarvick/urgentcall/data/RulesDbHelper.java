@@ -12,9 +12,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
-import android.util.Log;
 
 public class RulesDbHelper {
 	
@@ -22,6 +21,9 @@ public class RulesDbHelper {
 	SQLiteDatabase mRulesDb;
 	ContentResolver mContentResolver;
 	RulesDbOpenHelper mDbHelper;
+	
+	private final String CONTACT_LOOKUP = ContactsContract.Contacts.LOOKUP_KEY;
+	private final String CONTACT_NAME = ContactsContract.Contacts.DISPLAY_NAME;
 	
 	public RulesDbHelper(Context context) {
 		this.context = context;
@@ -34,23 +36,23 @@ public class RulesDbHelper {
 		
 		if (lookups.length == 0) return new String[][] {new String[0], new String[0]};
 		
-		String where = Data.LOOKUP_KEY + "='" + lookups[0] + "'";
+		String where = CONTACT_LOOKUP + "='" + lookups[0] + "'";
 		for (int i = 1; i < lookups.length; i++) {
-			where += " OR " + Data.LOOKUP_KEY + "='" + lookups[i] + "'";
+			where += " OR " + CONTACT_LOOKUP + "='" + lookups[i] + "'";
 		}
 		
-		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
-				new String[] {Data.LOOKUP_KEY, Phone.DISPLAY_NAME},
+		Cursor cursor = mContentResolver.query(Contacts.CONTENT_URI,
+				new String[] {CONTACT_LOOKUP, CONTACT_NAME},
 				where,
 				null,
-				Phone.DISPLAY_NAME + " ASC");
+				CONTACT_NAME + " ASC");
 		
 		String[][] data = new String[2][cursor.getCount()];
 		
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			data[0][cursor.getPosition()] = cursor.getString(cursor.getColumnIndex(Data.LOOKUP_KEY));
-			data[1][cursor.getPosition()] = cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME));
+			data[0][cursor.getPosition()] = cursor.getString(cursor.getColumnIndex(CONTACT_LOOKUP));
+			data[1][cursor.getPosition()] = cursor.getString(cursor.getColumnIndex(CONTACT_NAME));
 			cursor.moveToNext();
 		}
 		
@@ -94,12 +96,12 @@ public class RulesDbHelper {
 	}	
 	
 	public String getName(String lookup) {
-		Cursor cursor = mContentResolver.query(Data.CONTENT_URI,
-				new String[] {Phone.DISPLAY_NAME},
-				Data.LOOKUP_KEY + "=?",
+		Cursor cursor = mContentResolver.query(Contacts.CONTENT_URI,
+				new String[] {CONTACT_NAME},
+				CONTACT_LOOKUP + "=?",
 				new String[] {lookup}, null);
 		cursor.moveToFirst();
-		String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+		String name = cursor.getString(cursor.getColumnIndex(CONTACT_NAME));
 		cursor.close();
 		return name;	
 	}
@@ -135,7 +137,6 @@ public class RulesDbHelper {
 			mRulesDb.insert(RulesEntry.TABLE_NAME, null, values);
 		} 
 		ContentValues values = new ContentValues();
-		values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup); //TODO: Is this necessary?
 		values.put(alertType, userState);
 		mRulesDb.update(RulesEntry.TABLE_NAME, values, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
 	}	
@@ -143,7 +144,7 @@ public class RulesDbHelper {
 	public String getLookupFromNumber(String phoneNumber) {
 		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 		Cursor cursor = mContentResolver.query(uri,
-				new String[] {Phone.LOOKUP_KEY},
+				new String[] {CONTACT_LOOKUP},
 				null, null, null);
 		if (cursor.getCount() == 0) {
 			return null;

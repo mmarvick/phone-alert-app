@@ -67,9 +67,10 @@
     Users of Urgent Call Pro can snooze alerts for a period of time.\n\n\
 \	Users of Urgent Call Lite must turn the application off and on manually.</string>
     <string name="upgrade_body_state">
-    Users of Urgent Call Pro can filter users with an allow list or block list.\n\n\
-\	Users of Urgent Call Lite must leave the app on or off for all users.</string>
-
+    Users of Urgent Call Pro can filter alerts with an allow list or block list.\n\n\
+\	Users of Urgent Call Lite must leave the alerts on or off for everyone.</string>
+    <string name="upgrade_body_sc">
+    Only users of Urgent Call Pro can enable single call alerts.</string>
     <string name="snooze_dialog_title">Snooze for&#8230;</string> 
     
     <string name="cancel_snooze_dialog_title">Cancel Snooze?</string>

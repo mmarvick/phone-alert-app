@@ -22,25 +22,41 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+		String callState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 		dbHelper = new RulesDbHelper(context);
 		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		
-		if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+		// If the phone is ringing...
+		if (callState.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
 			
-			if (PrefHelper.getState(context, Constants.OVERALL_STATE) == RulesEntry.STATE_ON
+			String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER); // phone number
+			
+			// ... and the app isn't snoozing or turne off ...
+			if (PrefHelper.getState(context, Constants.APP_STATE) == RulesEntry.STATE_ON
 					&& !PrefHelper.isSnoozing(context)) {
 			
+				// ... and either a repeated call alert or single call alert criteria has been met ...
 				if (repeatedAlert(context, incomingNumber) || singleAlert(context, incomingNumber)) {
+					
+					// ... trigger an alert!
 					alertAction(context);					
 				}
 			
 			}
-		} else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
+		} else if (callState.equals(TelephonyManager.EXTRA_STATE_IDLE)
+				|| callState.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
+			// Reset from the alert when the phone stops ringing
 			resetAction(context);
 		}
 	}
+
+	private boolean singleAlert(Context context, String incomingNumber) {
+		if (isOn(context, RulesEntry.SC_STATE, incomingNumber)) {
+			return true;
+		} else {
+			return false;
+		}
+	}	
 	
 	private boolean repeatedAlert(Context context, String incomingNumber) {
 		if (isOn(context, RulesEntry.RC_STATE, incomingNumber)) {
@@ -56,32 +72,27 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		return false;
 	}
 	
-	private boolean singleAlert(Context context, String incomingNumber) {
-		if (isOn(context, RulesEntry.SC_STATE, incomingNumber)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
+	// Returns whether an alert is turned on for the given alert type and phone number
 	private boolean isOn(Context context, String alertType, String incomingNumber) {
-		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-		int urgentCallState = PrefHelper.getState(context, alertType);
-		int userState = dbHelper.getUserState(alertType, lookup);
+		String lookup = dbHelper.getLookupFromNumber(incomingNumber); // gets lookup for caller
+		int alertState = PrefHelper.getState(context, alertType); // gets the phone's setting for this alert
+		int userState = dbHelper.getUserState(alertType, lookup); // gets the user's setting for this alert (if whitelist/blacklist)
 		
-		switch(urgentCallState) {
+		switch(alertState) {
 		
 		case Constants.URGENT_CALL_STATE_ON:
 			return true;
 		case Constants.URGENT_CALL_STATE_OFF:
 			return false;
 		case Constants.URGENT_CALL_STATE_WHITELIST:
+			// Alert is only on if the user state is explicitly on for that alert
 			if (userState == RulesEntry.STATE_ON) {
 				return true;
 			} else {
 				return false;
 			}
 		case Constants.URGENT_CALL_STATE_BLACKLIST:
+			// Alert is only off if the user state is explicitly off for that alert
 			if (userState == RulesEntry.STATE_OFF) {
 				return false;
 			} else {

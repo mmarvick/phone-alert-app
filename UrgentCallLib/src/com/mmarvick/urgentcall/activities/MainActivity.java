@@ -41,22 +41,21 @@ import android.widget.TimePicker;
 public class MainActivity extends ActionBarActivity 
 	implements TimePickerDialog.OnTimeSetListener{
 	
-	public ArrayList<TabFragment> fragments;
-	public String[] fragmentTitles;
-	
-	private MyPagerAdapter mAdapter;
-	private SnoozeEndDialog endSnoozeDialog;
-	private MyViewPager mViewPager;
-	private PeriodicChecker mChecker;
-	
-	private boolean mCanChangeTabs = true;
-	
-	private ActionBar actionBar;
-	
 	public static final int TAB_HOME = 0;
 	public static final int TAB_MSG = 1;
 	public static final int TAB_RC = 2;
 	public static final int TAB_SC = 3;
+	public static final String [] fragmentTitles = new String[]
+			{"Home", "Text", "Repeat\nCall", "Single\nCall"};
+	public ArrayList<TabFragment> fragments;
+	
+	private ActionBar actionBar;
+	private MyPagerAdapter mAdapter;
+	private MyViewPager mViewPager;
+	private PeriodicChecker mChecker;
+	private SnoozeEndDialog endSnoozeDialog;	
+	
+	private boolean mCanChangeTabs = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +64,16 @@ public class MainActivity extends ActionBarActivity
 		
 		checkDisclaimer();		
 
+		actionBar = getSupportActionBar();		
 		
+		// Add fragments to list
 		fragments = new ArrayList<TabFragment>();
 		fragments.add((TabFragment) (new HomeFragment()));
 		fragments.add((TabFragment) (new MessageFragment()));	
 		fragments.add((TabFragment) (new RepeatCallFragment()));
 		fragments.add((TabFragment) (new SingleCallFragment()));
-		fragmentTitles = new String[] {"Home", "Text", "Repeat\nCall", "Single\nCall"};
 		
+		// Add the fragments to the view pager
 		mAdapter = new MyPagerAdapter(getSupportFragmentManager());
 		mViewPager = (MyViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mAdapter);
@@ -80,27 +81,27 @@ public class MainActivity extends ActionBarActivity
 			
 			@Override
 			public void onPageSelected(int position) {
-				getSupportActionBar().setSelectedNavigationItem(position);
+				actionBar.setSelectedNavigationItem(position);
 			}
 		});
 		
-		actionBar = getSupportActionBar();
-		
+		// Add tabs to the action bar
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
+		// Add a tab listener that changes tabs when the flag is set that changing is allowed
 		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 
 			@Override
-			public void onTabReselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onTabReselected(Tab tab, FragmentTransaction ft) { }
 
 			@Override
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
 				if (mCanChangeTabs) {
 					mViewPager.setCurrentItem(tab.getPosition());
-				} else if (!mCanChangeTabs && tab.getPosition() != TAB_HOME) {
+				}
+				
+				// If tabs can't be changed (due to off or snooze), alert the user and change the tab back
+				else if (!mCanChangeTabs && tab.getPosition() != TAB_HOME) {
 					AlertDialog.Builder dialogBuilder = new Builder(MainActivity.this);
 					dialogBuilder
 						.setCancelable(true)
@@ -137,31 +138,25 @@ public class MainActivity extends ActionBarActivity
 			}
 
 			@Override
-			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onTabUnselected(Tab tab, FragmentTransaction ft) {}
 			
 		};
 		
-		for (int i = 0; i < fragmentTitles.length; i++) {
-			actionBar.addTab(
-					actionBar.newTab()
-							.setText(fragmentTitles[i])
-							.setTabListener(tabListener));
-		}
+
 		
 	}
 	
 	@Override
 	public void onResume() {
 		checkTwoVersions();
-		updateSettings();
+		updateSettings();	//update control panel views
 		super.onResume();
 	}
 	
+
 	@Override
 	public void onPause() {
+		// Stops periodic update of view
 		if (mChecker != null) {
 			mChecker.cancel(true);
 			mChecker = null;
@@ -169,10 +164,12 @@ public class MainActivity extends ActionBarActivity
 		super.onPause();
 	}
 	
+	// Used to set the tab
 	public void setTab(int tab) {
 		mViewPager.setCurrentItem(tab);;
 	}
 	
+	// Hitting back on any tab other than the home tab returns home
 	@Override
 	public void onBackPressed() {
 		int tab = mViewPager.getCurrentItem();
@@ -183,6 +180,8 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 	
+	// Updates all the views on the control panel. This needs to be called when settings changed (e.g. an alert
+	// is turned off, the app starts snoozing, the keyword for an incoming message changes, or the activity is loaded)
 	public void updateSettings() {
 		disableEnableWhenOff();
 		
@@ -200,9 +199,10 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 	
+	// Prevent the user from switching tabs or scrolling when the alerts are snoozed or off
 	private void disableEnableWhenOff() {
 		if (PrefHelper.isSnoozing(getApplicationContext())
-				|| PrefHelper.getState(getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+				|| PrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mViewPager.setCurrentItem(TAB_HOME);
 			mViewPager.setScrollable(false);
 			mCanChangeTabs = false;
@@ -231,16 +231,13 @@ public class MainActivity extends ActionBarActivity
 		
 	}
 	
-
+	// A prompt to snooze
 	private void showSnooze() {
-		//if (getResources().getBoolean(R.bool.paid_version)) {
-			SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
-			snooze.show();
-		//} else {
-		//	UpgradeDialog.upgradeDialog(this, getString(R.string.upgrade_body_snooze));
-		//}
+		SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
+		snooze.show();
 	}
 	
+	// A prompt to end snooze app
 	public void endSnooze() {
 		endSnoozeDialog = new SnoozeEndDialog(this);
 		endSnoozeDialog.show();
@@ -248,12 +245,13 @@ public class MainActivity extends ActionBarActivity
 			
 			@Override
 			public void onOptionsChanged() {
-				updateSettings();
+				updateSettings(); //updates views on control panel
 			}
 		});
 
 	}	
 	
+	// Return value from the snooze prompt
 	@Override
 	public void onTimeSet(TimePicker view, int hours, int minutes) {
 		long snoozeTime = hours * 3600000 + minutes * 60000;
@@ -262,7 +260,7 @@ public class MainActivity extends ActionBarActivity
 			snoozeTime += 500;
 		}
 		PrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
-		updateSettings();
+		updateSettings(); // updates views on control panel
 	}	
 	
 	@Override
@@ -284,6 +282,7 @@ public class MainActivity extends ActionBarActivity
 		return returnValue;
 	}
 	
+	// Generate message and intent to share app with other users
 	private void share() {
 		Intent shareIntent = new Intent();
 		shareIntent.setAction(Intent.ACTION_SEND);
@@ -325,6 +324,7 @@ public class MainActivity extends ActionBarActivity
 		}
 	}	
 	
+	// Updates the values showed in the control panel every second (useful when snoozing)
 	private class PeriodicChecker extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... voids) {
 			while (!isCancelled() && PrefHelper.isSnoozing(getApplicationContext())) {
@@ -341,7 +341,10 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 	
+	// Check for both pro and lite being installed, and remove lite if so
 	public void checkTwoVersions() {
+		
+		// Check for lite and pro
 		List<PackageInfo> pkgs = getPackageManager().getInstalledPackages(0);
 		boolean lite = false;
 		boolean pro = false;
@@ -353,7 +356,8 @@ public class MainActivity extends ActionBarActivity
 				pro = true;
 			}
 		}
-		
+
+		// Uninstall lite if both lite and pro installed
 		if (lite && pro) {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			
@@ -363,6 +367,7 @@ public class MainActivity extends ActionBarActivity
 				.setCancelable(false)
 				.setPositiveButton(getString(R.string.pro_installed_ok), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
+						// Uninstalls lite
 						Uri pkg_uri = Uri.parse("package:com.mmarvick.urgentcall_lite");
 						Intent removeIntent = new Intent(Intent.ACTION_DELETE, pkg_uri);
 						startActivity(removeIntent);
@@ -374,9 +379,14 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 	
+	// Checks if the current disclaimer has been agreed to
 	public void checkDisclaimer() {
 		if (!(PrefHelper.disclaimerCheck(getApplicationContext()))) {
+			
+			//Save the app state (on/off) as backup, and then turn off
 			PrefHelper.disclaimerSaveBackup(getApplicationContext());
+			
+			//Create and show alert dialog with waiver
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			
 			alertDialogBuilder
@@ -385,8 +395,11 @@ public class MainActivity extends ActionBarActivity
 				.setCancelable(false)
 				.setPositiveButton(getString(R.string.disclaimer_agree), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
+						// Set that the disclaimer was agreed, and resume phone state from backup
 						PrefHelper.disclaimerAgreed(getApplicationContext());
 						PrefHelper.disclaimerResumeBackup(getApplicationContext());
+						
+						// Refresh values due to state change
 						updateSettings();
 					}
 				})

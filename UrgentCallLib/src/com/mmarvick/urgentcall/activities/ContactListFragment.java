@@ -29,20 +29,20 @@ import android.widget.TextView;
 
 public class ContactListFragment extends ListFragment {
 	
-	private final int REQUEST_CONTACT = 1;
-	
 	private String[] mContactNames;
 	private String[] mContactLookups;
 	
+	String alertType;
+	int userState;
+	
 	private RulesDbHelper dbHelper;
-	private String alertType;
-	private int userState;
+	
+	private final int REQUEST_CONTACT = 1;	
 	
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		alertType = getActivity().getIntent().getStringExtra(Constants.ALERT_TYPE);
-		userState = getActivity().getIntent().getIntExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
+
 		
 		getListView().setFooterDividersEnabled(true);
 		
@@ -58,9 +58,14 @@ public class ContactListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		dbHelper = new RulesDbHelper(getActivity().getApplicationContext());
+		
+		// Load contacts
+		dbHelper = new RulesDbHelper(getActivity().getApplicationContext());		
+		alertType = getActivity().getIntent().getStringExtra(Constants.ALERT_TYPE);
+		userState = getActivity().getIntent().getIntExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
 		loadContacts();
 		
+		// Put contacts into the ListView
 		ContactsArrayAdapter adapter = new ContactsArrayAdapter(getActivity(), mContactNames);
 		setListAdapter(adapter);
 	}
@@ -71,6 +76,8 @@ public class ContactListFragment extends ListFragment {
 		super.onPause();
 	}
 
+	// Load contacts from database
+	// Must load database and alertType and userState before calling
 	private void loadContacts() {
 		String[][] namesLookupsString;
 		namesLookupsString = dbHelper.getNamesLookups(alertType, userState);
@@ -78,22 +85,27 @@ public class ContactListFragment extends ListFragment {
 		mContactNames = namesLookupsString[1];
 	}
 	
+	// Add a user to list
+	// Must instantiate alertType and userState before calling
 	private void createUser() {
 		Intent contactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
 		startActivityForResult(contactIntent, REQUEST_CONTACT);
 	}
 	
+	// Add user to database when returned from picker
 	@Override
 	public void onActivityResult(int reqCode, int resultCode, Intent data) {
 		switch (reqCode) {
 		case (REQUEST_CONTACT):
 			if (resultCode == Activity.RESULT_OK){
+				//Get contact lookup key
 				Uri uri = data.getData();
 				String[] projection = new String[] {ContactsContract.Contacts.LOOKUP_KEY};
 				Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
 				cursor.moveToFirst();
 				String lookup = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
 				
+				//Add to database
 				dbHelper.setContactStateForAlert(alertType, lookup, userState);
 
 			}
@@ -102,7 +114,6 @@ public class ContactListFragment extends ListFragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	    // Inflate the menu items for use in the action bar
 	    inflater.inflate(R.menu.list_actions, menu);
 	    super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -113,12 +124,12 @@ public class ContactListFragment extends ListFragment {
 		if (itemId == R.id.action_add_contact) {
 			createUser();
 			return true;
-		}
-		else {
+		} else {
 			return super.onOptionsItemSelected(item);
 		}
 	}	
 	
+	// Adapter for showing contacts in the ListView
 	private class ContactsArrayAdapter extends ArrayAdapter<String> {
 		private final Context context;
 		private final ArrayList<String> values;
@@ -134,13 +145,16 @@ public class ContactListFragment extends ListFragment {
 		
 		@Override
 		public View getView(final int position, View view, ViewGroup parent) {
+			
 			LayoutInflater inflater = LayoutInflater.from(context);
 			View rowView = inflater.inflate(R.layout.list_item_contact, null);
+			
+			// Set contact name
 			TextView textView = (TextView) rowView.findViewById(R.id.list_contact_name_simple);
 			textView.setText(values.get(position));
 			
+			// Create delete action
 			ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.list_contact_delete_button);
-			
 			imageButton.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -148,6 +162,7 @@ public class ContactListFragment extends ListFragment {
 					String lookup = mContactLookups[position];
 					
 					dbHelper.removeContactForAlertType(alertType, lookup);
+					//TODO: Improve this so that we don't have to refresh the activity when a user is removed
 					((ContactListActivity) getActivity()).refresh();
 					
 				};	

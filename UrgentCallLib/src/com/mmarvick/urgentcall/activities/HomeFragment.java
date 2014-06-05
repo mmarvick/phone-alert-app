@@ -78,10 +78,10 @@ public class HomeFragment extends TabFragment {
 				if (PrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
 					getMainActivity().endSnooze();
 				}
-				else if (PrefHelper.getState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_ON);
+				else if (PrefHelper.getState(getMainActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
 				} else {
-					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_OFF);
+					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
 				}
 				
 				getMainActivity().updateSettings();
@@ -119,7 +119,7 @@ public class HomeFragment extends TabFragment {
 	}
 	
 	private void showTextViews() {
-		int state = PrefHelper.getState(getMainActivity(), Constants.OVERALL_STATE);
+		int state = PrefHelper.getState(getMainActivity(), Constants.APP_STATE);
 		if (state == Constants.URGENT_CALL_STATE_OFF || PrefHelper.isSnoozing(getMainActivity())) {
 			mLayoutMsgState.setVisibility(View.INVISIBLE);
 			mLayoutRCState.setVisibility(View.INVISIBLE);
@@ -146,7 +146,7 @@ public class HomeFragment extends TabFragment {
 			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_snoozing));
 			mButtonAppState.setTextColor(Color.RED);			
 		}
-		else if (PrefHelper.getState(getMainActivity().getApplicationContext(), Constants.OVERALL_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+		else if (PrefHelper.getState(getMainActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_off));
 			mButtonAppState.setTextColor(Color.RED);
 		} else {

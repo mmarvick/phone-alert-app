@@ -12,17 +12,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 public class PrefHelper {
-	public static int getView(Context context) {
-		return getPrefs(context).getInt(Constants.VIEW, Constants.VIEW_OLD);
-	}
-	
-	public static void setView(Context context, int view) {
-		Editor editor = getPrefs(context).edit();
-		editor.putInt(Constants.VIEW, view);
-		editor.commit();
-	}
-	
-	
+
 	public static int getState(Context context, String alertType) {
 		int def = Constants.URGENT_CALL_STATE_ON;
 		if (alertType == RulesEntry.SC_STATE) {
@@ -134,8 +124,8 @@ public class PrefHelper {
 		if (!prefs.getBoolean(Constants.DISCLAIMER_BACKUP_FLAG, false)) {
 			Editor edit = prefs.edit();
 			edit.putBoolean(Constants.DISCLAIMER_BACKUP_FLAG, true);
-			edit.putInt(Constants.DISCLAIMER_BACKUP_MODE, getState(context, Constants.OVERALL_STATE));
-			setState(context, Constants.OVERALL_STATE, Constants.URGENT_CALL_STATE_OFF);
+			edit.putInt(Constants.DISCLAIMER_BACKUP_MODE, getState(context, Constants.APP_STATE));
+			setState(context, Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
 			edit.commit();
 		}
 	}
@@ -143,7 +133,7 @@ public class PrefHelper {
 	public static void disclaimerResumeBackup(Context context) {
 		SharedPreferences prefs = getPrefs(context);
 		Editor edit = prefs.edit();
-		setState(context, Constants.OVERALL_STATE, prefs.getInt(Constants.DISCLAIMER_BACKUP_MODE, Constants.URGENT_CALL_STATE_ON));
+		setState(context, Constants.APP_STATE, prefs.getInt(Constants.DISCLAIMER_BACKUP_MODE, Constants.URGENT_CALL_STATE_ON));
 		edit.putBoolean(Constants.DISCLAIMER_BACKUP_FLAG, false);
 		edit.commit();
 	}

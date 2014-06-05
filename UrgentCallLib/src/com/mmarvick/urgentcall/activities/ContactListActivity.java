@@ -16,13 +16,9 @@ public class ContactListActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contact_list);
 		
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		String alertType = getIntent().getStringExtra(Constants.ALERT_TYPE);
-		String listType = "";
-		String alertTypeDescrip = "";
+		// Get a string for the title bar depending on if this is a block list or allow list
 		int userState = getIntent().getIntExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
+		String listType = "";
 		
 		switch (userState) {
 		case (RulesEntry.STATE_ON):
@@ -33,6 +29,9 @@ public class ContactListActivity extends ActionBarActivity {
 			break;
 		}
 		
+		// Get a string for the title bar depending on alert type
+		String alertType = getIntent().getStringExtra(Constants.ALERT_TYPE);
+		String alertTypeDescrip = "";
 		
 		if (alertType.equals(RulesEntry.MSG_STATE)) {
 			alertTypeDescrip = getString(R.string.list_fragment_alert_msg);
@@ -42,9 +41,15 @@ public class ContactListActivity extends ActionBarActivity {
 			alertTypeDescrip = getString(R.string.list_fragment_alert_sc);
 		}
 		
+		
+		// Add an action bar and set title
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);		
 		actionBar.setTitle(listType + " " + alertTypeDescrip);	
 	}
 	
+	// Refresh the intent when a value is added/removed from the list.
+	// TODO: The list logic should be improved so that this won't be necessary
 	public void refresh() {
 		finish();
 		startActivity(getIntent());

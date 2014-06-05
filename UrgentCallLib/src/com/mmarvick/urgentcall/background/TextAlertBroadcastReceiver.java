@@ -35,7 +35,7 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 			
 		}
 			
-		if (PrefHelper.getState(context, Constants.OVERALL_STATE) == RulesEntry.STATE_ON
+		if (PrefHelper.getState(context, Constants.APP_STATE) == RulesEntry.STATE_ON
 				&& !PrefHelper.isSnoozing(context)) {
 			
 			if (messageAlert(context, incomingNumber, message)) {

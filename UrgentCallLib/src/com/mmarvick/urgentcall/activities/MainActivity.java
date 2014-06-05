@@ -142,7 +142,12 @@ public class MainActivity extends ActionBarActivity
 			
 		};
 		
-
+		for (int i = 0; i < fragments.size(); i++) {
+			actionBar.addTab(
+					actionBar.newTab()
+						.setText(fragmentTitles[i])
+						.setTabListener(tabListener));
+		}
 		
 	}
 	

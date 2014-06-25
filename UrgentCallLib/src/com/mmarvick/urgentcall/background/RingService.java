@@ -1,17 +1,20 @@
 package com.mmarvick.urgentcall.background;
 
+import java.io.IOException;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
 
 public class RingService extends Service {
-	private Ringtone tone;
 	private AudioManager audio;
+	private MediaPlayer media;
 	private int streamVolumeInit;
 
 	@Override
@@ -22,21 +25,29 @@ public class RingService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid) {
 		audio = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+		media = new MediaPlayer();
 		Uri toneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-		tone = RingtoneManager.getRingtone(getApplicationContext(), toneUri);
 		
 		streamVolumeInit = audio.getStreamVolume(AudioManager.STREAM_ALARM);
 		audio.setStreamVolume(AudioManager.STREAM_ALARM, audio.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
 
-		tone.setStreamType(AudioManager.STREAM_ALARM);
-		tone.play();
+		try {
+			media.setDataSource(this, toneUri);
+			media.setAudioStreamType(AudioManager.STREAM_ALARM);
+			media.setLooping(true);
+			media.prepare();
+			media.start();
+		} catch (Exception e) {
+			// TODO Can't play media
+		}
+		
 		
 		return Service.START_STICKY;
 	}
 	
 	@Override
 	public void onDestroy() {
-		tone.stop();
+		media.stop();
 		audio.setStreamVolume(AudioManager.STREAM_ALARM, streamVolumeInit, 0);
 	}
 

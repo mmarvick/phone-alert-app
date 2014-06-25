@@ -297,6 +297,7 @@ public class MainActivity extends ActionBarActivity
 		message += getString(R.string.share_3);
 		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
 		shareIntent.setType("text/plain");
+		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
 	}
 	

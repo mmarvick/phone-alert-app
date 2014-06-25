@@ -33,7 +33,10 @@ public class RateDialog {
 						uri = Uri.parse(context.getString(R.string.url_play_web) + packageName);
 					}
 					
-					context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+					Intent rateIntent = new Intent(Intent.ACTION_VIEW, uri);
+					rateIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+					
+					context.startActivity(rateIntent);
 				}
 			})
 			.setNeutralButton(context.getString(R.string.rate_dialog_no), new DialogInterface.OnClickListener() {

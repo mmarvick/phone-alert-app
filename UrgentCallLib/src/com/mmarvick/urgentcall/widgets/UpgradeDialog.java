@@ -36,7 +36,10 @@ public class UpgradeDialog {
 						uri = Uri.parse(context.getString(R.string.url_play_web) + packageName);
 					}
 					
-					context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+					Intent upgradeIntent = new Intent(Intent.ACTION_VIEW, uri);
+					upgradeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+					
+					context.startActivity(upgradeIntent);
 				}
 			});
 		

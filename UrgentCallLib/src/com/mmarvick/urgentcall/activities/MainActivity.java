@@ -341,6 +341,9 @@ public class MainActivity extends ActionBarActivity
 				}
 				runOnUiThread(new Runnable() { public void run() {updateSettings();}});
 				Log.e("Time:",""+PrefHelper.snoozeRemaining(getApplicationContext()));
+				if (!(PrefHelper.isSnoozing(getApplicationContext()))) {
+					endSnoozeDialog.cancel();
+				}
 			}
 			cancel(true);
 			return null;

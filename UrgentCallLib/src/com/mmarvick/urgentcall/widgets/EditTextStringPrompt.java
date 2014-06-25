@@ -17,6 +17,10 @@ public class EditTextStringPrompt {
 	private Context context;
 	private int minLength;
 	
+	private AlertDialog.Builder alertDialogBuilder;
+	private OnOptionsChangedListener mOnOptionsChangedListener;
+	private EditText userInput;
+	
 	public EditTextStringPrompt(final Context context, final int minLength, final String name, final String def, final String title) {
 		this.minLength = minLength;
 		this.title = title;
@@ -25,10 +29,10 @@ public class EditTextStringPrompt {
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptView = li.inflate(R.layout.dialog_edit_text,  null);
 		
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setView(promptView);
 		
-		final EditText userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
+		userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
 		String setText = PrefHelper.getMessageToken(context);
 		
 		//Set initial EditText text and move cursor to the end
@@ -50,6 +54,7 @@ public class EditTextStringPrompt {
 						PrefHelper.setMessageToken(context, value);
 					}
 
+					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
 				}
 			})
 			.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -59,7 +64,10 @@ public class EditTextStringPrompt {
 					dialog.cancel();
 				}
 			});
-		
+
+	}
+	
+	public void show() {
 		AlertDialog dialog = alertDialogBuilder.create();
 		
 		//Show the keyboard when opened
@@ -69,8 +77,7 @@ public class EditTextStringPrompt {
 		
 		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(userInput, InputMethodManager.SHOW_IMPLICIT);
-
-	}
+	}	
 	
 	private void alertLength() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -84,5 +91,9 @@ public class EditTextStringPrompt {
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
 	}
+	
+	public void setOnOptionsChangedListener(OnOptionsChangedListener listener) {
+		mOnOptionsChangedListener = listener;
+	}	
 
 }

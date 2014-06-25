@@ -20,6 +20,10 @@ public class EditTextIntPrompt {
 	private String title;
 	private Context context;
 	
+	private AlertDialog.Builder alertDialogBuilder;
+	private OnOptionsChangedListener mOnOptionsChangedListener;
+	private EditText userInput;
+	
 	public EditTextIntPrompt(final Context context, final int min, final int max, final String name, final int def, final String title) {
 		this.min = min;
 		this.max = max;
@@ -29,10 +33,10 @@ public class EditTextIntPrompt {
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptView = li.inflate(R.layout.dialog_edit_text,  null);
 		
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setView(promptView);
 		
-		final EditText userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
+		userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
 		userInput.setInputType(InputType.TYPE_CLASS_NUMBER);
 		String setText = "" + PrefHelper.getRepeatedCallValue(context, name, def);
 		
@@ -66,6 +70,7 @@ public class EditTextIntPrompt {
 						
 					}
 
+					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
 				}
 			})
 			.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -75,7 +80,10 @@ public class EditTextIntPrompt {
 					dialog.cancel();
 				}
 			});
-		
+
+	}
+	
+	public void show() {
 		AlertDialog dialog = alertDialogBuilder.create();
 		
 		//Show the keyboard when opened
@@ -85,7 +93,6 @@ public class EditTextIntPrompt {
 		
 		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(userInput, InputMethodManager.SHOW_IMPLICIT);
-
 	}
 	
 	private void alertRange(int value) {
@@ -100,5 +107,9 @@ public class EditTextIntPrompt {
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
 	}
+	
+	public void setOnOptionsChangedListener(OnOptionsChangedListener listener) {
+		mOnOptionsChangedListener = listener;
+	}	
 
 }

@@ -61,8 +61,18 @@ public class RepeatCallFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View arg0) {
-				new EditTextIntPrompt(getMainActivity(), Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+				EditTextIntPrompt callNumberPrompt = new EditTextIntPrompt(getMainActivity(), Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
 						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
+				callNumberPrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
+					
+					@Override
+					public void onOptionsChanged() {
+						getMainActivity().updateSettings();
+						
+					}
+				});
+				
+				callNumberPrompt.show();				
 				
 			}
 		});
@@ -71,8 +81,18 @@ public class RepeatCallFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				new EditTextIntPrompt(getMainActivity(), Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+				EditTextIntPrompt callTimePrompt = new EditTextIntPrompt(getMainActivity(), Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
 						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
+				callTimePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
+					
+					@Override
+					public void onOptionsChanged() {
+						getMainActivity().updateSettings();
+						
+					}
+				});
+				
+				callTimePrompt.show();
 				
 			}
 		});
@@ -85,12 +105,13 @@ public class RepeatCallFragment extends TabFragment {
 						getMainActivity().getString(R.string.state_change_dialog_title_rc));
 				rcStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						
-						@Override
-						public void onOptionsChanged() {
-							getMainActivity().updateSettings();
-							
-						}
-					});
+					@Override
+					public void onOptionsChanged() {
+						getMainActivity().updateSettings();
+						
+					}
+				});
+				
 				rcStatePrompt.show();
 			}
 		});		

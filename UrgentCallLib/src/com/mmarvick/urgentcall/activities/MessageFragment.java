@@ -59,9 +59,18 @@ public class MessageFragment extends TabFragment {
 
 			@Override
 			public void onClick(View v) {
-				new EditTextStringPrompt(getMainActivity(), Constants.MSG_MESSAGE_MIN,
+				EditTextStringPrompt msgKeyPrompt = new EditTextStringPrompt(getMainActivity(), Constants.MSG_MESSAGE_MIN,
 						Constants.MSG_MESSAGE, Constants.MSG_MESSAGE_DEFAULT, Constants.MSG_MESSAGE_TITLE);
+				msgKeyPrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
+					
+					@Override
+					public void onOptionsChanged() {
+						getMainActivity().updateSettings();
+						
+					}
+				});
 				
+				msgKeyPrompt.show();
 			}
 			
 		});

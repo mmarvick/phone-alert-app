@@ -69,56 +69,36 @@ public class StateListsPrompt {
 				}
 			});
 			
-			/*if (!context.getResources().getBoolean(R.bool.paid_version)) {
-				whitelistButton.setEnabled(false);
-				blacklistButton.setEnabled(false);
+
+			onRadio.setOnClickListener(new OnClickListener() {
 				
-				whitelistRadio.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					whitelistButton.setVisibility(View.GONE);
+					blacklistButton.setVisibility(View.GONE);
 					
-					@Override
-					public void onClick(View arg0) {
-						upgradeNote();
-					}
-				});
+				}
+			});
+			
+			whitelistRadio.setOnClickListener(new OnClickListener() {
 				
-				blacklistRadio.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					whitelistButton.setVisibility(View.VISIBLE);
+					blacklistButton.setVisibility(View.GONE);			
 					
-					@Override
-					public void onClick(View v) {
-						upgradeNote();
-					}
-				});
-			} else { */
-				onRadio.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View arg0) {
-						whitelistButton.setVisibility(View.GONE);
-						blacklistButton.setVisibility(View.GONE);
-						
-					}
-				});
+				}
+			});
+			
+			blacklistRadio.setOnClickListener(new OnClickListener() {
 				
-				whitelistRadio.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					whitelistButton.setVisibility(View.GONE);
+					blacklistButton.setVisibility(View.VISIBLE);
 					
-					@Override
-					public void onClick(View arg0) {
-						whitelistButton.setVisibility(View.VISIBLE);
-						blacklistButton.setVisibility(View.GONE);			
-						
-					}
-				});
-				
-				blacklistRadio.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View arg0) {
-						whitelistButton.setVisibility(View.GONE);
-						blacklistButton.setVisibility(View.VISIBLE);
-						
-					}
-				});
-			//}
+				}
+			});
 			
 			select();
 			

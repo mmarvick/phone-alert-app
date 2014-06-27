@@ -25,12 +25,19 @@ public class StateListsPrompt {
 	private final Context context;
 	private final String alertType;
 	
+	private boolean showListButton;
+	
 	private AlertDialog.Builder alertDialogBuilder;
 	private OnOptionsChangedListener mOnOptionsChangedListener;
-
+	
 	public StateListsPrompt(final Context context, final String alertType, String title) {
+		this(context, alertType, title, true);
+	}
+
+	public StateListsPrompt(final Context context, final String alertType, String title, boolean showListButton) {
 		this.context = context;
 		this.alertType = alertType;
+		this.showListButton = showListButton;
 		
 		if (context.getResources().getBoolean(R.bool.paid_version)) {
 			LayoutInflater li = LayoutInflater.from(context);
@@ -69,36 +76,37 @@ public class StateListsPrompt {
 				}
 			});
 			
-
-			onRadio.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					whitelistButton.setVisibility(View.GONE);
-					blacklistButton.setVisibility(View.GONE);
+			if (showListButton) {
+				onRadio.setOnClickListener(new OnClickListener() {
 					
-				}
-			});
-			
-			whitelistRadio.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						whitelistButton.setVisibility(View.GONE);
+						blacklistButton.setVisibility(View.GONE);
+						
+					}
+				});
 				
-				@Override
-				public void onClick(View arg0) {
-					whitelistButton.setVisibility(View.VISIBLE);
-					blacklistButton.setVisibility(View.GONE);			
+				whitelistRadio.setOnClickListener(new OnClickListener() {
 					
-				}
-			});
-			
-			blacklistRadio.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						whitelistButton.setVisibility(View.VISIBLE);
+						blacklistButton.setVisibility(View.GONE);			
+						
+					}
+				});
 				
-				@Override
-				public void onClick(View arg0) {
-					whitelistButton.setVisibility(View.GONE);
-					blacklistButton.setVisibility(View.VISIBLE);
+				blacklistRadio.setOnClickListener(new OnClickListener() {
 					
-				}
-			});
+					@Override
+					public void onClick(View arg0) {
+						whitelistButton.setVisibility(View.GONE);
+						blacklistButton.setVisibility(View.VISIBLE);
+						
+					}
+				});
+			}
 			
 			select();
 			
@@ -149,6 +157,11 @@ public class StateListsPrompt {
 			whitelistButton.setVisibility(View.GONE);
 			blacklistButton.setVisibility(View.VISIBLE);			
 			break;
+		}
+		
+		if (!showListButton) {
+			whitelistButton.setVisibility(View.GONE);
+			blacklistButton.setVisibility(View.GONE);
 		}
 	}
 	

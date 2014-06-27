@@ -60,7 +60,19 @@
                 <action android:name="com.mmarvick.urgentcall.list.launch" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>            
-        </activity>     
+        </activity>
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.settings.SettingsActivity"
+            android:label="@string/app_name" >
+            
+        </activity>   
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.settings.MsgSettingsActivity"
+            android:label="@string/app_name" >
+            
+        </activity>           
         
         <receiver android:name = "com.mmarvick.urgentcall.background.SnoozeReset" >
             <intent-filter>

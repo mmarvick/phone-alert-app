@@ -6,6 +6,7 @@ import java.util.List;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.settings.SettingsActivity;
 import com.mmarvick.urgentcall.widgets.MyViewPager;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.RateDialog;
@@ -304,11 +305,11 @@ public class MainActivity extends ActionBarActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    int itemId = item.getItemId();
-		/*if (itemId == R.id.action_settings) {
+		if (itemId == R.id.action_settings) {
 			Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
 			startActivity(i);
 			return true;
-		} else */
+		} else
 		if (itemId == R.id.action_snooze) {
 			if (PrefHelper.isSnoozing(getApplicationContext())) {
 				endSnooze();

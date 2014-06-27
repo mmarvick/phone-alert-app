@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:range="http://schemas.android.com/apk/lib/com.mmarvick.urgentcall"
+    android:key="PREFERENCES" >
+    <Preference
+        android:key="MSG_STATUS"
+        android:title="Text Alerts"
+        />
+    
+    <Preference
+        android:key="MSG_KEY"
+        android:title="Keyword"
+        />
+    
+    <PreferenceCategory
+        android:title="Alert Filter" >
+    
+	    <Preference
+	        android:key="MSG_FILTER"
+	        android:title="Who can alert?"
+	        />
+	    
+	    <Preference
+	        android:key="MSG_FILTER_USERS"
+	        android:title="Allow / Block List" />
+	    
+	</PreferenceCategory>
+	
+    <PreferenceCategory
+        android:title="Alert Behavior" >    
+     
+	    <ListPreference
+	        android:key="MSG_NOISE"
+	        android:title="How to alert?"
+	        android:entries="@array/pref_noise_entries"
+	        android:entryValues="@array/pref_noise_values"
+	        />
+	    
+	    <Preference
+	        android:key="MSG_TIME"
+	        android:title="How long?"
+	        />	    
+	    
+	    <RingtonePreference
+	        android:key="MSG_SOUND"
+	        android:title="Ringtone"
+	        android:showDefault="false"
+	        android:showSilent="false"
+	        />
+	    
+	    <Preference
+	        android:key="MSG_VOLUME"
+	        android:title="Volume"
+	        />
+	   
+	</PreferenceCategory>
+
+</PreferenceScreen>

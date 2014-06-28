@@ -38,7 +38,7 @@ public class EditTextIntPrompt {
 		
 		userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
 		userInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-		String setText = "" + PrefHelper.getRepeatedCallValue(context, name, def);
+		String setText = "" + PrefHelper.getIntValue(context, name, def);
 		
 		//Set initial EditText text and move cursor to the end
 		userInput.setText(setText);
@@ -65,7 +65,7 @@ public class EditTextIntPrompt {
 							value = max;
 							alertRange(value);
 						}
-						PrefHelper.setRepeatedCallValue(context, name, value);					
+						PrefHelper.setIntValue(context, name, value);					
 					} catch (NumberFormatException e) {
 						
 					}

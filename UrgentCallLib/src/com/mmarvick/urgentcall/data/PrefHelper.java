@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
@@ -29,7 +31,7 @@ public class PrefHelper {
 	
 	public static void saveBackupState(Context context, String alertType) {
 		Editor editor = getPrefs(context).edit();
-		editor.putInt(alertType + "_BACKUP", getState(context, alertType));
+		editor.putInt(alertType + Constants.ALERT_BACKUP, getState(context, alertType));
 		editor.commit();
 	}
 	
@@ -38,7 +40,39 @@ public class PrefHelper {
 		if (alertType == RulesEntry.SC_STATE) {
 			def = Constants.URGENT_CALL_STATE_WHITELIST;
 		}
-		return getPrefs(context).getInt(alertType + "_BACKUP", def);		
+		return getPrefs(context).getInt(alertType + Constants.ALERT_BACKUP, def);		
+	}
+	
+	public static Uri getMessageSound(Context context, String alertType) {
+		String def = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE).toString();
+		if (alertType == RulesEntry.MSG_STATE) {
+			def = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString();;
+		}
+		return Uri.parse(getPrefs(context).getString(alertType + Constants.ALERT_SOUND, def));
+	}
+	
+	public static void setMessageSound(Context context, String alertType, Uri sound) {
+		Editor editor = getPrefs(context).edit();
+		editor.putString(alertType + Constants.ALERT_SOUND, sound.toString());
+		editor.commit();
+	}	
+	
+	public static String getMessageVolumePercent(Context context, String alertType) {
+		int volume = getPrefs(context).getInt(alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_DEFAULT);
+		int percent = volume * 100 / Constants.ALERT_VOLUME_DEFAULT;
+		if (volume > 0 && percent == 0) {
+			percent = 1;
+		}
+		return percent + "%";
+	}
+	
+	public static float getMessageVolumeValue(Context context, String alertType) {
+		int volume = getPrefs(context).getInt(alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_DEFAULT);
+		return (float) (1 - (Math.log(Constants.ALERT_VOLUME_MAX - volume) / Math.log(Constants.ALERT_VOLUME_MAX)));
+	}
+	
+	public static int getMessageTime(Context context, String alertType) {
+		return getPrefs(context).getInt(alertType + Constants.ALERT_TIME, 10);			
 	}
 	
 	public static String getMessageToken(Context context) {
@@ -52,22 +86,21 @@ public class PrefHelper {
 	}
 	
 	public static int getRepeatedCallQty(Context context) {
-		return getRepeatedCallValue(context, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT);
+		return getIntValue(context, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT);
 		
 	}
 	
 	public static int getRepeatedCallMins(Context context) {
-		return getRepeatedCallValue(context, Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT);
+		return getIntValue(context, Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT);
 	}	
 	
-	public static int getRepeatedCallValue(Context context, String name, int def) {
-		String value = getPrefs(context).getString(name, "" + def);
-		return Integer.parseInt(value);
+	public static int getIntValue(Context context, String name, int def) {
+		return getPrefs(context).getInt(name, def);
 	}	
 	
-	public static void setRepeatedCallValue(Context context, String name, int value) {
+	public static void setIntValue(Context context, String name, int value) {
 		Editor editor = getPrefs(context).edit();
-		editor.putString(name, "" + value);
+		editor.putInt(name, value);
 		editor.commit();
 	}
 	

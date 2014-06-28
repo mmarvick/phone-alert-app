@@ -1,11 +1,14 @@
 package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
+import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -14,8 +17,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class MessageAlarmService extends Service {
-	private Ringtone tone;
 	private AudioManager audio;
+	private MediaPlayer media;
 	private int streamVolumeInit;
 
 	@Override
@@ -26,14 +29,25 @@ public class MessageAlarmService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid) {
 		audio = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-		Uri toneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-		tone = RingtoneManager.getRingtone(getApplicationContext(), toneUri);
+		media = new MediaPlayer();
+		Uri toneUri = PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.MSG_STATE);
 		
 		streamVolumeInit = audio.getStreamVolume(AudioManager.STREAM_ALARM);
 		audio.setStreamVolume(AudioManager.STREAM_ALARM, audio.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
+		
+		float targetVolume = (PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntry.MSG_STATE)); //* audio.getStreamMaxVolume(AudioManager.STREAM_ALARM));
+		media.setVolume(targetVolume, targetVolume);
+		
 
-		tone.setStreamType(AudioManager.STREAM_ALARM);
-		tone.play();
+		try {
+			media.setDataSource(this, toneUri);
+			media.setAudioStreamType(AudioManager.STREAM_ALARM);
+			media.setLooping(true);
+			media.prepare();
+			media.start();
+		} catch (Exception e) {
+			// TODO Can't play media
+		}
 		
 		new Handler().postDelayed(new Runnable() {
 			@Override
@@ -41,16 +55,15 @@ public class MessageAlarmService extends Service {
 
 				stopSelf();
 			}
-		}, Constants.MSG_ALARM_TIME * 1000);
+		}, PrefHelper.getMessageTime(getApplicationContext(), RulesEntry.MSG_STATE) * 1000);
 		
 		return Service.START_STICKY;
 	}
 	
 	@Override
 	public void onDestroy() {
-		tone.stop();
-		audio.setStreamVolume(AudioManager.STREAM_ALARM, streamVolumeInit, 0);
-		Log.e("UrgentCall", "Self has stopped!");		
+		media.stop();
+		audio.setStreamVolume(AudioManager.STREAM_ALARM, streamVolumeInit, 0);	//TODO: Do we need to do this? If the stream is muted but the mediaplayer is not, what happens?
 	}
 
 }

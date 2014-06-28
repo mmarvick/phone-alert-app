@@ -7,18 +7,25 @@ import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
+import com.mmarvick.urgentcall.widgets.SliderPrompt;
 import com.mmarvick.urgentcall.widgets.StateListsPrompt;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.preference.RingtonePreference;
+import android.util.Log;
 
 public class MsgSettingsActivity extends PreferenceActivity {
 
@@ -27,6 +34,10 @@ public class MsgSettingsActivity extends PreferenceActivity {
 	private Preference keyword;
 	private Preference whoAlerts;
 	private Preference whoList;
+	private Preference noise;
+	private Preference time;
+	private RingtonePreference sound;
+	private Preference volume;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,10 @@ public class MsgSettingsActivity extends PreferenceActivity {
 		keyword = findPreference("MSG_KEY");
 		whoAlerts = findPreference("MSG_FILTER");
 		whoList = findPreference("MSG_FILTER_USERS");
+		noise = findPreference("MSG_NOISE");
+		time = findPreference("MSG_TIME");
+		sound = (RingtonePreference) findPreference("MSG_SOUND");
+		volume = findPreference("MSG_VOLUME");
 		
 		msgState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -110,6 +125,55 @@ public class MsgSettingsActivity extends PreferenceActivity {
 				return true;
 			}
 		});
+
+		time.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				EditTextIntPrompt msgTimePrompt = new EditTextIntPrompt(MsgSettingsActivity.this, 1, 60,
+						RulesEntry.MSG_STATE + Constants.ALERT_TIME, 10, "How long? (seconds)");
+				msgTimePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
+					
+					@Override
+					public void onOptionsChanged() {
+						setStates();
+						
+					}
+				});
+				
+				msgTimePrompt.show();
+				return true;
+			}
+		});		
+		
+		sound.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				PrefHelper.setMessageSound(getApplicationContext(), RulesEntry.MSG_STATE, Uri.parse(newValue.toString()));
+				return true;
+			}
+		});
+		
+		volume.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				SliderPrompt volumePrompt = new SliderPrompt(MsgSettingsActivity.this, Constants.ALERT_VOLUME_DEFAULT,
+						RulesEntry.MSG_STATE + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_MAX, "Volume", R.drawable.ic_action_ring_volume);
+				volumePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
+					
+					@Override
+					public void onOptionsChanged() {
+						setStates();
+						
+					}
+				});
+				
+				volumePrompt.show();
+				return true;
+			}
+		});	
 		
 	}
 	
@@ -147,6 +211,14 @@ public class MsgSettingsActivity extends PreferenceActivity {
     		whoAlerts.setEnabled(false);
     		whoList.setEnabled(false);      		
     	}
+    	
+    	time.setSummary(PrefHelper.getMessageTime(getApplicationContext(), RulesEntry.MSG_STATE) + " seconds");
+    	
+    	Uri ringUri = PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.MSG_STATE);
+    	Log.e("Test", ringUri.toString());
+    	sound.setSummary(RingtoneManager.getRingtone(getApplicationContext(), ringUri).getTitle(getApplicationContext()));
+    	
+    	volume.setSummary(PrefHelper.getMessageVolumePercent(getApplicationContext(), RulesEntry.MSG_STATE));
     	
     }
     

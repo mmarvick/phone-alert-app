@@ -44,8 +44,9 @@
 	    <RingtonePreference
 	        android:key="MSG_SOUND"
 	        android:title="Ringtone"
-	        android:showDefault="false"
+	        android:showDefault="true"
 	        android:showSilent="false"
+	        android:ringtoneType="alarm"
 	        />
 	    
 	    <Preference

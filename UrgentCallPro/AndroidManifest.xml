@@ -74,7 +74,13 @@
             android:name="com.mmarvick.urgentcall.settings.MsgSettingsActivity"
             android:label="@string/app_name" >
             
-        </activity>           
+        </activity>    
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.settings.SCSettingsActivity"
+            android:label="@string/app_name" >
+            
+        </activity>         
         
         <receiver android:name = "com.mmarvick.urgentcall.background.SnoozeReset" >
             <intent-filter>

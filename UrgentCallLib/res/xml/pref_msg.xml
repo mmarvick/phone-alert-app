@@ -3,12 +3,12 @@
     xmlns:range="http://schemas.android.com/apk/lib/com.mmarvick.urgentcall"
     android:key="PREFERENCES" >
     <Preference
-        android:key="MSG_STATUS"
+        android:key="msg_state_STATUS"
         android:title="Text Alerts"
         />
     
     <Preference
-        android:key="MSG_KEY"
+        android:key="msg_state_KEY"
         android:title="Keyword"
         />
     
@@ -16,12 +16,12 @@
         android:title="Alert Filter" >
     
 	    <Preference
-	        android:key="MSG_FILTER"
+	        android:key="msg_state_FILTER"
 	        android:title="Who can alert?"
 	        />
 	    
 	    <Preference
-	        android:key="MSG_FILTER_USERS"
+	        android:key="msg_state_FILTER_USERS"
 	        android:title="Allow / Block List" />
 	    
 	</PreferenceCategory>
@@ -38,12 +38,12 @@
 	        />
 	    
 	    <Preference
-	        android:key="MSG_TIME"
+	        android:key="msg_state_TIME"
 	        android:title="How long?"
 	        />	    
 	    
 	    <RingtonePreference
-	        android:key="MSG_SOUND"
+	        android:key="msg_state_SOUND"
 	        android:title="Ringtone"
 	        android:showDefault="true"
 	        android:showSilent="false"
@@ -51,7 +51,7 @@
 	        />
 	    
 	    <Preference
-	        android:key="MSG_VOLUME"
+	        android:key="msg_state_VOLUME"
 	        android:title="Volume"
 	        />
 	   

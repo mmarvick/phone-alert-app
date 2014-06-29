@@ -48,14 +48,14 @@ public class MsgSettingsActivity extends PreferenceActivity {
 		
 		prefScreen = getPreferenceScreen();
 		
-		msgState = findPreference("MSG_STATUS");
-		keyword = findPreference("MSG_KEY");
-		whoAlerts = findPreference("MSG_FILTER");
-		whoList = findPreference("MSG_FILTER_USERS");
+		msgState = findPreference("msg_state_STATUS");
+		keyword = findPreference("msg_state_KEY");
+		whoAlerts = findPreference("msg_state_FILTER");
+		whoList = findPreference("msg_state_FILTER_USERS");
 		how = (ListPreference) findPreference("msg_state_HOW");
-		time = findPreference("MSG_TIME");
-		sound = (RingtonePreference) findPreference("MSG_SOUND");
-		volume = findPreference("MSG_VOLUME");
+		time = findPreference("msg_state_TIME");
+		sound = (RingtonePreference) findPreference("msg_state_SOUND");
+		volume = findPreference("msg_state_VOLUME");
 		
 		msgState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -163,15 +163,6 @@ public class MsgSettingsActivity extends PreferenceActivity {
 				return true;
 			}
 		});		
-		
-		sound.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				PrefHelper.setMessageSound(getApplicationContext(), RulesEntry.MSG_STATE, Uri.parse(newValue.toString()));
-				return true;
-			}
-		});
 		
 		volume.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			

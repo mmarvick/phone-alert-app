@@ -1,5 +1,8 @@
 package com.mmarvick.urgentcall.settings;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
@@ -33,15 +36,17 @@ public class AlertSettingsActivity extends PreferenceActivity {
 	private PreferenceScreen prefScreen;
 	private Preference onState;
 	
-	private Preference[] prefs;
-	private Preference keyword;
-	private Preference whoAlerts;
-	private Preference whoList;
-	private ListPreference how;
-	private Preference noise;
-	private Preference time;
-	private RingtonePreference sound;
-	private Preference volume;
+	protected List<Preference> prefs;
+	
+	protected Preference whoList;
+	protected ListPreference how;
+	protected Preference noise;
+	protected Preference time;
+	protected RingtonePreference sound;
+	protected Preference volume;
+	
+	protected int xml;
+	protected String alertType;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,24 +61,28 @@ public class AlertSettingsActivity extends PreferenceActivity {
 	     super.onResume();
     }	
 	
-	private void loadPrefs() {
-		addPreferencesFromResource(R.xml.pref_msg);
+	protected void loadPrefs() {
+		addPreferencesFromResource(xml);
 		
 		prefScreen = getPreferenceScreen();
 		
-		onState = findPreference("msg_state_STATUS");
-		keyword = findPreference("msg_state_KEY");
-		whoAlerts = findPreference("msg_state_FILTER");
-		whoList = findPreference("msg_state_FILTER_USERS");
-		how = (ListPreference) findPreference("msg_state_HOW");
-		time = findPreference("msg_state_TIME");
-		sound = (RingtonePreference) findPreference("msg_state_SOUND");
-		volume = findPreference("msg_state_VOLUME");
+		onState = findPreference(alertType + "_STATUS");
 		
-		prefs = new Preference[] {onState, keyword, whoAlerts, whoList, how, time, sound, volume};
+		whoList = findPreference(alertType + "_FILTER_USERS");
+		how = (ListPreference) findPreference(alertType + "_HOW");
+		time = findPreference(alertType + "_TIME");
+		sound = (RingtonePreference) findPreference(alertType + "_SOUND");
+		volume = findPreference(alertType + "_VOLUME");
+		
+		prefs = new ArrayList<Preference>();
+		prefs.add(whoList);
+		prefs.add(how);
+		prefs.add(time);
+		prefs.add(sound);
+		prefs.add(volume);
 	}
 	
-	private void startPrefListeners() {
+	protected void startPrefListeners() {
 		onState.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			@Override
@@ -90,44 +99,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			}
 		});
 		
-		keyword.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				EditTextStringPrompt msgKeyPrompt = new EditTextStringPrompt(AlertSettingsActivity.this, Constants.MSG_MESSAGE_MIN,
-						Constants.MSG_MESSAGE, Constants.MSG_MESSAGE_DEFAULT, Constants.MSG_MESSAGE_TITLE);
-				msgKeyPrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
-					
-					@Override
-					public void onOptionsChanged() {
-						setStates();
-						
-					}
-				});
-				
-				msgKeyPrompt.show();
-				return true;
-			}
-		});
-		
-		whoAlerts.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				StateListsPrompt msgStatePrompt = new StateListsPrompt(AlertSettingsActivity.this, RulesEntry.MSG_STATE,
-						getApplicationContext().getString(R.string.state_change_dialog_title_msg), false);
-				msgStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
-						
-						@Override
-						public void onOptionsChanged() {
-							setStates();
-							
-						}
-					});
-				msgStatePrompt.show();
-				return true;
-			}
-		});
+
 		
 		whoList.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -202,65 +174,67 @@ public class AlertSettingsActivity extends PreferenceActivity {
 		});			
 	}
     
-    private void setStates() {
-    	if (PrefHelper.getState(getApplicationContext(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+    protected void setStates() {
+    	int mode = PrefHelper.getState(getApplicationContext(), alertType);
+    	
+    	if (mode != Constants.URGENT_CALL_STATE_OFF) {
+	    	for (Preference p : prefs) {
+	    		p.setEnabled(true);
+	    	}
+    	}
+    	
+    	if (mode == Constants.URGENT_CALL_STATE_OFF) {
     		onState.setSummary("Off");
-    		keyword.setEnabled(false);
     	} else {
     		onState.setSummary("On");
-    		keyword.setEnabled(true);
     	}
     	
-    	keyword.setSummary(PrefHelper.getMessageToken(getApplicationContext()));
+    	if (mode == Constants.URGENT_CALL_STATE_ON) {
+    		
+    		whoList.setTitle("Allow / Block List");
+    	}
+
     	
-    	if (PrefHelper.getState(getApplicationContext(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_ON) {
-    		setWhoTitles(Constants.URGENT_CALL_STATE_ON);
-    		whoAlerts.setEnabled(true);
-    		whoList.setEnabled(false);
-    	} else if (PrefHelper.getState(getApplicationContext(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_WHITELIST) {
-    		setWhoTitles(Constants.URGENT_CALL_STATE_WHITELIST);
-    		whoAlerts.setEnabled(true);
-    		whoList.setEnabled(true);
-    	} else if (PrefHelper.getState(getApplicationContext(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_BLACKLIST) {
-    		setWhoTitles(Constants.URGENT_CALL_STATE_BLACKLIST);
-    		whoAlerts.setEnabled(true);
-    		whoList.setEnabled(true);    		
-    	} else {
-    		setWhoTitles(PrefHelper.getBackupState(getApplicationContext(), RulesEntry.MSG_STATE));
-    		whoAlerts.setEnabled(false);
-    		whoList.setEnabled(false);      		
+    	int recentState = mode;
+    	if (mode == Constants.URGENT_CALL_STATE_OFF) {
+    		recentState = PrefHelper.getBackupState(getApplicationContext(), alertType);
     	}
     	
-    	String howValue = PrefHelper.getMessageHow(getApplicationContext(), RulesEntry.MSG_STATE);
-    	if (howValue.equals(Constants.ALERT_HOW_RING)) {
-    		how.setSummary("Ring");
-    	} else if (howValue.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
-    		how.setSummary("Ring and vibrate");
-    	} else {
-    		how.setSummary("Vibrate");
-    	}
-    	
-    	
-    	time.setSummary(PrefHelper.getMessageTime(getApplicationContext(), RulesEntry.MSG_STATE) + " seconds");
-    	
-    	Uri ringUri = PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.MSG_STATE);
-    	Log.e("Test", ringUri.toString());
-    	sound.setSummary(RingtoneManager.getRingtone(getApplicationContext(), ringUri).getTitle(getApplicationContext()));
-    	
-    	volume.setSummary(PrefHelper.getMessageVolumePercent(getApplicationContext(), RulesEntry.MSG_STATE));
-    	
-    }
-    
-    private void setWhoTitles(int state) {
-    	if (state == Constants.URGENT_CALL_STATE_WHITELIST) {
-    		whoAlerts.setSummary("Allowed users only");
+    	if (recentState == Constants.URGENT_CALL_STATE_WHITELIST) {
     		whoList.setTitle("Allow List");    		
-    	} else if (state == Constants.URGENT_CALL_STATE_BLACKLIST) {
-    		whoAlerts.setSummary("Everyone but blocked users");
+    	} else if (recentState == Constants.URGENT_CALL_STATE_BLACKLIST) {
     		whoList.setTitle("Block List");    		
     	} else {
-    		whoAlerts.setSummary("All users");
+    		whoList.setEnabled(false);
     		whoList.setTitle("Allow / Block List");    		
+    	}    	
+    	
+    	String howValue = PrefHelper.getMessageHow(getApplicationContext(), alertType);
+    	if (howValue.equals(Constants.ALERT_HOW_RING)) {
+    		how.setSummary("Ring");
+    		sound.setEnabled(true);
+    		volume.setEnabled(true);
+    	} else if (howValue.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
+    		how.setSummary("Ring and vibrate");
+    		sound.setEnabled(true);
+    		volume.setEnabled(true);    		
+    	} else {
+    		how.setSummary("Vibrate");
+    		sound.setEnabled(false);
+    		volume.setEnabled(false);    		
+    	}	
+    	
+    	time.setSummary(PrefHelper.getMessageTime(getApplicationContext(), alertType) + " seconds");
+    	
+    	Uri ringUri = PrefHelper.getMessageSound(getApplicationContext(), alertType);
+    	sound.setSummary(RingtoneManager.getRingtone(getApplicationContext(), ringUri).getTitle(getApplicationContext()));
+    	
+    	volume.setSummary(PrefHelper.getMessageVolumePercent(getApplicationContext(), alertType));
+    	
+    	if (mode == Constants.URGENT_CALL_STATE_OFF) {
+	    	for (Preference p : prefs) {
+	    		p.setEnabled(false);
+	    	}
     	}
     }
     

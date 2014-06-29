@@ -71,6 +71,10 @@ public class PrefHelper {
 		return (float) (1 - (Math.log(Constants.ALERT_VOLUME_MAX - volume) / Math.log(Constants.ALERT_VOLUME_MAX)));
 	}
 	
+	public static String getMessageHow(Context context, String alertType) {
+		return getPrefs(context).getString(alertType + Constants.ALERT_HOW, Constants.ALERT_HOW_DEFAULT);			
+	}	
+	
 	public static int getMessageTime(Context context, String alertType) {
 		return getPrefs(context).getInt(alertType + Constants.ALERT_TIME, 10);			
 	}

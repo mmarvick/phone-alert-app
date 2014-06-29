@@ -30,7 +30,8 @@
         android:title="Alert Behavior" >    
      
 	    <ListPreference
-	        android:key="MSG_NOISE"
+	        android:key="msg_state_HOW"
+	        
 	        android:title="How to alert?"
 	        android:entries="@array/pref_noise_entries"
 	        android:entryValues="@array/pref_noise_values"

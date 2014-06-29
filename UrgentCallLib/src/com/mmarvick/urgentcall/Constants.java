@@ -42,6 +42,12 @@ public class Constants {
 	public final static int ALERT_VOLUME_MAX = 1000;
 	public final static int ALERT_VOLUME_DEFAULT = ALERT_VOLUME_MAX;
 	
+	// How to alert
+	public final static String ALERT_HOW_RING = "0";
+	public final static String ALERT_HOW_VIBE = "1";
+	public final static String ALERT_HOW_RING_AND_VIBE = "2";
+	public final static String ALERT_HOW_DEFAULT = ALERT_HOW_RING;
+	
 	// Message alarm constant for how long alert plays for
 	public final static int MSG_ALARM_TIME = 10;
 	
@@ -63,6 +69,7 @@ public class Constants {
 	public final static String ALERT_TIME = "_TIME"; // time for alert
 	public final static String ALERT_VOLUME = "_VOLUME"; // volume for an alert
 	public final static String ALERT_SOUND = "_SOUND"; // sound for an alert
+	public final static String ALERT_HOW = "_HOW"; // how to alert (ring, vibrate, etc...)
 	
 	/* --------------- Intent Flags ---------------------- 
 	 * These are keys for values passed in the intent to the ContactListActivity so

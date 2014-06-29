@@ -19,6 +19,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -34,6 +35,7 @@ public class MsgSettingsActivity extends PreferenceActivity {
 	private Preference keyword;
 	private Preference whoAlerts;
 	private Preference whoList;
+	private ListPreference how;
 	private Preference noise;
 	private Preference time;
 	private RingtonePreference sound;
@@ -50,7 +52,7 @@ public class MsgSettingsActivity extends PreferenceActivity {
 		keyword = findPreference("MSG_KEY");
 		whoAlerts = findPreference("MSG_FILTER");
 		whoList = findPreference("MSG_FILTER_USERS");
-		noise = findPreference("MSG_NOISE");
+		how = (ListPreference) findPreference("msg_state_HOW");
 		time = findPreference("MSG_TIME");
 		sound = (RingtonePreference) findPreference("MSG_SOUND");
 		volume = findPreference("MSG_VOLUME");
@@ -125,6 +127,22 @@ public class MsgSettingsActivity extends PreferenceActivity {
 				return true;
 			}
 		});
+		
+		how.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				String howValue = (String) newValue;
+		    	if (howValue.equals(Constants.ALERT_HOW_RING)) {
+		    		how.setSummary("Ring");
+		    	} else if (howValue.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
+		    		how.setSummary("Ring and vibrate");
+		    	} else {
+		    		how.setSummary("Vibrate");
+		    	}
+				return true;
+			}
+		});		
 
 		time.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -211,6 +229,16 @@ public class MsgSettingsActivity extends PreferenceActivity {
     		whoAlerts.setEnabled(false);
     		whoList.setEnabled(false);      		
     	}
+    	
+    	String howValue = PrefHelper.getMessageHow(getApplicationContext(), RulesEntry.MSG_STATE);
+    	if (howValue.equals(Constants.ALERT_HOW_RING)) {
+    		how.setSummary("Ring");
+    	} else if (howValue.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
+    		how.setSummary("Ring and vibrate");
+    	} else {
+    		how.setSummary("Vibrate");
+    	}
+    	
     	
     	time.setSummary(PrefHelper.getMessageTime(getApplicationContext(), RulesEntry.MSG_STATE) + " seconds");
     	

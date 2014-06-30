@@ -124,23 +124,6 @@ public class PrefHelper {
 		return snoozeTime - clockTime;
 	}	
 	
-	public static void saveCurrentPhoneState(Context context, AudioManager audio) {
-		Editor editor = getPrefs(context).edit();
-		editor.putInt(Constants.SETTING_VOLUME, audio.getStreamVolume(AudioManager.STREAM_RING));
-		editor.putBoolean(Constants.SETTING_VOLUME_CHANGED, true);
-		editor.commit();
-	}
-	
-	public static void resetSavedPhoneState(Context context, AudioManager audio) {
-		SharedPreferences prefs = getPrefs(context);
-		Editor editor = prefs.edit();
-		if (prefs.getBoolean(Constants.SETTING_VOLUME_CHANGED, false)) {
-			audio.setStreamVolume(AudioManager.STREAM_RING, prefs.getInt(Constants.SETTING_VOLUME, audio.getStreamMaxVolume(AudioManager.STREAM_RING)), 0);
-			editor.putBoolean(Constants.SETTING_VOLUME_CHANGED, false);
-			editor.commit();
-		}
-	}
-	
 	public static boolean disclaimerCheck(Context context) {
 		SharedPreferences prefs = getPrefs(context);
 		int agreed = prefs.getInt(Constants.DISCLAIMER_VERSION, Constants.DISCLAIMER_DEFAULT);

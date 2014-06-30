@@ -40,11 +40,6 @@
 	        android:title="How to alert?"
 	        android:entries="@array/pref_noise_entries"
 	        android:entryValues="@array/pref_noise_values"
-	        />
-	    
-	    <Preference
-	        android:key="on_state_TIME"
-	        android:title="How long?"
 	        />	    
 	    
 	    <RingtonePreference

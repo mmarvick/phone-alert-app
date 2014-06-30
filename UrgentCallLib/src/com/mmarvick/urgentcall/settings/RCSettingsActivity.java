@@ -36,7 +36,7 @@ public class RCSettingsActivity extends AlertSettingsActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				StateListsPrompt msgStatePrompt = new StateListsPrompt(RCSettingsActivity.this, RulesEntry.MSG_STATE,
+				StateListsPrompt msgStatePrompt = new StateListsPrompt(RCSettingsActivity.this, alertType,
 						getApplicationContext().getString(R.string.state_change_dialog_title_msg), false);
 				msgStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						

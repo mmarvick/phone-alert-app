@@ -51,10 +51,10 @@ public class Constants {
 	// Message alarm constant for how long alert plays for
 	public final static int MSG_ALARM_TIME = 10;
 	
-	// Keys for settings used in the CallAlertBroadcastReceiver to flag that a received call
-	// changed the phone volume, and what volume should the phone return to after the app
-	public final static String SETTING_VOLUME = "VOLUME";
-	public final static String SETTING_VOLUME_CHANGED = "VOLUME_CHANGED";
+	// Call alert type
+	public final static int CALL_ALERT_TYPE_RC = 0;
+	public final static int CALL_ALERT_TYPE_SC = 1;
+	public final static int CALL_ALERT_TYPE_BOTH = 2;
 	
 	// Most recently accepted disclaimer
 	public final static String DISCLAIMER_VERSION = "DISCLAIMER_VERSION";
@@ -77,7 +77,7 @@ public class Constants {
 	 */
 	
 	public final static String ALERT_TYPE = "ALERT_TYPE";
-	public final static String USER_STATE = "USER_STATE";	
+	public final static String USER_STATE = "USER_STATE";
 	
 
 }

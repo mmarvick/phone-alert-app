@@ -4,6 +4,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.StateListsPrompt;
@@ -15,6 +16,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 public class MsgSettingsActivity extends AlertSettingsActivity {
 	protected Preference keyword;
 	protected Preference whoAlerts;
+	protected Preference time;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		xml = R.xml.pref_msg;
@@ -27,8 +29,10 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
 		super.loadPrefs();
 		keyword = findPreference(alertType + "_KEY");
 		whoAlerts = findPreference(alertType + "_FILTER");
+		time = findPreference(alertType + "_TIME");
 		prefs.add(keyword);
 		prefs.add(whoAlerts);
+		prefs.add(time);
 	}
 	
 	protected void startPrefListeners() {
@@ -58,7 +62,7 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				StateListsPrompt msgStatePrompt = new StateListsPrompt(MsgSettingsActivity.this, RulesEntry.MSG_STATE,
+				StateListsPrompt msgStatePrompt = new StateListsPrompt(MsgSettingsActivity.this, alertType,
 						getApplicationContext().getString(R.string.state_change_dialog_title_msg), false);
 				msgStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						
@@ -71,7 +75,27 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
 				msgStatePrompt.show();
 				return true;
 			}
-		});		
+		});	
+		
+		time.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				EditTextIntPrompt msgTimePrompt = new EditTextIntPrompt(MsgSettingsActivity.this, 1, 60,
+						alertType + Constants.ALERT_TIME, 10, "How long? (seconds)");
+				msgTimePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
+					
+					@Override
+					public void onOptionsChanged() {
+						setStates();
+						
+					}
+				});
+				
+				msgTimePrompt.show();
+				return true;
+			}
+		});			
 	}
 	
 	protected void setStates() {
@@ -89,6 +113,8 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
     		whoAlerts.setSummary("Everyone except blocked callers");    		
     	} else {
     		whoAlerts.setSummary("Everyone");    		
-    	} 		
+    	} 
+    	
+    	time.setSummary(PrefHelper.getMessageTime(getApplicationContext(), alertType) + " seconds");    	
 	}
 }

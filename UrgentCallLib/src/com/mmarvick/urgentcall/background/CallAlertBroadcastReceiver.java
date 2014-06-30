@@ -36,10 +36,13 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 					&& !PrefHelper.isSnoozing(context)) {
 			
 				// ... and either a repeated call alert or single call alert criteria has been met ...
-				if (repeatedAlert(context, incomingNumber) || singleAlert(context, incomingNumber)) {
-					
-					// ... trigger an alert!
-					alertAction(context);					
+				// ... trigger an alert!
+				if (repeatedAlert(context, incomingNumber) && singleAlert(context, incomingNumber)) {
+					alertAction(context, Constants.CALL_ALERT_TYPE_BOTH);					
+				} else if (repeatedAlert(context, incomingNumber)) {
+					alertAction(context, Constants.CALL_ALERT_TYPE_RC);	
+				} else if (singleAlert(context, incomingNumber)) {
+					alertAction(context, Constants.CALL_ALERT_TYPE_SC);	
 				}
 			
 			}
@@ -118,20 +121,15 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		return numCalls;
 	}	
 	
-	private void alertAction(Context context) {
-		if (audio.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-			PrefHelper.saveCurrentPhoneState(context, audio);
-			audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING), 0);
-		} else {
-			Intent ringService = new Intent(context, RingService.class);
-			context.startService(ringService);			
-		}
+	private void alertAction(Context context, int alertType) {
+		Intent ringService = new Intent(context, RingService.class);
+		ringService.putExtra(Constants.ALERT_TYPE, alertType);
+		context.startService(ringService);			
 	}	
 	
 	private void resetAction(Context context) {
 		Intent ringService = new Intent(context, RingService.class);
 		context.stopService(ringService);
-		PrefHelper.resetSavedPhoneState(context, audio);
 	}
 	
 }

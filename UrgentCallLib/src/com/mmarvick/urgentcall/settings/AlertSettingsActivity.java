@@ -41,7 +41,6 @@ public class AlertSettingsActivity extends PreferenceActivity {
 	protected Preference whoList;
 	protected ListPreference how;
 	protected Preference noise;
-	protected Preference time;
 	protected RingtonePreference sound;
 	protected Preference volume;
 	
@@ -70,14 +69,12 @@ public class AlertSettingsActivity extends PreferenceActivity {
 		
 		whoList = findPreference(alertType + "_FILTER_USERS");
 		how = (ListPreference) findPreference(alertType + "_HOW");
-		time = findPreference(alertType + "_TIME");
 		sound = (RingtonePreference) findPreference(alertType + "_SOUND");
 		volume = findPreference(alertType + "_VOLUME");
 		
 		prefs = new ArrayList<Preference>();
 		prefs.add(whoList);
 		prefs.add(how);
-		prefs.add(time);
 		prefs.add(sound);
 		prefs.add(volume);
 	}
@@ -131,27 +128,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 		    	}
 				return true;
 			}
-		});		
-
-		time.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				EditTextIntPrompt msgTimePrompt = new EditTextIntPrompt(AlertSettingsActivity.this, 1, 60,
-						alertType + Constants.ALERT_TIME, 10, "How long? (seconds)");
-				msgTimePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
-					
-					@Override
-					public void onOptionsChanged() {
-						setStates();
-						
-					}
-				});
-				
-				msgTimePrompt.show();
-				return true;
-			}
-		});		
+		});			
 		
 		volume.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -223,8 +200,6 @@ public class AlertSettingsActivity extends PreferenceActivity {
     		sound.setEnabled(false);
     		volume.setEnabled(false);    		
     	}	
-    	
-    	time.setSummary(PrefHelper.getMessageTime(getApplicationContext(), alertType) + " seconds");
     	
     	Uri ringUri = PrefHelper.getMessageSound(getApplicationContext(), alertType);
     	sound.setSummary(RingtoneManager.getRingtone(getApplicationContext(), ringUri).getTitle(getApplicationContext()));

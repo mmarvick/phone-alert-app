@@ -3,15 +3,30 @@
     xmlns:range="http://schemas.android.com/apk/lib/com.mmarvick.urgentcall"
     android:key="PREFERENCES" >
     <Preference
-        android:key="single_call_state_STATUS"
-        android:title="Single Call Alerts"
+        android:key="on_state_STATUS"
+        android:title="Repeat Call Alerts"
+        />
+    
+    <Preference
+        android:key="on_state_CALL_QTY"
+        android:title="Number of calls"
+        />
+    
+    <Preference
+        android:key="on_state_CALL_TIME"
+        android:title="Length of time"
         />
     
     <PreferenceCategory
         android:title="Alert Filter" >
+    
+	    <Preference
+	        android:key="on_state_FILTER"
+	        android:title="Who can alert?"
+	        />
 	    
 	    <Preference
-	        android:key="single_call_state_FILTER_USERS"
+	        android:key="on_state_FILTER_USERS"
 	        android:title="Allow / Block List" />
 	    
 	</PreferenceCategory>
@@ -20,7 +35,7 @@
         android:title="Alert Behavior" >    
      
 	    <ListPreference
-	        android:key="single_call_state_HOW"
+	        android:key="on_state_HOW"
 	        
 	        android:title="How to alert?"
 	        android:entries="@array/pref_noise_entries"
@@ -28,12 +43,12 @@
 	        />
 	    
 	    <Preference
-	        android:key="single_call_state_TIME"
+	        android:key="on_state_TIME"
 	        android:title="How long?"
 	        />	    
 	    
 	    <RingtonePreference
-	        android:key="single_call_state_SOUND"
+	        android:key="on_state_SOUND"
 	        android:title="Ringtone"
 	        android:showDefault="true"
 	        android:showSilent="false"
@@ -41,7 +56,7 @@
 	        />
 	    
 	    <Preference
-	        android:key="single_call_state_VOLUME"
+	        android:key="on_state_VOLUME"
 	        android:title="Volume"
 	        />
 	   

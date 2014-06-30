@@ -60,6 +60,15 @@ public class SettingsActivity extends PreferenceActivity {
 			}
 		});
 		
+		rcAlert.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				startActivity(new Intent(getApplicationContext(), RCSettingsActivity.class));
+				return false;
+			}
+		});			
+		
 		scAlert.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			@Override

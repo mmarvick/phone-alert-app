@@ -74,7 +74,13 @@
             android:name="com.mmarvick.urgentcall.settings.MsgSettingsActivity"
             android:label="@string/app_name" >
             
-        </activity>    
+        </activity> 
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.settings.RCSettingsActivity"
+            android:label="@string/app_name" >
+            
+        </activity>
         
         <activity
             android:name="com.mmarvick.urgentcall.settings.SCSettingsActivity"

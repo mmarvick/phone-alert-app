@@ -87,12 +87,12 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				if (PrefHelper.getState(getApplicationContext(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-					int backupState = PrefHelper.getBackupState(getApplicationContext(), RulesEntry.MSG_STATE);
-					PrefHelper.setState(getApplicationContext(), RulesEntry.MSG_STATE, backupState);
+				if (PrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
+					int backupState = PrefHelper.getBackupState(getApplicationContext(), alertType);
+					PrefHelper.setState(getApplicationContext(), alertType, backupState);
 				} else {
-					PrefHelper.saveBackupState(getApplicationContext(), RulesEntry.MSG_STATE);
-					PrefHelper.setState(getApplicationContext(), RulesEntry.MSG_STATE, Constants.URGENT_CALL_STATE_OFF);
+					PrefHelper.saveBackupState(getApplicationContext(), alertType);
+					PrefHelper.setState(getApplicationContext(), alertType, Constants.URGENT_CALL_STATE_OFF);
 				}
 				setStates();
 				return true;
@@ -106,8 +106,8 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 		        Intent listIntent = new Intent(getApplicationContext(), ContactListActivity.class);
-		        listIntent.putExtra(Constants.ALERT_TYPE, RulesEntry.MSG_STATE);
-		        if (PrefHelper.getState(getApplicationContext(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_WHITELIST) {
+		        listIntent.putExtra(Constants.ALERT_TYPE, alertType);
+		        if (PrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_WHITELIST) {
 		        	listIntent.putExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
 		        } else {
 		        	listIntent.putExtra(Constants.USER_STATE, RulesEntry.STATE_OFF);
@@ -138,7 +138,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				EditTextIntPrompt msgTimePrompt = new EditTextIntPrompt(AlertSettingsActivity.this, 1, 60,
-						RulesEntry.MSG_STATE + Constants.ALERT_TIME, 10, "How long? (seconds)");
+						alertType + Constants.ALERT_TIME, 10, "How long? (seconds)");
 				msgTimePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 					
 					@Override
@@ -158,7 +158,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				SliderPrompt volumePrompt = new SliderPrompt(AlertSettingsActivity.this, Constants.ALERT_VOLUME_DEFAULT,
-						RulesEntry.MSG_STATE + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_MAX, "Volume", R.drawable.ic_action_ring_volume);
+						alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_MAX, "Volume", R.drawable.ic_action_ring_volume);
 				volumePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 					
 					@Override

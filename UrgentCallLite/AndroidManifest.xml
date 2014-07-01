@@ -15,6 +15,8 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -60,7 +62,31 @@
                 <action android:name="com.mmarvick.urgentcall.list.launch" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>            
-        </activity>     
+        </activity>
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.settings.SettingsActivity"
+            android:label="@string/app_name" >
+            
+        </activity>   
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.settings.MsgSettingsActivity"
+            android:label="@string/app_name" >
+            
+        </activity> 
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.settings.RCSettingsActivity"
+            android:label="@string/app_name" >
+            
+        </activity>
+        
+        <activity
+            android:name="com.mmarvick.urgentcall.settings.SCSettingsActivity"
+            android:label="@string/app_name" >
+            
+        </activity>         
         
         <receiver android:name = "com.mmarvick.urgentcall.background.SnoozeReset" >
             <intent-filter>

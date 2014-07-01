@@ -5,15 +5,12 @@ import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
-import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.StateListsPrompt;
 
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 public class RCSettingsActivity extends AlertSettingsActivity {
 	protected Preference callQty;

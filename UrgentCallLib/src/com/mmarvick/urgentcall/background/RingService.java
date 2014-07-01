@@ -1,7 +1,5 @@
 package com.mmarvick.urgentcall.background;
 
-import java.io.IOException;
-
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
@@ -11,8 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -42,8 +38,8 @@ public class RingService extends Service {
 		
 		float rcVolume = PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntry.RC_STATE);
 		float scVolume = PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntry.SC_STATE);
-		Uri rcToneUri = PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.RC_STATE);
-		Uri scToneUri = PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.SC_STATE);
+		PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.RC_STATE);
+		PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.SC_STATE);
 		
 		if (alertType == Constants.CALL_ALERT_TYPE_RC) {
 			volume = rcVolume;

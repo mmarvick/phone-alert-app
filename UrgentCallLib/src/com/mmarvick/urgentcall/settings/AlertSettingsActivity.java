@@ -7,18 +7,12 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract;
-import com.mmarvick.urgentcall.data.RulesDbHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
-import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
-import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.SliderPrompt;
-import com.mmarvick.urgentcall.widgets.StateListsPrompt;
+import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,7 +24,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
-import android.util.Log;
 
 public class AlertSettingsActivity extends PreferenceActivity {
 
@@ -91,12 +84,16 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				if (PrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
-					int backupState = PrefHelper.getBackupState(getApplicationContext(), alertType);
-					PrefHelper.setState(getApplicationContext(), alertType, backupState);
+				if (alertType == RulesEntry.SC_STATE && !(getResources().getBoolean(R.bool.paid_version))) {
+					UpgradeDialog.upgradeDialog(AlertSettingsActivity.this, getString(R.string.upgrade_body_sc));
 				} else {
-					PrefHelper.saveBackupState(getApplicationContext(), alertType);
-					PrefHelper.setState(getApplicationContext(), alertType, Constants.URGENT_CALL_STATE_OFF);
+					if (PrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
+						int backupState = PrefHelper.getBackupState(getApplicationContext(), alertType);
+						PrefHelper.setState(getApplicationContext(), alertType, backupState);
+					} else {
+						PrefHelper.saveBackupState(getApplicationContext(), alertType);
+						PrefHelper.setState(getApplicationContext(), alertType, Constants.URGENT_CALL_STATE_OFF);
+					}
 				}
 				setStates();
 				return true;

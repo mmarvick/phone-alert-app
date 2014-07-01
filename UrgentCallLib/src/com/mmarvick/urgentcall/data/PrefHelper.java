@@ -7,7 +7,6 @@ import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.SystemClock;

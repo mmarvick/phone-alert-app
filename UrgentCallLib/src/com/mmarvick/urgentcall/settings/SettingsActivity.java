@@ -3,13 +3,9 @@ package com.mmarvick.urgentcall.settings;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract;
-import com.mmarvick.urgentcall.data.RulesDbHelper;
 import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;

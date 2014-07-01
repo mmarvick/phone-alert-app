@@ -13,6 +13,7 @@
         />
     
     <PreferenceCategory
+        android:key="msg_state_FILTER_CATEGORY"
         android:title="Alert Filter" >
     
 	    <Preference
@@ -27,6 +28,7 @@
 	</PreferenceCategory>
 	
     <PreferenceCategory
+        android:key="msg_state_BEHAVIOR_CATEGORY"
         android:title="Alert Behavior" >    
      
 	    <ListPreference

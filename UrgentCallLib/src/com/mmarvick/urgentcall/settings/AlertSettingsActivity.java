@@ -27,6 +27,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.util.Log;
@@ -35,6 +36,9 @@ public class AlertSettingsActivity extends PreferenceActivity {
 
 	private PreferenceScreen prefScreen;
 	private Preference onState;
+	
+	protected PreferenceCategory filterCategory;
+	protected PreferenceCategory behaviorCategory;
 	
 	protected List<Preference> prefs;
 	
@@ -64,6 +68,9 @@ public class AlertSettingsActivity extends PreferenceActivity {
 		addPreferencesFromResource(xml);
 		
 		prefScreen = getPreferenceScreen();
+		
+		behaviorCategory = (PreferenceCategory) findPreference(alertType + "_BEHAVIOR_CATEGORY");
+		filterCategory = (PreferenceCategory) findPreference(alertType + "_FILTER_CATEGORY");
 		
 		onState = findPreference(alertType + "_STATUS");
 		
@@ -158,6 +165,11 @@ public class AlertSettingsActivity extends PreferenceActivity {
 	    	for (Preference p : prefs) {
 	    		p.setEnabled(true);
 	    	}
+	    	//behaviorCategory.setEnabled(true);
+	    	//filterCategory.setEnabled(true);
+			//behaviorCategory.setShouldDisableView(false);
+			//filterCategory.setShouldDisableView(false);
+			
     	}
     	
     	if (mode == Constants.URGENT_CALL_STATE_OFF) {
@@ -210,6 +222,8 @@ public class AlertSettingsActivity extends PreferenceActivity {
 	    	for (Preference p : prefs) {
 	    		p.setEnabled(false);
 	    	}
+			//behaviorCategory.setShouldDisableView(true);
+			//filterCategory.setShouldDisableView(true);
     	}
     }
     

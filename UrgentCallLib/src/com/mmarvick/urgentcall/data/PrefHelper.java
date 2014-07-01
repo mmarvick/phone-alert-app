@@ -57,6 +57,12 @@ public class PrefHelper {
 		editor.commit();
 	}	
 	
+	public static void setMessageHow(Context context, String alertType, String how) {
+		Editor editor = getPrefs(context).edit();
+		editor.putString(alertType + Constants.ALERT_HOW, how);
+		editor.commit();
+	}		
+	
 	public static String getMessageVolumePercent(Context context, String alertType) {
 		int volume = getPrefs(context).getInt(alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_DEFAULT);
 		int percent = volume * 100 / Constants.ALERT_VOLUME_DEFAULT;
@@ -88,6 +94,7 @@ public class PrefHelper {
 		editor.putString(Constants.MSG_MESSAGE, value);
 		editor.commit();
 	}
+		
 	
 	public static int getRepeatedCallQty(Context context) {
 		return getIntValue(context, Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT);

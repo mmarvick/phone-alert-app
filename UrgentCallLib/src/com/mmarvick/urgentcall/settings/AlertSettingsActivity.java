@@ -126,13 +126,8 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				String howValue = (String) newValue;
-		    	if (howValue.equals(Constants.ALERT_HOW_RING)) {
-		    		how.setSummary("Ring");
-		    	} else if (howValue.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
-		    		how.setSummary("Ring and vibrate");
-		    	} else {
-		    		how.setSummary("Vibrate");
-		    	}
+		    	PrefHelper.setMessageHow(getApplicationContext(), alertType, howValue);
+		    	setStates();
 				return true;
 			}
 		});			

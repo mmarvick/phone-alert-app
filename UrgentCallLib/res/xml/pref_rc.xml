@@ -47,7 +47,7 @@
 	        android:title="Ringtone"
 	        android:showDefault="true"
 	        android:showSilent="false"
-	        android:ringtoneType="alarm"
+	        android:ringtoneType="all"
 	        />
 	    
 	    <Preference

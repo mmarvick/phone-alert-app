@@ -6,18 +6,18 @@
 	    android:icon="@drawable/ic_action_time"
 	    android:title="@string/action_snooze"
 	    yourapp:showAsAction="ifRoom" />
- 	
+
+	<item
+	     android:id="@+id/action_rate"
+	     android:icon="@drawable/ic_action_rate"
+	     android:title="@string/action_rate"
+	     yourapp:showAsAction="collapseActionView" />	 	
+ 		
 	<item
 	     android:id="@+id/action_share"
 	     android:icon="@drawable/ic_action_share"
 	     android:title="@string/action_share"
 	     yourapp:showAsAction="collapseActionView" />
-	
-	<item
-	     android:id="@+id/action_rate"
-	     android:icon="@drawable/ic_action_rate"
-	     android:title="@string/action_rate"
-	     yourapp:showAsAction="collapseActionView" />	
 	     
 	<item
 	     android:id="@+id/action_upgrade"

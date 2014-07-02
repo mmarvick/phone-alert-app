@@ -31,3 +31,6 @@ proguard/
 # Other local files
 debug/
 .metadata
+
+# application files ready for deployment
+deploy/

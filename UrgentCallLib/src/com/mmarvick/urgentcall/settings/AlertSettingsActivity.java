@@ -191,6 +191,9 @@ public class AlertSettingsActivity extends PreferenceActivity {
     	}    	
     	
     	String howValue = PrefHelper.getMessageHow(getApplicationContext(), alertType);
+    	if (how.getValue() == null) {
+    		how.setValue(howValue);
+    	}
     	if (howValue.equals(Constants.ALERT_HOW_RING)) {
     		how.setSummary("Ring");
     		sound.setEnabled(true);
@@ -207,6 +210,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
     	
     	Uri ringUri = PrefHelper.getMessageSound(getApplicationContext(), alertType);
     	sound.setSummary(RingtoneManager.getRingtone(getApplicationContext(), ringUri).getTitle(getApplicationContext()));
+    	sound.setDefaultValue(ringUri);
     	
     	volume.setSummary(PrefHelper.getMessageVolumePercent(getApplicationContext(), alertType));
     	

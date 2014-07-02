@@ -290,16 +290,55 @@ public class MainActivity extends ActionBarActivity
 	
 	// Generate message and intent to share app with other users
 	private void share() {
-		Intent shareIntent = new Intent();
-		shareIntent.setAction(Intent.ACTION_SEND);
-		shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
-		String message = getString(R.string.share_1) + PrefHelper.getRepeatedCallQty(getApplicationContext());
-		message += getString(R.string.share_2) + PrefHelper.getRepeatedCallMins(getApplicationContext());
-		message += getString(R.string.share_3);
-		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
-		shareIntent.setType("text/plain");
-		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.share_type_subject))
+				.setItems(R.array.share_types, new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent shareIntent = new Intent();
+						
+						String message = "";
+						String subject = "";
+						String intentPickerTitle = "";
+						
+						switch (which) {
+						case 0:
+						default:
+							subject = getString(R.string.share_uc_subject);
+							message = getString(R.string.share_uc_1) + getString(R.string.share_app_url);
+							intentPickerTitle = getString(R.string.share_uc_by);
+							break;
+						case 1:
+							subject = getString(R.string.share_msg_subject);
+							message += getString(R.string.share_msg_1) + "\"" + PrefHelper.getMessageToken(getApplicationContext()) + "\"";
+							message += getString(R.string.share_msg_2) + getString(R.string.share_app_url);
+							intentPickerTitle = getString(R.string.share_msg_by);							
+							break;
+						case 2:
+							subject = getString(R.string.share_rc_subject);
+							message += getString(R.string.share_rc_1) + PrefHelper.getRepeatedCallQty(getApplicationContext());
+							message += getString(R.string.share_rc_2) + PrefHelper.getRepeatedCallMins(getApplicationContext());
+							message += getString(R.string.share_rc_3) + getString(R.string.share_app_url);
+							intentPickerTitle = getString(R.string.share_rc_by);
+							break;
+						case 3:
+							subject = getString(R.string.share_sc_subject);
+							message = getString(R.string.share_sc_1) + getString(R.string.share_app_url);
+							intentPickerTitle = getString(R.string.share_sc_by);							
+							break;
+						}
+
+						shareIntent.setAction(Intent.ACTION_SEND);
+						shareIntent.setType("text/plain");
+						shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+						shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+						shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+						startActivity(Intent.createChooser(shareIntent, intentPickerTitle));
+						
+					}
+				});
+		builder.create().show();
 	}
 	
 	@Override

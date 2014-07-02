@@ -10,4 +10,10 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="share_types">
+        <item>Urgent Call App</item>
+        <item>Message Alerts</item>
+        <item>Repeat Call Alerts</item>
+        <item>Single Call Alerts</item>
+    </string-array>
 </resources>

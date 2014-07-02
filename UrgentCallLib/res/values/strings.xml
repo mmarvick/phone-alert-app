@@ -102,10 +102,27 @@
     <string name="pro_installed_body">Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.</string>
     <string name="pro_installed_ok">OK</string>
 
-    <string name="share_title">Share app info</string>
-    <string name="share_subject">Reach me in an emergency!</string>
-    <string name="share_1">Call me&#160;</string>
-    <string name="share_2">&#160;times in&#160;</string>
-    <string name="share_3">&#160;minutes to ring my phone, even if silenced. To also be reachable in an emergency, add this app: http://goo.gl/aK3Ic7</string>
+    <string name="share_app_url">http://goo.gl/aK3Ic7</string>
     
+    <string name="share_type_subject">Tell friends about...</string>
+
+    <string name="share_uc_subject">Be reached in an emergency!</string>
+    <string name="share_uc_1">Try the Urgent Call app for Android to turn off distractions, but always be alerted when urgently needed. Learn more:&#160;</string>
+	<string name="share_uc_by">Share Urgent Call App info</string>     
+    
+    <string name="share_msg_subject">Reach me in an emergency!</string>
+    <string name="share_msg_1">Text me with &#160;</string>
+    <string name="share_msg_2">&#160; to alert my phone, even if silenced. To be reachable in an emergency too, add this app:&#160;</string>
+	<string name="share_msg_by">Share Message Alert info</string>    
+    
+    <string name="share_rc_subject">Reach me in an emergency!</string>
+    <string name="share_rc_1">Call me&#160;</string>
+    <string name="share_rc_2">&#160;times in&#160;</string>
+    <string name="share_rc_3">&#160;minutes to alert my phone, even if silenced. To be reachable in an emergency too, add this app:&#160;</string>
+	<string name="share_rc_by">Share Repeat Call Alert info</string>
+
+    <string name="share_sc_subject">Reach me whenever!</string>
+    <string name="share_sc_1">I\'ve set up my phone to always notify me of your calls, even when it\'s in silent mode. To do the same, add this app:&#160;</string>
+	<string name="share_sc_by">Share Single Call Alert info</string>	
+	
 </resources>

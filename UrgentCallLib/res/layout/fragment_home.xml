@@ -35,6 +35,17 @@
         android:text="for"
         android:textSize="@dimen/small_textSize" />
     
+     <TextView
+        android:id="@+id/textView_home_safely_silence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_home_state"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:text="feel free to silence your phone as needed"
+        android:textSize="@dimen/small_textSize" />  
+    
     <TextView
         android:id="@+id/textView_home_snooze_time"
         android:layout_width="wrap_content"

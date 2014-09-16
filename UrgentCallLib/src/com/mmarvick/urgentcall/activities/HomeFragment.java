@@ -27,6 +27,7 @@ public class HomeFragment extends TabFragment {
 	private TextView mTextAllOffState;
 	private TextView mTextSnoozeFor;
 	private TextView mTextSnoozeTime;
+	private TextView mTextSafelySilence;
 	
 	private Button mButtonAppState;		
 	
@@ -45,6 +46,7 @@ public class HomeFragment extends TabFragment {
 		mTextAllOffState = (TextView) view.findViewById(R.id.textView_home_all_off_state);
 		mTextSnoozeFor = (TextView) view.findViewById(R.id.textView_home_snooze_for);
 		mTextSnoozeTime = (TextView) view.findViewById(R.id.textView_home_snooze_time);
+		mTextSafelySilence = (TextView) textView_home_safely_silence); 
 		mButtonAppState = (Button) view.findViewById(R.id.button_home_state);
 		
 		mLayoutMsgState.setOnClickListener(new OnClickListener() {

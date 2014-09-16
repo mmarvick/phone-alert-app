@@ -9,12 +9,12 @@
     
     <Preference
         android:key="on_state_CALL_QTY"
-        android:title="Number of calls"
+        android:title="How  many calls?"
         />
     
     <Preference
         android:key="on_state_CALL_TIME"
-        android:title="Length of time"
+        android:title="Within how much time?"
         />
     
     <PreferenceCategory

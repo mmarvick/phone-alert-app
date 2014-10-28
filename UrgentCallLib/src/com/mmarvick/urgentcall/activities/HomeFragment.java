@@ -46,7 +46,7 @@ public class HomeFragment extends TabFragment {
 		mTextAllOffState = (TextView) view.findViewById(R.id.textView_home_all_off_state);
 		mTextSnoozeFor = (TextView) view.findViewById(R.id.textView_home_snooze_for);
 		mTextSnoozeTime = (TextView) view.findViewById(R.id.textView_home_snooze_time);
-		mTextSafelySilence = (TextView) textView_home_safely_silence); 
+		mTextSafelySilence = (TextView) view.findViewById(R.id.textView_home_safely_silence); 
 		mButtonAppState = (Button) view.findViewById(R.id.button_home_state);
 		
 		mLayoutMsgState.setOnClickListener(new OnClickListener() {
@@ -126,12 +126,14 @@ public class HomeFragment extends TabFragment {
 			mLayoutMsgState.setVisibility(View.INVISIBLE);
 			mLayoutRCState.setVisibility(View.INVISIBLE);
 			mLayoutSCState.setVisibility(View.INVISIBLE);
-			mLayoutAllOff.setVisibility(View.VISIBLE);			
+			mLayoutAllOff.setVisibility(View.VISIBLE);	
+			mTextSafelySilence.setVisibility(View.INVISIBLE);
 		} else {
 			mLayoutMsgState.setVisibility(View.VISIBLE);
 			mLayoutRCState.setVisibility(View.VISIBLE);
 			mLayoutSCState.setVisibility(View.VISIBLE);
 			mLayoutAllOff.setVisibility(View.INVISIBLE);
+			mTextSafelySilence.setVisibility(View.VISIBLE);
 		}
 		
 		if (PrefHelper.isSnoozing(getMainActivity())) {

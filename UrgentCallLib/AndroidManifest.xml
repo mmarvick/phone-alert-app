@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mmarvick.urgentcall"
-    android:versionCode="15"
-    android:versionName="4.1" >
+    package="com.mmarvick.uc"
+    android:versionCode="1"
+    android:versionName="0.9" >
 
     <uses-sdk
         android:minSdkVersion="8"

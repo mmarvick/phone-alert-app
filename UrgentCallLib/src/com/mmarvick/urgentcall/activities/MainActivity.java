@@ -48,7 +48,6 @@ public class MainActivity extends ActionBarActivity
 	public static final int TAB_SC = 3;
 	public static final String [] fragmentTitles = new String[]
 			{"Home", "Text", "Repeat\nCall", "Single\nCall"};
-	public ArrayList<TabFragment> fragments;
 	
 	private ActionBar actionBar;
 	private MyPagerAdapter mAdapter;
@@ -66,13 +65,6 @@ public class MainActivity extends ActionBarActivity
 		checkDisclaimer();		
 
 		actionBar = getSupportActionBar();		
-		
-		// Add fragments to list
-		fragments = new ArrayList<TabFragment>();
-		fragments.add((TabFragment) (new HomeFragment()));
-		fragments.add((TabFragment) (new MessageFragment()));	
-		fragments.add((TabFragment) (new RepeatCallFragment()));
-		fragments.add((TabFragment) (new SingleCallFragment()));
 		
 		// Add the fragments to the view pager
 		mAdapter = new MyPagerAdapter(getSupportFragmentManager());
@@ -143,7 +135,7 @@ public class MainActivity extends ActionBarActivity
 			
 		};
 		
-		for (int i = 0; i < fragments.size(); i++) {
+		for (int i = 0; i < mAdapter.getCount(); i++) {
 			actionBar.addTab(
 					actionBar.newTab()
 						.setText(fragmentTitles[i])
@@ -197,13 +189,17 @@ public class MainActivity extends ActionBarActivity
 			Log.e("Checker", "Checker made!");
 		}
 		
-		for (int i = 0; i < fragments.size(); i++) {
-			TabFragment frag = fragments.get(i);
-			if (frag.isAdded()) {
+		for (int i = 0; i < mAdapter.getCount(); i++) {
+			TabFragment frag =  (TabFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(i));
+			if (frag != null && frag.isAdded()) {
 				frag.fragUpdateSettings();
 			}
 		}
 	}
+	
+	private String getFragmentTag(int fragmentPosition) {
+	     return "android:switcher:" + mViewPager.getId() + ":" + fragmentPosition;
+	}	
 	
 	// Prevent the user from switching tabs or scrolling when the alerts are snoozed or off
 	private void disableEnableWhenOff() {
@@ -227,13 +223,20 @@ public class MainActivity extends ActionBarActivity
 		
 		@Override
 		public Fragment getItem(int position) {
-			return fragments.get(position);
+			if (position == 1) {
+				return new MessageFragment();
+			} else if (position == 2) {
+				return new RepeatCallFragment();
+			} else if (position == 3) {
+				return new SingleCallFragment();
+			}
+			return new HomeFragment();
 		}
 
 		@Override
 		public int getCount() {
-			return fragments.size();
-		}
+			return 4;
+		}		
 		
 	}
 	

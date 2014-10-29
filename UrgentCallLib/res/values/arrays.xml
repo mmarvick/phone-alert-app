@@ -11,9 +11,9 @@
         <item>2</item>
     </string-array>
     <string-array name="share_types">
-        <item>Urgent Call App</item>
-        <item>Message Alerts</item>
-        <item>Repeat Call Alerts</item>
-        <item>Single Call Alerts</item>
+        <item>This app!</item>
+        <item>Text alerting me</item>
+        <item>Repeat Call alerting me</item>
+        <item>Single Call alerting me</item>
     </string-array>
 </resources>

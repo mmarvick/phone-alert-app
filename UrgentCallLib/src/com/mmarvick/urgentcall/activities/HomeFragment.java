@@ -105,7 +105,6 @@ public class HomeFragment extends TabFragment {
 		mTextAllOffState.setTextColor(Color.RED);
 		
 		setButtonState();
-		super.fragUpdateSettings();
 	}
 	
 	public void setStateText(TextView textView, String alertType) {		
@@ -123,17 +122,17 @@ public class HomeFragment extends TabFragment {
 	private void showTextViews() {
 		int state = PrefHelper.getState(getMainActivity(), Constants.APP_STATE);
 		if (state == Constants.URGENT_CALL_STATE_OFF || PrefHelper.isSnoozing(getMainActivity())) {
+			mTextSafelySilence.setVisibility(View.INVISIBLE);
 			mLayoutMsgState.setVisibility(View.INVISIBLE);
 			mLayoutRCState.setVisibility(View.INVISIBLE);
 			mLayoutSCState.setVisibility(View.INVISIBLE);
-			mLayoutAllOff.setVisibility(View.VISIBLE);	
-			mTextSafelySilence.setVisibility(View.INVISIBLE);
+			mLayoutAllOff.setVisibility(View.VISIBLE);
 		} else {
+			mTextSafelySilence.setVisibility(View.VISIBLE);	
 			mLayoutMsgState.setVisibility(View.VISIBLE);
 			mLayoutRCState.setVisibility(View.VISIBLE);
-			mLayoutSCState.setVisibility(View.VISIBLE);
+			mLayoutSCState.setVisibility(View.VISIBLE);	
 			mLayoutAllOff.setVisibility(View.INVISIBLE);
-			mTextSafelySilence.setVisibility(View.VISIBLE);
 		}
 		
 		if (PrefHelper.isSnoozing(getMainActivity())) {

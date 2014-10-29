@@ -124,7 +124,6 @@ public class RepeatCallFragment extends TabFragment {
 	public void fragUpdateSettings() {
 		setButtonState();
 		setText();
-		super.fragUpdateSettings();
 	}
 	
 	private void setButtonState() {

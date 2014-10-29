@@ -199,7 +199,7 @@ public class MainActivity extends ActionBarActivity
 		
 		for (int i = 0; i < fragments.size(); i++) {
 			TabFragment frag = fragments.get(i);
-			if (frag.isUpdatable()) {
+			if (frag.isAdded()) {
 				frag.fragUpdateSettings();
 			}
 		}

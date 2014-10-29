@@ -101,7 +101,6 @@ public class MessageFragment extends TabFragment {
 	public void fragUpdateSettings() {
 		setButtonState();
 		setText();
-		super.fragUpdateSettings();
 	}
 	
 	private void setButtonState() {

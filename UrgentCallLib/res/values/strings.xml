@@ -107,7 +107,7 @@
     <string name="share_type_subject">Tell friends about...</string>
 
     <string name="share_uc_subject">Be reached in an emergency!</string>
-    <string name="share_uc_1">Try the Urgent Call app for Android to turn off distractions, but always be alerted when urgently needed. Learn more:&#160;</string>
+    <string name="share_uc_1">Try the Urgent Call app for Android to turn off distractions, but always be alerted when needed urgently. Learn more:&#160;</string>
 	<string name="share_uc_by">Share Urgent Call App info</string>     
     
     <string name="share_msg_subject">Reach me in an emergency!</string>

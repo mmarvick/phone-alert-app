@@ -402,9 +402,9 @@ public class MainActivity extends ActionBarActivity
 		boolean pro = false;
 		
 		for (int i = 0; i < pkgs.size(); i++) {
-			if (pkgs.get(i).packageName.equals("com.mmarvick.urgentcall_lite")) {
+			if (pkgs.get(i).packageName.equals("com.mmarvick.uc_lite")) {
 				lite = true;
-			} else if (pkgs.get(i).packageName.equals("com.mmarvick.urgentcall_pro")) {
+			} else if (pkgs.get(i).packageName.equals("com.mmarvick.uc_pro")) {
 				pro = true;
 			}
 		}
@@ -420,7 +420,7 @@ public class MainActivity extends ActionBarActivity
 				.setPositiveButton(getString(R.string.pro_installed_ok), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						// Uninstalls lite
-						Uri pkg_uri = Uri.parse("package:com.mmarvick.urgentcall_lite");
+						Uri pkg_uri = Uri.parse("package:com.mmarvick.uc_lite");
 						Intent removeIntent = new Intent(Intent.ACTION_DELETE, pkg_uri);
 						startActivity(removeIntent);
 					}

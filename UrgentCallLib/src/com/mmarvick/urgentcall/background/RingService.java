@@ -12,12 +12,17 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.provider.Telephony;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 public class RingService extends Service {
 	private AudioManager audio;
 	private MediaPlayer media;
 	private Vibrator vibrator;
 	private int streamVolumeInit;
+	
+	TelephonyManager telephonyManager;
 	
 	private float volume;
 	private Uri toneUri;
@@ -32,6 +37,9 @@ public class RingService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid) {
 		int alertType = intent.getIntExtra(Constants.ALERT_TYPE, Constants.CALL_ALERT_TYPE_BOTH);
+		
+		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		telephonyManager.listen(new TeleListener(), PhoneStateListener.LISTEN_CALL_STATE);
 		
 		ring = false;
 		vibrate = false;
@@ -116,6 +124,13 @@ public class RingService extends Service {
 		}		
 	}
 	
+	private class TeleListener extends PhoneStateListener {
+		public void onCallStateChanged(int state, String incomingNumber) {
+			if (state == TelephonyManager.CALL_STATE_IDLE || state == TelephonyManager.CALL_STATE_OFFHOOK) {
+				RingService.this.stopSelf();
+			}
+		}
+	}
 
 
 }

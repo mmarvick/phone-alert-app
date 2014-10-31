@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.provider.CallLog;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 
@@ -25,6 +26,7 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		String callState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 		dbHelper = new RulesDbHelper(context);
 		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		Log.e("UC", "SOMETHING HAPPENED WITH THE PHONE");
 		
 		// If the phone is ringing...
 		if (callState.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
@@ -46,11 +48,7 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 				}
 			
 			}
-		} else if (callState.equals(TelephonyManager.EXTRA_STATE_IDLE)
-				|| callState.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-			// Reset from the alert when the phone stops ringing
-			resetAction(context);
-		}
+		} 
 	}
 
 	private boolean singleAlert(Context context, String incomingNumber) {
@@ -126,10 +124,5 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		ringService.putExtra(Constants.ALERT_TYPE, alertType);
 		context.startService(ringService);			
 	}	
-	
-	private void resetAction(Context context) {
-		Intent ringService = new Intent(context, RingService.class);
-		context.stopService(ringService);
-	}
 	
 }

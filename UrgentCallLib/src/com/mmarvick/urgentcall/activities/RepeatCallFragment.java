@@ -4,7 +4,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.StateListsPrompt;
@@ -44,12 +44,12 @@ public class RepeatCallFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				if (PrefHelper.getState(getMainActivity(), RulesEntry.RC_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-					int backupState = PrefHelper.getBackupState(getMainActivity(), RulesEntry.MSG_STATE);
-					PrefHelper.setState(getMainActivity(), RulesEntry.RC_STATE, backupState);
+				if (PrefHelper.getState(getMainActivity(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+					int backupState = PrefHelper.getBackupState(getMainActivity(), RulesEntryOld.MSG_STATE);
+					PrefHelper.setState(getMainActivity(), RulesEntryOld.RC_STATE, backupState);
 				} else {
-					PrefHelper.saveBackupState(getMainActivity(), RulesEntry.RC_STATE);
-					PrefHelper.setState(getMainActivity(), RulesEntry.RC_STATE, Constants.URGENT_CALL_STATE_OFF);
+					PrefHelper.saveBackupState(getMainActivity(), RulesEntryOld.RC_STATE);
+					PrefHelper.setState(getMainActivity(), RulesEntryOld.RC_STATE, Constants.URGENT_CALL_STATE_OFF);
 				}
 				
 				getMainActivity().updateSettings();
@@ -101,7 +101,7 @@ public class RepeatCallFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				StateListsPrompt rcStatePrompt = new StateListsPrompt(getMainActivity(), RulesEntry.RC_STATE,
+				StateListsPrompt rcStatePrompt = new StateListsPrompt(getMainActivity(), RulesEntryOld.RC_STATE,
 						getMainActivity().getString(R.string.state_change_dialog_title_rc));
 				rcStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						
@@ -127,7 +127,7 @@ public class RepeatCallFragment extends TabFragment {
 	}
 	
 	private void setButtonState() {
-		if (PrefHelper.getState(getMainActivity().getApplicationContext(), RulesEntry.RC_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+		if (PrefHelper.getState(getMainActivity().getApplicationContext(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mButtonRCState.setText(getMainActivity().getString(R.string.status_allcaps_off));
 			mButtonRCState.setTextColor(Color.RED);
 		} else {
@@ -138,7 +138,7 @@ public class RepeatCallFragment extends TabFragment {
 	
 	private void setText() {
 		RulesDbHelper dbHelper;
-		int state = PrefHelper.getState(getMainActivity(), RulesEntry.RC_STATE);
+		int state = PrefHelper.getState(getMainActivity(), RulesEntryOld.RC_STATE);
 		
 		showTextViews();
 		
@@ -153,14 +153,14 @@ public class RepeatCallFragment extends TabFragment {
 		case (Constants.URGENT_CALL_STATE_WHITELIST):
 			dbHelper = new RulesDbHelper(getMainActivity());
 			fromMessage += getMainActivity().getString(R.string.rc_text_whitelist_before);
-			fromMessage += dbHelper.getCount(RulesEntry.RC_STATE, RulesEntry.STATE_ON);
+			fromMessage += dbHelper.getCount(RulesEntryOld.RC_STATE, RulesEntryOld.STATE_ON);
 			fromMessage += getMainActivity().getString(R.string.rc_text_whitelist_after);
 			dbHelper.close();
 			break;
 		case (Constants.URGENT_CALL_STATE_BLACKLIST):
 			dbHelper = new RulesDbHelper(getMainActivity());
 			fromMessage += getMainActivity().getString(R.string.rc_text_blacklist_before);
-			fromMessage += dbHelper.getCount(RulesEntry.RC_STATE, RulesEntry.STATE_OFF);
+			fromMessage += dbHelper.getCount(RulesEntryOld.RC_STATE, RulesEntryOld.STATE_OFF);
 			fromMessage += getMainActivity().getString(R.string.rc_text_blacklist_after);
 			dbHelper.close();
 			break;
@@ -170,7 +170,7 @@ public class RepeatCallFragment extends TabFragment {
 	}
 	
 	private void showTextViews() {
-		int state = PrefHelper.getState(getMainActivity(), RulesEntry.RC_STATE);
+		int state = PrefHelper.getState(getMainActivity(), RulesEntryOld.RC_STATE);
 		if (state == Constants.URGENT_CALL_STATE_ON || state == Constants.URGENT_CALL_STATE_WHITELIST
 				|| state == Constants.URGENT_CALL_STATE_BLACKLIST) {
 			mLinearLayoutCallSettings.setVisibility(View.VISIBLE);

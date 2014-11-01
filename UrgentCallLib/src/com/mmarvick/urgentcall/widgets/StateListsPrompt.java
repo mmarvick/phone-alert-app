@@ -4,7 +4,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -60,7 +60,7 @@ public class StateListsPrompt {
 				public void onClick(View arg0) {
 			        Intent whitelistIntent = new Intent(context, ContactListActivity.class);
 			        whitelistIntent.putExtra(Constants.ALERT_TYPE, alertType);
-			        whitelistIntent.putExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
+			        whitelistIntent.putExtra(Constants.USER_STATE, RulesEntryOld.STATE_ON);
 					context.startActivity(whitelistIntent);
 				}
 			});
@@ -71,7 +71,7 @@ public class StateListsPrompt {
 				public void onClick(View arg0) {
 			        Intent blacklistIntent = new Intent(context, ContactListActivity.class);
 			        blacklistIntent.putExtra(Constants.ALERT_TYPE, alertType);
-			        blacklistIntent.putExtra(Constants.USER_STATE, RulesEntry.STATE_OFF);
+			        blacklistIntent.putExtra(Constants.USER_STATE, RulesEntryOld.STATE_OFF);
 					context.startActivity(blacklistIntent);
 				}
 			});

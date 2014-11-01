@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 
 import android.app.Service;
 import android.content.Context;
@@ -44,18 +44,18 @@ public class RingService extends Service {
 		ring = false;
 		vibrate = false;
 		
-		float rcVolume = PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntry.RC_STATE);
-		float scVolume = PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntry.SC_STATE);
-		PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.RC_STATE);
-		PrefHelper.getMessageSound(getApplicationContext(), RulesEntry.SC_STATE);
+		float rcVolume = PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.RC_STATE);
+		float scVolume = PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.SC_STATE);
+		PrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.RC_STATE);
+		PrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.SC_STATE);
 		
 		if (alertType == Constants.CALL_ALERT_TYPE_RC) {
 			volume = rcVolume;
-			setHowToAlert(RulesEntry.RC_STATE);
+			setHowToAlert(RulesEntryOld.RC_STATE);
 			
 		} else if (alertType == Constants.CALL_ALERT_TYPE_SC) {
 			volume = scVolume;
-			setHowToAlert(RulesEntry.SC_STATE);
+			setHowToAlert(RulesEntryOld.SC_STATE);
 		} else {
 			
 			if (rcVolume >= scVolume) {
@@ -64,8 +64,8 @@ public class RingService extends Service {
 				volume = scVolume;			
 			}
 			
-			setHowToAlert(RulesEntry.SC_STATE);
-			setHowToAlert(RulesEntry.RC_STATE);			
+			setHowToAlert(RulesEntryOld.SC_STATE);
+			setHowToAlert(RulesEntryOld.RC_STATE);			
 		}
 
 		if (ring) {

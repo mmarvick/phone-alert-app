@@ -3,7 +3,7 @@ package com.mmarvick.urgentcall.settings;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -87,22 +87,22 @@ public class SettingsActivity extends PreferenceActivity {
     	} else if (PrefHelper.isSnoozing(getApplicationContext())) {
     		ucState.setSummary("All Alerts Snoozing");
     	} else {
-    		if ((PrefHelper.getState(getApplicationContext(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF)
-    				&& (PrefHelper.getState(getApplicationContext(), RulesEntry.RC_STATE) == Constants.URGENT_CALL_STATE_OFF)
-    				&& (PrefHelper.getState(getApplicationContext(), RulesEntry.SC_STATE) == Constants.URGENT_CALL_STATE_OFF)) {
+    		if ((PrefHelper.getState(getApplicationContext(), RulesEntryOld.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF)
+    				&& (PrefHelper.getState(getApplicationContext(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF)
+    				&& (PrefHelper.getState(getApplicationContext(), RulesEntryOld.SC_STATE) == Constants.URGENT_CALL_STATE_OFF)) {
     			ucState.setSummary("All Alerts Off");
-    		} else if ((PrefHelper.getState(getApplicationContext(), RulesEntry.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF)
-    				|| (PrefHelper.getState(getApplicationContext(), RulesEntry.RC_STATE) == Constants.URGENT_CALL_STATE_OFF)
-    				|| (PrefHelper.getState(getApplicationContext(), RulesEntry.SC_STATE) == Constants.URGENT_CALL_STATE_OFF)) {
+    		} else if ((PrefHelper.getState(getApplicationContext(), RulesEntryOld.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF)
+    				|| (PrefHelper.getState(getApplicationContext(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF)
+    				|| (PrefHelper.getState(getApplicationContext(), RulesEntryOld.SC_STATE) == Constants.URGENT_CALL_STATE_OFF)) {
     			ucState.setSummary("Some Alerts On");
     		} else {
     			ucState.setSummary("All Alerts On");
     		}
     	}
     	
-    	setStateItem(msgAlert, RulesEntry.MSG_STATE);
-    	setStateItem(rcAlert, RulesEntry.RC_STATE);
-    	setStateItem(scAlert, RulesEntry.SC_STATE);
+    	setStateItem(msgAlert, RulesEntryOld.MSG_STATE);
+    	setStateItem(rcAlert, RulesEntryOld.RC_STATE);
+    	setStateItem(scAlert, RulesEntryOld.SC_STATE);
     }
     
     private void setStateItem(Preference pref, String prefName) {

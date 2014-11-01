@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -62,7 +62,7 @@ public class ContactListFragment extends ListFragment {
 		// Load contacts
 		dbHelper = new RulesDbHelper(getActivity().getApplicationContext());		
 		alertType = getActivity().getIntent().getStringExtra(Constants.ALERT_TYPE);
-		userState = getActivity().getIntent().getIntExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
+		userState = getActivity().getIntent().getIntExtra(Constants.USER_STATE, RulesEntryOld.STATE_ON);
 		loadContacts();
 		
 		// Put contacts into the ListView

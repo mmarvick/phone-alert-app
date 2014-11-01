@@ -4,7 +4,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
 import android.content.Intent;
@@ -41,10 +41,10 @@ public class SingleCallFragment extends TabFragment {
 
 				if (getResources().getBoolean(R.bool.paid_version)) {
 					
-					if (PrefHelper.getState(getMainActivity(), RulesEntry.SC_STATE) == Constants.URGENT_CALL_STATE_WHITELIST) {
-						PrefHelper.setState(getMainActivity(), RulesEntry.SC_STATE, Constants.URGENT_CALL_STATE_OFF);
+					if (PrefHelper.getState(getMainActivity(), RulesEntryOld.SC_STATE) == Constants.URGENT_CALL_STATE_WHITELIST) {
+						PrefHelper.setState(getMainActivity(), RulesEntryOld.SC_STATE, Constants.URGENT_CALL_STATE_OFF);
 					} else {
-						PrefHelper.setState(getMainActivity(), RulesEntry.SC_STATE, Constants.URGENT_CALL_STATE_WHITELIST);
+						PrefHelper.setState(getMainActivity(), RulesEntryOld.SC_STATE, Constants.URGENT_CALL_STATE_WHITELIST);
 					}
 					
 					getMainActivity().updateSettings();
@@ -60,8 +60,8 @@ public class SingleCallFragment extends TabFragment {
 			@Override
 			public void onClick(View v) {
 		        Intent whitelistIntent = new Intent(getMainActivity(), ContactListActivity.class);
-		        whitelistIntent.putExtra(Constants.ALERT_TYPE, RulesEntry.SC_STATE);
-		        whitelistIntent.putExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
+		        whitelistIntent.putExtra(Constants.ALERT_TYPE, RulesEntryOld.SC_STATE);
+		        whitelistIntent.putExtra(Constants.USER_STATE, RulesEntryOld.STATE_ON);
 				getMainActivity().startActivity(whitelistIntent);
 				
 			}
@@ -78,7 +78,7 @@ public class SingleCallFragment extends TabFragment {
 	}
 	
 	private void setButtonState() {
-		if (PrefHelper.getState(getMainActivity().getApplicationContext(), RulesEntry.SC_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+		if (PrefHelper.getState(getMainActivity().getApplicationContext(), RulesEntryOld.SC_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mButtonSCState.setText(getMainActivity().getString(R.string.status_allcaps_off));
 			mButtonSCState.setTextColor(Color.RED);
 		} else {
@@ -89,14 +89,14 @@ public class SingleCallFragment extends TabFragment {
 	
 	private void setText() {
 		RulesDbHelper dbHelper;
-		int state = PrefHelper.getState(getMainActivity(), RulesEntry.SC_STATE);
+		int state = PrefHelper.getState(getMainActivity(), RulesEntryOld.SC_STATE);
 		
 		String fromMessage = "";
 		switch(state) {
 		case (Constants.URGENT_CALL_STATE_WHITELIST):
 			dbHelper = new RulesDbHelper(getMainActivity());
 			fromMessage += getMainActivity().getString(R.string.sc_text_whitelist_before);
-			fromMessage += dbHelper.getCount(RulesEntry.SC_STATE, RulesEntry.STATE_ON);
+			fromMessage += dbHelper.getCount(RulesEntryOld.SC_STATE, RulesEntryOld.STATE_ON);
 			fromMessage += getMainActivity().getString(R.string.sc_text_whitelist_after);
 			dbHelper.close();
 			

@@ -7,7 +7,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.SliderPrompt;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;
@@ -84,7 +84,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				if (alertType == RulesEntry.SC_STATE && !(getResources().getBoolean(R.bool.paid_version))) {
+				if (alertType == RulesEntryOld.SC_STATE && !(getResources().getBoolean(R.bool.paid_version))) {
 					UpgradeDialog.upgradeDialog(AlertSettingsActivity.this, getString(R.string.upgrade_body_sc));
 				} else {
 					if (PrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
@@ -109,9 +109,9 @@ public class AlertSettingsActivity extends PreferenceActivity {
 		        Intent listIntent = new Intent(getApplicationContext(), ContactListActivity.class);
 		        listIntent.putExtra(Constants.ALERT_TYPE, alertType);
 		        if (PrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_WHITELIST) {
-		        	listIntent.putExtra(Constants.USER_STATE, RulesEntry.STATE_ON);
+		        	listIntent.putExtra(Constants.USER_STATE, RulesEntryOld.STATE_ON);
 		        } else {
-		        	listIntent.putExtra(Constants.USER_STATE, RulesEntry.STATE_OFF);
+		        	listIntent.putExtra(Constants.USER_STATE, RulesEntryOld.STATE_OFF);
 		        }
 		        startActivity(listIntent);
 				return true;

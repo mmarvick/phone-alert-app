@@ -3,7 +3,7 @@ package com.mmarvick.urgentcall.settings;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
@@ -20,7 +20,7 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		xml = R.xml.pref_msg;
-		alertType = RulesEntry.MSG_STATE;
+		alertType = RulesEntryOld.MSG_STATE;
 		super.onCreate(savedInstanceState);
 	}
 	

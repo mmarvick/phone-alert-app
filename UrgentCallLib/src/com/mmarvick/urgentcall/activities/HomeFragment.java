@@ -3,7 +3,7 @@ package com.mmarvick.urgentcall.activities;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -97,9 +97,9 @@ public class HomeFragment extends TabFragment {
 	@Override
 	public void fragUpdateSettings() {
 		showTextViews();
-		setStateText(mTextMsgState, RulesEntry.MSG_STATE);
-		setStateText(mTextRCState, RulesEntry.RC_STATE);
-		setStateText(mTextSCState, RulesEntry.SC_STATE);
+		setStateText(mTextMsgState, RulesEntryOld.MSG_STATE);
+		setStateText(mTextRCState, RulesEntryOld.RC_STATE);
+		setStateText(mTextSCState, RulesEntryOld.SC_STATE);
 		setSnoozeTime();
 		
 		mTextAllOffState.setTextColor(Color.RED);

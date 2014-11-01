@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.data;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,7 +16,7 @@ public class PrefHelper {
 
 	public static int getState(Context context, String alertType) {
 		int def = Constants.URGENT_CALL_STATE_ON;
-		if (alertType == RulesEntry.SC_STATE) {
+		if (alertType == RulesEntryOld.SC_STATE) {
 			def = Constants.URGENT_CALL_STATE_OFF;
 		}
 		return getPrefs(context).getInt(alertType, def);
@@ -36,7 +36,7 @@ public class PrefHelper {
 	
 	public static int getBackupState(Context context, String alertType) {
 		int def = Constants.URGENT_CALL_STATE_ON;
-		if (alertType == RulesEntry.SC_STATE) {
+		if (alertType == RulesEntryOld.SC_STATE) {
 			def = Constants.URGENT_CALL_STATE_WHITELIST;
 		}
 		return getPrefs(context).getInt(alertType + Constants.ALERT_BACKUP, def);		
@@ -44,7 +44,7 @@ public class PrefHelper {
 	
 	public static Uri getMessageSound(Context context, String alertType) {
 		String def = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE).toString();
-		if (alertType == RulesEntry.MSG_STATE) {
+		if (alertType == RulesEntryOld.MSG_STATE) {
 			def = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString();;
 		}
 		return Uri.parse(getPrefs(context).getString(alertType + Constants.ALERT_SOUND, def));

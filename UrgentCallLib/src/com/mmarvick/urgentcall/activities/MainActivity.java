@@ -42,6 +42,8 @@ import android.widget.TimePicker;
 public class MainActivity extends ActionBarActivity 
 	implements TimePickerDialog.OnTimeSetListener{
 	
+	private static boolean testMode = true;
+	
 	public static final int TAB_HOME = 0;
 	public static final int TAB_MSG = 1;
 	public static final int TAB_RC = 2;
@@ -227,8 +229,10 @@ public class MainActivity extends ActionBarActivity
 				return new MessageFragment();
 			} else if (position == 2) {
 				return new RepeatCallFragment();
-			} else if (position == 3) {
+			} else if (position == 3 && !testMode) {
 				return new SingleCallFragment();
+			} else if (position == 3 && testMode) {
+				return new TestFragment();
 			}
 			return new HomeFragment();
 		}

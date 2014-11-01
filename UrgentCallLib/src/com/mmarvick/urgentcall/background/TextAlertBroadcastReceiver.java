@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.data.RulesDbHelper;
 
 import android.content.BroadcastReceiver;
@@ -35,7 +35,7 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 			
 		}
 			
-		if (PrefHelper.getState(context, Constants.APP_STATE) == RulesEntry.STATE_ON
+		if (PrefHelper.getState(context, Constants.APP_STATE) == RulesEntryOld.STATE_ON
 				&& !PrefHelper.isSnoozing(context)) {
 			
 			if (messageAlert(context, incomingNumber, message)) {
@@ -58,13 +58,13 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 		case Constants.URGENT_CALL_STATE_OFF:
 			return false;
 		case Constants.URGENT_CALL_STATE_WHITELIST:
-			if (userState == RulesEntry.STATE_ON) {
+			if (userState == RulesEntryOld.STATE_ON) {
 				return true;
 			} else {
 				return false;
 			}
 		case Constants.URGENT_CALL_STATE_BLACKLIST:
-			if (userState == RulesEntry.STATE_OFF) {
+			if (userState == RulesEntryOld.STATE_OFF) {
 				return false;
 			} else {
 				return true;
@@ -75,7 +75,7 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private boolean messageAlert(Context context, String incomingNumber, String message) {
-		if (isOn(context, RulesEntry.MSG_STATE, incomingNumber)) {
+		if (isOn(context, RulesEntryOld.MSG_STATE, incomingNumber)) {
 			if (message.toLowerCase().contains(PrefHelper.getMessageToken(context).toLowerCase())) {
 				return true;
 			}

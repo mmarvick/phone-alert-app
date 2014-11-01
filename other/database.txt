@@ -57,3 +57,93 @@ from 5 to 6:
 	- drop sys_type
 	- create msg_state
 	- create single_call
+
+============================================================================================
+
+Version 7
+
+
+====================
+CALL_RULES
+====================
+
+_ID
+	int - ID for rule
+TITLE
+	String - title for the rule
+ON
+	boolean - is this alert on?
+CONTACT MODE
+	int - everyone, allow list, or block list	
+RING
+	boolean - should it ring?
+VIBRATE
+	boolean - should it vibrate?
+TONE
+  - the ringtone to play
+VOLUME
+		- the volume level
+
+
+====================
+CALL_RULES_CONTACTS
+====================
+
+_ID_TEXT_RULES_CONTACT
+	int - ID for this row
+_ID
+	int - ID for the rule
+LOOKUP
+	- lookup from the address book
+ALLOWED
+	int - contact is on allow list or block list
+
+
+====================
+TEXT_RULES
+====================
+
+_ID
+	int - ID for rule
+TITLE
+	String - title for the rule
+ON
+	boolean - is this alert on?
+CONTACT MODE
+	int - everyone, whitelist, or blacklist		
+RING
+	boolean - should it ring?
+VIBRATE
+	boolean - should it vibrate?
+TONE
+  - the ringtone to play
+VOLUME
+		- the volume level
+TIME
+  int - the time for the sound/vibrate to play for
+
+
+====================
+TEXT_RULES_CONTACTS
+====================
+
+_ID_TEXT_RULES_CONTACT
+	int - ID for this row
+_ID
+	int - ID for the rule
+LOOKUP
+	- lookup from the address book
+ALLOWED
+	boolean - if yes, whitelist -- if no, blacklist	
+
+
+====================
+TEXT_RULES_KEYWORDS
+====================
+
+_ID_TEXT_RULES_KEYWORDS
+	int - ID for this row
+_ID
+	int - ID for the rule
+KEYWORD
+	String - the phrase for the text to contain

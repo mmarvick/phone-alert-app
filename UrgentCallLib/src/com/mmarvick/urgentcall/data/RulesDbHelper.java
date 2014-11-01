@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.data;
 
 import java.util.ArrayList;
 
-import com.mmarvick.urgentcall.data.RulesDbContract.RulesEntry;
+import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -70,7 +70,7 @@ public class RulesDbHelper {
 		c.moveToFirst();
 		
 		while (!c.isAfterLast()) {
-			contactIDs.add(c.getString(c.getColumnIndex(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP)));
+			contactIDs.add(c.getString(c.getColumnIndex(RulesEntryOld.COLUMN_NAME_CONTACT_LOOKUP)));
 			c.moveToNext();
 		}
 		
@@ -110,18 +110,18 @@ public class RulesDbHelper {
 	// is null or RulesEntry.STATE_DEFAULT for the alertType. Otherwise, returns the user state for that alertType.
 	public int getUserState(String alertType, String lookup) {
 		if (lookup == null) {
-			return RulesEntry.STATE_DEFAULT;
+			return RulesEntryOld.STATE_DEFAULT;
 		}
 		
 		open();
 		String[] columns = new String[] {alertType};
-		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, columns, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
+		Cursor c = mRulesDb.query(RulesEntryOld.TABLE_NAME, columns, RulesEntryOld.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
 		if (c.getCount() == 0) {
-			return RulesEntry.STATE_DEFAULT;
+			return RulesEntryOld.STATE_DEFAULT;
 		}
 		c.moveToFirst();
 		if (c.isNull(c.getColumnIndex(alertType))) {
-			return RulesEntry.STATE_DEFAULT;
+			return RulesEntryOld.STATE_DEFAULT;
 		}
 		
 		int state = c.getInt(c.getColumnIndex(alertType));
@@ -133,12 +133,12 @@ public class RulesDbHelper {
 		open();
 		if (!isInDb(lookup)) {
 			ContentValues values = new ContentValues();
-			values.put(RulesEntry.COLUMN_NAME_CONTACT_LOOKUP, lookup);		
-			mRulesDb.insert(RulesEntry.TABLE_NAME, null, values);
+			values.put(RulesEntryOld.COLUMN_NAME_CONTACT_LOOKUP, lookup);		
+			mRulesDb.insert(RulesEntryOld.TABLE_NAME, null, values);
 		} 
 		ContentValues values = new ContentValues();
 		values.put(alertType, userState);
-		mRulesDb.update(RulesEntry.TABLE_NAME, values, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
+		mRulesDb.update(RulesEntryOld.TABLE_NAME, values, RulesEntryOld.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null);
 	}	
 	
 	public String getLookupFromNumber(String phoneNumber) {
@@ -158,12 +158,12 @@ public class RulesDbHelper {
 	}
 	
 	public void removeContactForAlertType(String alertType, String lookup) {
-		setContactStateForAlert(alertType, lookup, RulesEntry.STATE_DEFAULT);
+		setContactStateForAlert(alertType, lookup, RulesEntryOld.STATE_DEFAULT);
 	}
 	
 	private boolean isInDb(String lookup) {
 		open();
-		Cursor c = mRulesDb.query(RulesEntry.TABLE_NAME, null, RulesEntry.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
+		Cursor c = mRulesDb.query(RulesEntryOld.TABLE_NAME, null, RulesEntryOld.COLUMN_NAME_CONTACT_LOOKUP + "='" + lookup + "'", null, null, null, null);
 		boolean isInDb = (c.getCount() == 0);
 		c.close();
 		

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
 import com.mmarvick.urgentcall.settings.SettingsActivity;
 import com.mmarvick.urgentcall.widgets.MyViewPager;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
@@ -108,7 +108,7 @@ public class MainActivity extends ActionBarActivity
 							}
 						});
 					
-					if (PrefHelper.isSnoozing(getApplicationContext())) {
+					if (OldPrefHelper.isSnoozing(getApplicationContext())) {
 						dialogBuilder.setTitle(getString(R.string.tab_change_prohibitted_dialog_snooze_title))
 						.setMessage(getString(R.string.tab_change_prohibitted_dialog_snooze_message));						
 					} else {
@@ -185,7 +185,7 @@ public class MainActivity extends ActionBarActivity
 	public void updateSettings() {
 		disableEnableWhenOff();
 		
-		if (PrefHelper.isSnoozing(getApplicationContext()) && (mChecker == null || mChecker.isCancelled())) {
+		if (OldPrefHelper.isSnoozing(getApplicationContext()) && (mChecker == null || mChecker.isCancelled())) {
 			mChecker = new PeriodicChecker();
 			mChecker.execute();
 			Log.e("Checker", "Checker made!");
@@ -205,8 +205,8 @@ public class MainActivity extends ActionBarActivity
 	
 	// Prevent the user from switching tabs or scrolling when the alerts are snoozed or off
 	private void disableEnableWhenOff() {
-		if (PrefHelper.isSnoozing(getApplicationContext())
-				|| PrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+		if (OldPrefHelper.isSnoozing(getApplicationContext())
+				|| OldPrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mViewPager.setCurrentItem(TAB_HOME);
 			mViewPager.setScrollable(false);
 			mCanChangeTabs = false;
@@ -272,7 +272,7 @@ public class MainActivity extends ActionBarActivity
 		if (snoozeTime > 0) {
 			snoozeTime += 500;
 		}
-		PrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
+		OldPrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
 		updateSettings(); // updates views on control panel
 	}	
 	
@@ -318,14 +318,14 @@ public class MainActivity extends ActionBarActivity
 							break;
 						case 1:
 							subject = getString(R.string.share_msg_subject);
-							message += getString(R.string.share_msg_1) + "\"" + PrefHelper.getMessageToken(getApplicationContext()) + "\"";
+							message += getString(R.string.share_msg_1) + "\"" + OldPrefHelper.getMessageToken(getApplicationContext()) + "\"";
 							message += getString(R.string.share_msg_2) + getString(R.string.share_app_url);
 							intentPickerTitle = getString(R.string.share_msg_by);							
 							break;
 						case 2:
 							subject = getString(R.string.share_rc_subject);
-							message += getString(R.string.share_rc_1) + PrefHelper.getRepeatedCallQty(getApplicationContext());
-							message += getString(R.string.share_rc_2) + PrefHelper.getRepeatedCallMins(getApplicationContext());
+							message += getString(R.string.share_rc_1) + OldPrefHelper.getRepeatedCallQty(getApplicationContext());
+							message += getString(R.string.share_rc_2) + OldPrefHelper.getRepeatedCallMins(getApplicationContext());
 							message += getString(R.string.share_rc_3) + getString(R.string.share_app_url);
 							intentPickerTitle = getString(R.string.share_rc_by);
 							break;
@@ -357,7 +357,7 @@ public class MainActivity extends ActionBarActivity
 			return true;
 		} else
 		if (itemId == R.id.action_snooze) {
-			if (PrefHelper.isSnoozing(getApplicationContext())) {
+			if (OldPrefHelper.isSnoozing(getApplicationContext())) {
 				endSnooze();
 			} else {
 				showSnooze();
@@ -380,15 +380,15 @@ public class MainActivity extends ActionBarActivity
 	// Updates the values showed in the control panel every second (useful when snoozing)
 	private class PeriodicChecker extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... voids) {
-			while (!isCancelled() && PrefHelper.isSnoozing(getApplicationContext())) {
+			while (!isCancelled() && OldPrefHelper.isSnoozing(getApplicationContext())) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				runOnUiThread(new Runnable() { public void run() {updateSettings();}});
-				Log.e("Time:",""+PrefHelper.snoozeRemaining(getApplicationContext()));
-				if (!(PrefHelper.isSnoozing(getApplicationContext()))) {
+				Log.e("Time:",""+OldPrefHelper.snoozeRemaining(getApplicationContext()));
+				if (!(OldPrefHelper.isSnoozing(getApplicationContext()))) {
 					endSnoozeDialog.cancel();
 				}
 			}
@@ -437,10 +437,10 @@ public class MainActivity extends ActionBarActivity
 	
 	// Checks if the current disclaimer has been agreed to
 	public void checkDisclaimer() {
-		if (!(PrefHelper.disclaimerCheck(getApplicationContext()))) {
+		if (!(OldPrefHelper.disclaimerCheck(getApplicationContext()))) {
 			
 			//Save the app state (on/off) as backup, and then turn off
-			PrefHelper.disclaimerSaveBackup(getApplicationContext());
+			OldPrefHelper.disclaimerSaveBackup(getApplicationContext());
 			
 			//Create and show alert dialog with waiver
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -452,8 +452,8 @@ public class MainActivity extends ActionBarActivity
 				.setPositiveButton(getString(R.string.disclaimer_agree), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						// Set that the disclaimer was agreed, and resume phone state from backup
-						PrefHelper.disclaimerAgreed(getApplicationContext());
-						PrefHelper.disclaimerResumeBackup(getApplicationContext());
+						OldPrefHelper.disclaimerAgreed(getApplicationContext());
+						OldPrefHelper.disclaimerResumeBackup(getApplicationContext());
 						
 						// Refresh values due to state change
 						updateSettings();

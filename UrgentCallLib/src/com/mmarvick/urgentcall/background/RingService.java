@@ -1,8 +1,8 @@
 package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.app.Service;
 import android.content.Context;
@@ -44,10 +44,10 @@ public class RingService extends Service {
 		ring = false;
 		vibrate = false;
 		
-		float rcVolume = PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.RC_STATE);
-		float scVolume = PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.SC_STATE);
-		PrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.RC_STATE);
-		PrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.SC_STATE);
+		float rcVolume = OldPrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.RC_STATE);
+		float scVolume = OldPrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.SC_STATE);
+		OldPrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.RC_STATE);
+		OldPrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.SC_STATE);
 		
 		if (alertType == Constants.CALL_ALERT_TYPE_RC) {
 			volume = rcVolume;
@@ -112,11 +112,11 @@ public class RingService extends Service {
 	}	
 	
 	public void setHowToAlert(String alertType) {
-		String howToAlert = PrefHelper.getMessageHow(getApplicationContext(), alertType);
+		String howToAlert = OldPrefHelper.getMessageHow(getApplicationContext(), alertType);
 		
 		if (howToAlert.equals(Constants.ALERT_HOW_RING) || howToAlert.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
 			ring = true;
-			toneUri = PrefHelper.getMessageSound(getApplicationContext(), alertType);
+			toneUri = OldPrefHelper.getMessageSound(getApplicationContext(), alertType);
 		}
 		
 		if (howToAlert.equals(Constants.ALERT_HOW_VIBE) || howToAlert.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {

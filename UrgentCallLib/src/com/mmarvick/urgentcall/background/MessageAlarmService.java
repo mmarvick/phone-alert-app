@@ -1,8 +1,8 @@
 package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.app.Service;
 import android.content.Context;
@@ -36,14 +36,14 @@ public class MessageAlarmService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startid) {
 		final int startidStatic = startid;
 		
-		String alertHow = PrefHelper.getMessageHow(getApplicationContext(), RulesEntryOld.MSG_STATE);
-		long time = PrefHelper.getMessageTime(getApplicationContext(), RulesEntryOld.MSG_STATE) * 1000;
+		String alertHow = OldPrefHelper.getMessageHow(getApplicationContext(), RulesEntryOld.MSG_STATE);
+		long time = OldPrefHelper.getMessageTime(getApplicationContext(), RulesEntryOld.MSG_STATE) * 1000;
 		
 		if (alertHow.equals(Constants.ALERT_HOW_RING) || alertHow.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
-			Uri toneUri = PrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.MSG_STATE);
+			Uri toneUri = OldPrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.MSG_STATE);
 			audio.setStreamVolume(AudioManager.STREAM_ALARM, audio.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
 			
-			float targetVolume = (PrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.MSG_STATE)); //* audio.getStreamMaxVolume(AudioManager.STREAM_ALARM));
+			float targetVolume = (OldPrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.MSG_STATE)); //* audio.getStreamMaxVolume(AudioManager.STREAM_ALARM));
 			
 			if (media.isPlaying()) {
 				media.reset();

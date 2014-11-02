@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/customborder" >
+    
+	<RelativeLayout
+	    android:id="@+id/linearLayoutHeading"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/customheader"
+	    android:orientation="horizontal" >
+        
+	    <TextView
+	       android:id="@+id/textViewAlertName"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:layout_gravity="center_vertical"
+	       android:layout_marginLeft="10dp"
+	       android:layout_centerVertical="true"
+	       android:textAppearance="?android:attr/textAppearanceLarge"
+	       android:textColor="#ffffff"
+	       android:text="Repeat Call Alert" />
+         
+	    <ToggleButton
+	        android:id="@+id/toggleButtonAlarm"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true"
+	        android:layout_marginRight="10dp" />         
+        
+    </RelativeLayout>
+
+
+    <ImageButton
+        android:id="@+id/imageButtonCallNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayoutHeading"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_action_call" />
+    
+    <TextView
+        android:id="@+id/textViewCallNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageButtonCallNum"
+        android:layout_alignTop="@id/imageButtonCallNum"
+        android:layout_toRightOf="@+id/imageButtonCallNum"
+        android:layout_marginLeft="16dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="center_vertical"
+        android:text="3 Calls" />
+	
+    <TextView
+        android:id="@+id/textViewCallTimeWithin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageButtonCallNum"
+        android:layout_alignLeft="@id/textViewCallNum"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="within" />       
+
+    <ImageButton
+        android:id="@+id/imageButtonCallTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewCallTimeWithin"
+        android:layout_alignLeft="@id/imageButtonCallNum"
+        android:src="@drawable/ic_action_time" />
+    
+    <TextView
+        android:id="@+id/textViewCallTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageButtonCallTime"
+        android:layout_alignTop="@id/imageButtonCallTime"
+        android:layout_toRightOf="@+id/imageButtonCallTime"
+        android:layout_marginLeft="16dp"       
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="center_vertical"        
+        android:text="15 Minutes" />    
+        
+    <TextView
+        android:id="@+id/textViewCallTimeFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageButtonCallTime"
+        android:layout_alignLeft="@id/textViewCallNum"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:text="from" />     
+
+    <ImageButton
+        android:id="@+id/imageButtonCallFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewCallTimeFrom"
+        android:layout_alignLeft="@id/imageButtonCallNum"        
+        android:src="@drawable/ic_action_group" />
+    
+    <TextView
+        android:id="@+id/textViewCallFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageButtonCallFrom"
+        android:layout_alignTop="@id/imageButtonCallFrom"
+        android:layout_toRightOf="@+id/imageButtonCallFrom"
+        android:layout_marginLeft="16dp"       
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="center_vertical"        
+        android:text="Anyone" />
+
+
+
+</RelativeLayout>

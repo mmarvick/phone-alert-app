@@ -9,10 +9,10 @@ import com.mmarvick.urgentcall.data.DbContract;
 import com.mmarvick.urgentcall.data.DbContractCallRule;
 import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
 import com.mmarvick.urgentcall.data.DbOpenHelperCall;
-import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
 import com.mmarvick.urgentcall.data.DbContract.RuleEntry;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
-import com.mmarvick.urgentcall.data.RulesDbHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldRulesDbHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,13 +26,13 @@ import android.util.Log;
 
 public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 
-	RulesDbHelper dbHelper;
+	OldRulesDbHelper dbHelper;
 	AudioManager audio;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String callState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-		dbHelper = new RulesDbHelper(context);
+		dbHelper = new OldRulesDbHelper(context);
 		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		
 		// If the phone is ringing...
@@ -41,8 +41,8 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 			String phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER); // phone number
 			Log.e("UC", "Call came in");
 			// ... and the app isn't snoozing or turne off ...
-			if (PrefHelper.getState(context, Constants.APP_STATE) == RulesEntryOld.STATE_ON
-					&& !PrefHelper.isSnoozing(context)) {
+			if (OldPrefHelper.getState(context, Constants.APP_STATE) == RulesEntryOld.STATE_ON
+					&& !OldPrefHelper.isSnoozing(context)) {
 			
 				// ... and either a repeated call alert or single call alert criteria has been met ...
 				// ... trigger an alert!

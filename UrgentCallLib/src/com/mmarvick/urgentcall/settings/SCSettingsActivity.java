@@ -3,7 +3,7 @@ package com.mmarvick.urgentcall.settings;
 import android.os.Bundle;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 public class SCSettingsActivity extends AlertSettingsActivity {
 	protected void onCreate(Bundle savedInstanceState) {

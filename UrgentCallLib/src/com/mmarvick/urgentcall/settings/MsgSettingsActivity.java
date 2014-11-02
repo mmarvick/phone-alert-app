@@ -2,8 +2,8 @@ package com.mmarvick.urgentcall.settings;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
@@ -100,11 +100,11 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
 	
 	protected void setStates() {
 		super.setStates();
-		keyword.setSummary(PrefHelper.getMessageToken(getApplicationContext()));
+		keyword.setSummary(OldPrefHelper.getMessageToken(getApplicationContext()));
 		
-    	int recentState = PrefHelper.getState(getApplicationContext(), alertType);
+    	int recentState = OldPrefHelper.getState(getApplicationContext(), alertType);
     	if (recentState == Constants.URGENT_CALL_STATE_OFF) {
-    		recentState = PrefHelper.getBackupState(getApplicationContext(), alertType);
+    		recentState = OldPrefHelper.getBackupState(getApplicationContext(), alertType);
     	}
     	
     	if (recentState == Constants.URGENT_CALL_STATE_WHITELIST) {
@@ -115,6 +115,6 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
     		whoAlerts.setSummary("Everyone");    		
     	} 
     	
-    	time.setSummary(PrefHelper.getMessageTime(getApplicationContext(), alertType) + " seconds");    	
+    	time.setSummary(OldPrefHelper.getMessageTime(getApplicationContext(), alertType) + " seconds");    	
 	}
 }

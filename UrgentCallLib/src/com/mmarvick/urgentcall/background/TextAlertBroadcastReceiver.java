@@ -1,9 +1,9 @@
 package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
-import com.mmarvick.urgentcall.data.RulesDbHelper;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldRulesDbHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,12 +14,12 @@ import android.telephony.SmsMessage;
 
 public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 
-	RulesDbHelper dbHelper;
+	OldRulesDbHelper dbHelper;
 	AudioManager audio;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		dbHelper = new RulesDbHelper(context);
+		dbHelper = new OldRulesDbHelper(context);
 		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		
 		Bundle bundle = intent.getExtras();
@@ -35,8 +35,8 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 			
 		}
 			
-		if (PrefHelper.getState(context, Constants.APP_STATE) == RulesEntryOld.STATE_ON
-				&& !PrefHelper.isSnoozing(context)) {
+		if (OldPrefHelper.getState(context, Constants.APP_STATE) == RulesEntryOld.STATE_ON
+				&& !OldPrefHelper.isSnoozing(context)) {
 			
 			if (messageAlert(context, incomingNumber, message)) {
 				alertAction(context);					
@@ -48,7 +48,7 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 	
 	private boolean isOn(Context context, String alertType, String incomingNumber) {
 		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-		int urgentCallState = PrefHelper.getState(context, alertType);
+		int urgentCallState = OldPrefHelper.getState(context, alertType);
 		int userState = dbHelper.getUserState(alertType, lookup);
 		
 		switch(urgentCallState) {
@@ -76,7 +76,7 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 	
 	private boolean messageAlert(Context context, String incomingNumber, String message) {
 		if (isOn(context, RulesEntryOld.MSG_STATE, incomingNumber)) {
-			if (message.toLowerCase().contains(PrefHelper.getMessageToken(context).toLowerCase())) {
+			if (message.toLowerCase().contains(OldPrefHelper.getMessageToken(context).toLowerCase())) {
 				return true;
 			}
 		}

@@ -6,8 +6,8 @@ import java.util.List;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.SliderPrompt;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;
@@ -87,12 +87,12 @@ public class AlertSettingsActivity extends PreferenceActivity {
 				if (alertType == RulesEntryOld.SC_STATE && !(getResources().getBoolean(R.bool.paid_version))) {
 					UpgradeDialog.upgradeDialog(AlertSettingsActivity.this, getString(R.string.upgrade_body_sc));
 				} else {
-					if (PrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
-						int backupState = PrefHelper.getBackupState(getApplicationContext(), alertType);
-						PrefHelper.setState(getApplicationContext(), alertType, backupState);
+					if (OldPrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
+						int backupState = OldPrefHelper.getBackupState(getApplicationContext(), alertType);
+						OldPrefHelper.setState(getApplicationContext(), alertType, backupState);
 					} else {
-						PrefHelper.saveBackupState(getApplicationContext(), alertType);
-						PrefHelper.setState(getApplicationContext(), alertType, Constants.URGENT_CALL_STATE_OFF);
+						OldPrefHelper.saveBackupState(getApplicationContext(), alertType);
+						OldPrefHelper.setState(getApplicationContext(), alertType, Constants.URGENT_CALL_STATE_OFF);
 					}
 				}
 				setStates();
@@ -108,7 +108,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 		        Intent listIntent = new Intent(getApplicationContext(), ContactListActivity.class);
 		        listIntent.putExtra(Constants.ALERT_TYPE, alertType);
-		        if (PrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_WHITELIST) {
+		        if (OldPrefHelper.getState(getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_WHITELIST) {
 		        	listIntent.putExtra(Constants.USER_STATE, RulesEntryOld.STATE_ON);
 		        } else {
 		        	listIntent.putExtra(Constants.USER_STATE, RulesEntryOld.STATE_OFF);
@@ -123,7 +123,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				String howValue = (String) newValue;
-		    	PrefHelper.setMessageHow(getApplicationContext(), alertType, howValue);
+		    	OldPrefHelper.setMessageHow(getApplicationContext(), alertType, howValue);
 		    	setStates();
 				return true;
 			}
@@ -151,7 +151,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 	}
     
     protected void setStates() {
-    	int mode = PrefHelper.getState(getApplicationContext(), alertType);
+    	int mode = OldPrefHelper.getState(getApplicationContext(), alertType);
     	
     	if (mode != Constants.URGENT_CALL_STATE_OFF) {
 	    	for (Preference p : prefs) {
@@ -178,7 +178,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
     	
     	int recentState = mode;
     	if (mode == Constants.URGENT_CALL_STATE_OFF) {
-    		recentState = PrefHelper.getBackupState(getApplicationContext(), alertType);
+    		recentState = OldPrefHelper.getBackupState(getApplicationContext(), alertType);
     	}
     	
     	if (recentState == Constants.URGENT_CALL_STATE_WHITELIST) {
@@ -190,7 +190,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
     		whoList.setTitle("Allow / Block List");    		
     	}    	
     	
-    	String howValue = PrefHelper.getMessageHow(getApplicationContext(), alertType);
+    	String howValue = OldPrefHelper.getMessageHow(getApplicationContext(), alertType);
     	if (how.getValue() == null) {
     		how.setValue(howValue);
     	}
@@ -208,11 +208,11 @@ public class AlertSettingsActivity extends PreferenceActivity {
     		volume.setEnabled(false);    		
     	}	
     	
-    	Uri ringUri = PrefHelper.getMessageSound(getApplicationContext(), alertType);
+    	Uri ringUri = OldPrefHelper.getMessageSound(getApplicationContext(), alertType);
     	sound.setSummary(RingtoneManager.getRingtone(getApplicationContext(), ringUri).getTitle(getApplicationContext()));
     	sound.setDefaultValue(ringUri);
     	
-    	volume.setSummary(PrefHelper.getMessageVolumePercent(getApplicationContext(), alertType));
+    	volume.setSummary(OldPrefHelper.getMessageVolumePercent(getApplicationContext(), alertType));
     	
     	if (mode == Constants.URGENT_CALL_STATE_OFF) {
 	    	for (Preference p : prefs) {

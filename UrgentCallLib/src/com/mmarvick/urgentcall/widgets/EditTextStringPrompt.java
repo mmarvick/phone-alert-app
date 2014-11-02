@@ -1,7 +1,7 @@
 package com.mmarvick.urgentcall.widgets;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -33,7 +33,7 @@ public class EditTextStringPrompt {
 		alertDialogBuilder.setView(promptView);
 		
 		userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
-		String setText = PrefHelper.getMessageToken(context);
+		String setText = OldPrefHelper.getMessageToken(context);
 		
 		//Set initial EditText text and move cursor to the end
 		userInput.setText(setText);
@@ -51,7 +51,7 @@ public class EditTextStringPrompt {
 					if (value.length() < minLength) {
 						alertLength();
 					} else {
-						PrefHelper.setMessageToken(context, value);
+						OldPrefHelper.setMessageToken(context, value);
 					}
 
 					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();

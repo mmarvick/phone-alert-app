@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.data;
 
 import java.util.ArrayList;
 
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -15,19 +15,19 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
 
-public class RulesDbHelper {
+public class OldRulesDbHelper {
 	
 	Context context;
 	SQLiteDatabase mRulesDb;
 	ContentResolver mContentResolver;
-	RulesDbOpenHelper mDbHelper;
+	OldRulesDbOpenHelper mDbHelper;
 	
 	private final String CONTACT_LOOKUP = ContactsContract.Contacts.LOOKUP_KEY;
 	private final String CONTACT_NAME = ContactsContract.Contacts.DISPLAY_NAME;
 	
-	public RulesDbHelper(Context context) {
+	public OldRulesDbHelper(Context context) {
 		this.context = context;
-		mDbHelper = new RulesDbOpenHelper(context);
+		mDbHelper = new OldRulesDbOpenHelper(context);
 		mContentResolver = context.getContentResolver();
 	}
 	

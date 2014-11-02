@@ -3,8 +3,8 @@ package com.mmarvick.urgentcall.widgets;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.activities.ContactListActivity;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -117,11 +117,11 @@ public class StateListsPrompt {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if (onRadio.isChecked()) {
-						PrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_ON);
+						OldPrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_ON);
 					} else if (whitelistRadio.isChecked()) {
-						PrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_WHITELIST);
+						OldPrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_WHITELIST);
 					} else if (blacklistRadio.isChecked()) {
-						PrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_BLACKLIST);
+						OldPrefHelper.setState(context, alertType, Constants.URGENT_CALL_STATE_BLACKLIST);
 					} 
 					
 					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
@@ -140,7 +140,7 @@ public class StateListsPrompt {
 	}
 	
 	private void select() {
-		int state = PrefHelper.getState(context, alertType);
+		int state = OldPrefHelper.getState(context, alertType);
 		switch (state) {
 		case Constants.URGENT_CALL_STATE_ON:
 			onRadio.setChecked(true);

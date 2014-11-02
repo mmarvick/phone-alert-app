@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.data;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,7 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
-public class PrefHelper {
+public class OldPrefHelper {
 
 	public static int getState(Context context, String alertType) {
 		int def = Constants.URGENT_CALL_STATE_ON;

@@ -2,8 +2,8 @@ package com.mmarvick.urgentcall.activities;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -77,13 +77,13 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				if (PrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
+				if (OldPrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
 					getMainActivity().endSnooze();
 				}
-				else if (PrefHelper.getState(getMainActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
+				else if (OldPrefHelper.getState(getMainActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+					OldPrefHelper.setState(getMainActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
 				} else {
-					PrefHelper.setState(getMainActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
+					OldPrefHelper.setState(getMainActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
 				}
 				
 				getMainActivity().updateSettings();
@@ -109,7 +109,7 @@ public class HomeFragment extends TabFragment {
 	
 	public void setStateText(TextView textView, String alertType) {		
 		if (textView != null) {
-			if (PrefHelper.getState(getMainActivity().getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
+			if (OldPrefHelper.getState(getMainActivity().getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
 				textView.setText(getMainActivity().getString(R.string.status_nocaps_off));
 				textView.setTextColor(Color.RED);
 			} else {
@@ -120,8 +120,8 @@ public class HomeFragment extends TabFragment {
 	}
 	
 	private void showTextViews() {
-		int state = PrefHelper.getState(getMainActivity(), Constants.APP_STATE);
-		if (state == Constants.URGENT_CALL_STATE_OFF || PrefHelper.isSnoozing(getMainActivity())) {
+		int state = OldPrefHelper.getState(getMainActivity(), Constants.APP_STATE);
+		if (state == Constants.URGENT_CALL_STATE_OFF || OldPrefHelper.isSnoozing(getMainActivity())) {
 			mTextSafelySilence.setVisibility(View.INVISIBLE);
 			mLayoutMsgState.setVisibility(View.INVISIBLE);
 			mLayoutRCState.setVisibility(View.INVISIBLE);
@@ -135,7 +135,7 @@ public class HomeFragment extends TabFragment {
 			mLayoutAllOff.setVisibility(View.INVISIBLE);
 		}
 		
-		if (PrefHelper.isSnoozing(getMainActivity())) {
+		if (OldPrefHelper.isSnoozing(getMainActivity())) {
 			mTextSnoozeFor.setVisibility(View.VISIBLE);
 			mTextSnoozeTime.setVisibility(View.VISIBLE);
 		} else {
@@ -145,11 +145,11 @@ public class HomeFragment extends TabFragment {
 	}	
 	
 	private void setButtonState() {
-		if (PrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
+		if (OldPrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
 			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_snoozing));
 			mButtonAppState.setTextColor(Color.RED);			
 		}
-		else if (PrefHelper.getState(getMainActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+		else if (OldPrefHelper.getState(getMainActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_off));
 			mButtonAppState.setTextColor(Color.RED);
 		} else {
@@ -159,8 +159,8 @@ public class HomeFragment extends TabFragment {
 	}
 	
 	public void setSnoozeTime() {
-		if (PrefHelper.isSnoozing(getMainActivity())) {
-			long time = PrefHelper.snoozeRemaining(getMainActivity());
+		if (OldPrefHelper.isSnoozing(getMainActivity())) {
+			long time = OldPrefHelper.snoozeRemaining(getMainActivity());
 			long allsec = time / 1000;
 			long sec = allsec % 60;
 			long min = (allsec % 3600) / 60;

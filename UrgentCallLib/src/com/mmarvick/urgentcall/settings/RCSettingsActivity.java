@@ -2,8 +2,8 @@ package com.mmarvick.urgentcall.settings;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.StateListsPrompt;
@@ -100,13 +100,13 @@ public class RCSettingsActivity extends AlertSettingsActivity {
 	protected void setStates() {
 		super.setStates();
 		
-		callQty.setSummary(PrefHelper.getRepeatedCallQty(RCSettingsActivity.this) + " calls");
+		callQty.setSummary(OldPrefHelper.getRepeatedCallQty(RCSettingsActivity.this) + " calls");
 		
-		callTime.setSummary("" + PrefHelper.getRepeatedCallMins(RCSettingsActivity.this) + " minutes");
+		callTime.setSummary("" + OldPrefHelper.getRepeatedCallMins(RCSettingsActivity.this) + " minutes");
 		
-    	int recentState = PrefHelper.getState(getApplicationContext(), alertType);
+    	int recentState = OldPrefHelper.getState(getApplicationContext(), alertType);
     	if (recentState == Constants.URGENT_CALL_STATE_OFF) {
-    		recentState = PrefHelper.getBackupState(getApplicationContext(), alertType);
+    		recentState = OldPrefHelper.getBackupState(getApplicationContext(), alertType);
     	}
     	
     	if (recentState == Constants.URGENT_CALL_STATE_WHITELIST) {

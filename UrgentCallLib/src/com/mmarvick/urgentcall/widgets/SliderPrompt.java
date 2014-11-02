@@ -1,7 +1,7 @@
 package com.mmarvick.urgentcall.widgets;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,7 +25,7 @@ public class SliderPrompt {
 		icon = (ImageView) promptView.findViewById(R.id.slider_prompt_icon);
 		
 		seekBar.setMax(max);
-		seekBar.setProgress(PrefHelper.getIntValue(context, name, def));
+		seekBar.setProgress(OldPrefHelper.getIntValue(context, name, def));
 		
 		icon.setImageResource(iconResource);
 		
@@ -39,7 +39,7 @@ public class SliderPrompt {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					PrefHelper.setIntValue(context, name, seekBar.getProgress());
+					OldPrefHelper.setIntValue(context, name, seekBar.getProgress());
 					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
 				}
 			})

@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.activities;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;

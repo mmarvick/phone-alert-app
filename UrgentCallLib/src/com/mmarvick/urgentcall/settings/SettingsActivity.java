@@ -2,8 +2,8 @@ package com.mmarvick.urgentcall.settings;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.DbContractOldDatabase.RulesEntryOld;
+import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,10 +36,10 @@ public class SettingsActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				if (PrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-		    		PrefHelper.setState(getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
+				if (OldPrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+		    		OldPrefHelper.setState(getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
 		    	} else {
-		    		PrefHelper.setState(getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
+		    		OldPrefHelper.setState(getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
 		    	}
 				
 				setStates();
@@ -82,18 +82,18 @@ public class SettingsActivity extends PreferenceActivity {
     }
     
     private void setStates() {
-    	if (PrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+    	if (OldPrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
     		ucState.setSummary("All Alerts Off");
-    	} else if (PrefHelper.isSnoozing(getApplicationContext())) {
+    	} else if (OldPrefHelper.isSnoozing(getApplicationContext())) {
     		ucState.setSummary("All Alerts Snoozing");
     	} else {
-    		if ((PrefHelper.getState(getApplicationContext(), RulesEntryOld.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF)
-    				&& (PrefHelper.getState(getApplicationContext(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF)
-    				&& (PrefHelper.getState(getApplicationContext(), RulesEntryOld.SC_STATE) == Constants.URGENT_CALL_STATE_OFF)) {
+    		if ((OldPrefHelper.getState(getApplicationContext(), RulesEntryOld.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF)
+    				&& (OldPrefHelper.getState(getApplicationContext(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF)
+    				&& (OldPrefHelper.getState(getApplicationContext(), RulesEntryOld.SC_STATE) == Constants.URGENT_CALL_STATE_OFF)) {
     			ucState.setSummary("All Alerts Off");
-    		} else if ((PrefHelper.getState(getApplicationContext(), RulesEntryOld.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF)
-    				|| (PrefHelper.getState(getApplicationContext(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF)
-    				|| (PrefHelper.getState(getApplicationContext(), RulesEntryOld.SC_STATE) == Constants.URGENT_CALL_STATE_OFF)) {
+    		} else if ((OldPrefHelper.getState(getApplicationContext(), RulesEntryOld.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF)
+    				|| (OldPrefHelper.getState(getApplicationContext(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF)
+    				|| (OldPrefHelper.getState(getApplicationContext(), RulesEntryOld.SC_STATE) == Constants.URGENT_CALL_STATE_OFF)) {
     			ucState.setSummary("Some Alerts On");
     		} else {
     			ucState.setSummary("All Alerts On");
@@ -106,14 +106,14 @@ public class SettingsActivity extends PreferenceActivity {
     }
     
     private void setStateItem(Preference pref, String prefName) {
-    	if (PrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF
-    			|| PrefHelper.isSnoozing(getApplicationContext())) {
+    	if (OldPrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF
+    			|| OldPrefHelper.isSnoozing(getApplicationContext())) {
     		pref.setEnabled(false);
     		pref.setSummary("");
     	} else {
     		pref.setEnabled(true);
     		
-			if (PrefHelper.getState(getApplicationContext(), prefName) == Constants.URGENT_CALL_STATE_OFF) {
+			if (OldPrefHelper.getState(getApplicationContext(), prefName) == Constants.URGENT_CALL_STATE_OFF) {
 				pref.setSummary("Off");
 			} else {
 				pref.setSummary("On");

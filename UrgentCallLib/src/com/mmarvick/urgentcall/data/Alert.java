@@ -25,16 +25,16 @@ public abstract class Alert {
 	/** The column for a contact's name in the phone's contacts database */
 	private final String CONTACT_NAME = ContactsContract.Contacts.DISPLAY_NAME;	
 	
-	/** The context of the alert **/
+	/** The context of the alert */
 	protected Context mContext;
 	
-	/** The id corresponding to the row of the alert **/
+	/** The id corresponding to the row of the alert */
 	private int mRuleId;
 	
-	/** The title of the alert **/
+	/** The title of the alert */
 	private String mTitle;
 	
-	/** The flag of whether the alert is on or off **/
+	/** The flag of whether the alert is on or off**/
 	private boolean mOnState;
 	
 	/** The value that specifies if the alert is for everyone, only allowed
@@ -85,6 +85,8 @@ public abstract class Alert {
 		mVolume = ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VOLUME));
 		
 		loadRemainingRuleData(ruleCursor);
+		
+		ruleCursor.close();
 		
 		Cursor contactsCursor = database.query(getContactTableName(), 
 				new String[] {RuleContactEntry.COLUMN_LIST, RuleContactEntry.COLUMN_LOOKUP}, 
@@ -338,7 +340,7 @@ public abstract class Alert {
 		database.close();
 	}
 
-	/** Checks to see if a contact fulfils the contact criteria of the alert.
+	/** Checks to see if a contact fulfills the contact criteria of the alert.
 	 * If the filter is set to everyone, then any passed value will pass. If
 	 * the filter is set to allow list only, then only phone numbers on the list
 	 * will pass. If the filter is set to block only block list contacts, then

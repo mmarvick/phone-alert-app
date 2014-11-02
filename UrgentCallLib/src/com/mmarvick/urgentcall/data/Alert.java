@@ -29,7 +29,7 @@ public abstract class Alert {
 	protected Context mContext;
 	
 	/** The id corresponding to the row of the alert */
-	private long mRuleId;
+	protected long mRuleId;
 	
 	/** The title of the alert */
 	private String mTitle;
@@ -146,7 +146,7 @@ public abstract class Alert {
 		mVibrate = DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VIBRATE)));
 		mVolume = ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VOLUME));
 		
-		loadRemainingRuleData(ruleCursor);
+		loadRemainingRuleData(database, ruleCursor);
 		
 		ruleCursor.close();
 		
@@ -196,10 +196,11 @@ public abstract class Alert {
 	
 	/** Gets the remaining information that is alert-specific (not common to
 	 * all types of alerts) from the database
+	 * @param database the database that has tables for the alert type
 	 * @param ruleCursor the Cursor that both contains and is currently
 	 * positioned at the table row to read alert data from
 	 */
-	protected abstract void loadRemainingRuleData(Cursor ruleCursor);
+	protected abstract void loadRemainingRuleData(SQLiteDatabase database, Cursor ruleCursor);
 
 	/** Initializes the remaining information that is alert-specific (not common to
 	 * all types of alerts), and stores into the ContentValues as key-value

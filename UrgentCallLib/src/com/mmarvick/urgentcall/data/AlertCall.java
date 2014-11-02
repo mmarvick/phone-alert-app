@@ -19,7 +19,7 @@ public class AlertCall extends Alert {
 	/** The default name of a call alert */
 	public static final String ALERT_CALL_TYPE_NAME = "Call Alert";
 	
-	/** The default name of the initial alert */
+	/** The default name of the initial call alert */
 	public static final String RULE_CALL_INITIAL_NAME = "Repeated Call Alert";	
 	
 	/** The call threshold for a call alert */
@@ -52,7 +52,7 @@ public class AlertCall extends Alert {
 		super(context, db, isInitial);
 	}	
 	
-	/** Constructor for an AlertCall.
+	/** Constructor for an AlertCall already in the database..
 	 * 
 	 * @param context (required) context of the call alert
 	 * @param id (required) row number of the call alert
@@ -98,16 +98,6 @@ public class AlertCall extends Alert {
 		updateRuleTable(newValues);		
 		mCallQty = callTime;	
 	}	
-
-	/** {@inheritDoc} */
-	protected String getAlertTypeName() {
-		return ALERT_CALL_TYPE_NAME;
-	}
-	
-	/** {@inheritDoc} */
-	protected String getRuleInitialName() {
-		return RULE_CALL_INITIAL_NAME;
-	}
 	
 	/** Checks to see if all the criteria of this alert have been met by the
 	 * contact that's calling.
@@ -144,7 +134,7 @@ public class AlertCall extends Alert {
 	 * @param ruleCursor the Cursor that both contains and is currently
 	 * positioned at the table row to read alert data from
 	 */
-	protected void loadRemainingRuleData(Cursor ruleCursor) {
+	protected void loadRemainingRuleData(SQLiteDatabase database, Cursor ruleCursor) {
 		mCallQty = ruleCursor.getInt(ruleCursor.getColumnIndex(CallRuleEntry.COLUMN_CALL_QTY));
 		mCallTime = ruleCursor.getInt(ruleCursor.getColumnIndex(CallRuleEntry.COLUMN_CALL_TIME));
 	}
@@ -165,6 +155,16 @@ public class AlertCall extends Alert {
 	protected void performRemainingDropCommands(SQLiteDatabase db) {
 		// nothing needed
 	}
+
+	/** {@inheritDoc} */
+	protected String getAlertTypeName() {
+		return ALERT_CALL_TYPE_NAME;
+	}
+	
+	/** {@inheritDoc} */
+	protected String getRuleInitialName() {
+		return RULE_CALL_INITIAL_NAME;
+	}	
 	
 	/** {@inheritDoc} */
 	protected String getTableName() {

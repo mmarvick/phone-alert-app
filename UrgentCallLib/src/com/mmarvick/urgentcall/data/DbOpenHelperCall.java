@@ -6,7 +6,7 @@ import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-/** Used to open a connection to a database holding tables pertaining to a call alerts */
+/** Used to open a connection to a database holding tables pertaining to call alerts */
 public class DbOpenHelperCall extends DbOpenHelper {
 	
 	/** The call alert database filename */

@@ -2,19 +2,7 @@ package com.mmarvick.urgentcall.data;
 
 import android.provider.BaseColumns;
 
-public class OldDbContractDatabase {	
-	
-	public static abstract class TextRuleEntry implements BaseColumns {
-		public static final String TABLE_NAME = "TEXT_RULE";
-	}	
-	
-	public static abstract class TextRuleContactEntry implements BaseColumns {
-		public static final String TABLE_NAME = "TEXT_RULE_CONTACT";
-	}	
-	
-	public static abstract class TextRulePhraseEntry implements BaseColumns {
-		public static final String TABLE_NAME = "TEXT_RULE_PHRASE";
-	}		
+public class OldDbContractDatabase {		
 	
 	public static abstract class RulesEntryOld implements BaseColumns{
 		public static final String TABLE_NAME = "rules";

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.mmarvick.urgentcall.data.DbContract.RuleContactEntry;
 import com.mmarvick.urgentcall.data.DbContract.RuleEntry;
-import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,7 +14,6 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.util.Log;
 
 /** Object that represents one alert (call or text) rule, keeps track of
  * information associated with it, and saves changes to the database when updated.
@@ -402,18 +400,21 @@ public abstract class Alert {
 	 * <code>DbContract.ENTRY_LIST_BLOCK_LIST</code> to add to the block list
 	 */
 	public void addContact(String lookup, int list) {
-		SQLiteDatabase database = getWritableDatabase();
-		ContentValues contact = new ContentValues();
-		contact.put(RuleContactEntry.COLUMN_ALERT_RULE_ID, mRuleId);
-		contact.put(RuleContactEntry.COLUMN_LOOKUP, lookup);
-		contact.put(RuleContactEntry.COLUMN_LIST, list);		
-		database.insert(getContactTableName(), null, contact);
-		database.close();
-		
-		if (list == DbContract.ENTRY_LIST_ALLOW_LIST) {
-			mAllowedContacts.add(lookup);
-		} else {
-			mBlockedContacts.add(lookup);
+		if (list == DbContract.ENTRY_LIST_ALLOW_LIST && !mAllowedContacts.contains(lookup) ||
+				list == DbContract.ENTRY_LIST_BLOCK_LIST && !mBlockedContacts.contains(lookup)) {
+			SQLiteDatabase database = getWritableDatabase();
+			ContentValues contact = new ContentValues();
+			contact.put(RuleContactEntry.COLUMN_ALERT_RULE_ID, mRuleId);
+			contact.put(RuleContactEntry.COLUMN_LOOKUP, lookup);
+			contact.put(RuleContactEntry.COLUMN_LIST, list);		
+			database.insert(getContactTableName(), null, contact);
+			database.close();
+			
+			if (list == DbContract.ENTRY_LIST_ALLOW_LIST) {
+				mAllowedContacts.add(lookup);
+			} else {
+				mBlockedContacts.add(lookup);
+			}
 		}
 	}
 

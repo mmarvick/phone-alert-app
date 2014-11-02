@@ -1,7 +1,10 @@
 package com.mmarvick.urgentcall.data;
 
+import java.util.List;
+
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
+import com.mmarvick.urgentcall.data.DbContractTextRule.TextRuleEntry;
 import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.content.Context;
@@ -51,6 +54,35 @@ public class OldRulesDbOpenHelper extends SQLiteOpenHelper {
 			alertCallSingle.setCallQty(1);
 			alertCallSingle.setTitle("Single Call Alert");
 		}
+		
+		/* TEXT ALERT */
+		
+		// Find the alert, or create a new one if there are none
+		DbOpenHelperText dbOpenHelperText = new DbOpenHelperText(mContext);
+		SQLiteDatabase textDb = dbOpenHelperText.getReadableDatabase();
+		Cursor textDbCursor = textDb.query(DbOpenHelperText.RULE_TABLE_NAME, new String[]{TextRuleEntry._ID}, null, null, null, null, null);
+		textDbCursor.moveToFirst();
+		AlertText alertText;
+		if (textDbCursor.isAfterLast()) {
+			alertText = new AlertText(mContext);
+		} else {
+			long id = textDbCursor.getLong(textDbCursor.getColumnIndex(TextRuleEntry._ID));
+			alertText = new AlertText(mContext, id);
+		}
+		textDb.close();
+		textDbCursor.close();
+		
+		// Update the alert
+		updateAlert(oldDb, alertText, RulesEntryOld.MSG_STATE);
+		alertText.setAlertDuration(OldPrefHelper.getMessageTime(mContext, RulesEntryOld.MSG_STATE));
+		
+		List<String> badPhrases = alertText.getPhrases();
+		
+		for (String badPhrase : badPhrases) {
+			alertText.removePhrase(badPhrase);
+		}
+		
+		alertText.addPhrase(OldPrefHelper.getMessageToken(mContext));
 		
 	}
 	

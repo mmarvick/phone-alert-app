@@ -11,7 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.CallLog;
 import android.util.Log;
 
-import com.mmarvick.urgentcall.data.DbContract.RuleEntry;
 import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleContactEntry;
 import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
 

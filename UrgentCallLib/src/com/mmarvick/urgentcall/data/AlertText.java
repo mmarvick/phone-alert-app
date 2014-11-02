@@ -143,13 +143,13 @@ public class AlertText extends Alert {
 			boolean needToClose = false;
 			
 			if (db == null) {
-				SQLiteDatabase database = getWritableDatabase();
+				db = getWritableDatabase();
 				needToClose = true;
 			}
 			ContentValues phraseValues = new ContentValues();
 			phraseValues.put(TextRulePhraseEntry.COLUMN_ALERT_RULE_ID, mRuleId);
 			phraseValues.put(TextRulePhraseEntry.COLUMN_TEXT_PHRASE, trimmedPhrase);
-				db.insert(getPhraseTableName(), null, phraseValues);
+			db.insert(getPhraseTableName(), null, phraseValues);
 			
 			if (needToClose) {
 				db.close();

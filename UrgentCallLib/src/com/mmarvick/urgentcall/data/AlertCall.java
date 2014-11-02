@@ -16,6 +16,11 @@ import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
  * information associated with it, and saves changes to the database when updated.
  */
 public class AlertCall extends Alert {
+	/** The default name of a call alert */
+	public static final String ALERT_CALL_TYPE_NAME = "Call Alert";
+	
+	/** The default name of the initial alert */
+	public static final String RULE_CALL_INITIAL_NAME = "Repeated Call Alert";	
 	
 	/** The call threshold for a call alert */
 	private int mCallQty;
@@ -23,6 +28,29 @@ public class AlertCall extends Alert {
 	/** The time span within which calls must be made to trigger a call alert
 	 * in minutes */
 	private int mCallTime;
+
+	/** Constructor for an AlertCall not currently in the database, with all
+	 * initial values generated as defaults. Also adds the Alert to the
+	 * database.
+	 * 
+	 * @param context the current context
+	 */
+	public AlertCall(Context context) {
+		super(context);
+	}
+
+	/** Constructor for an AlertCall not currently in the database, with all
+	 * initial values generated as defaults. Also adds the Alert to the
+	 * database.
+	 * 
+	 * @param context the current context
+	 * @param db a writable database for call rules
+	 * @param isInitial <code>true</code> if is the initial rule created when
+	 * the application runs for the first time; <code>false</code> if not 
+	 */	
+	public AlertCall(Context context, SQLiteDatabase db, boolean isInitial) {
+		super(context, db, isInitial);
+	}	
 	
 	/** Constructor for an AlertCall.
 	 * 
@@ -71,6 +99,16 @@ public class AlertCall extends Alert {
 		mCallQty = callTime;	
 	}	
 
+	/** {@inheritDoc} */
+	protected String getAlertTypeName() {
+		return ALERT_CALL_TYPE_NAME;
+	}
+	
+	/** {@inheritDoc} */
+	protected String getRuleInitialName() {
+		return RULE_CALL_INITIAL_NAME;
+	}
+	
 	/** Checks to see if all the criteria of this alert have been met by the
 	 * contact that's calling.
 	 * @param phoneNumber the phone number that is calling
@@ -109,6 +147,18 @@ public class AlertCall extends Alert {
 	protected void loadRemainingRuleData(Cursor ruleCursor) {
 		mCallQty = ruleCursor.getInt(ruleCursor.getColumnIndex(CallRuleEntry.COLUMN_CALL_QTY));
 		mCallTime = ruleCursor.getInt(ruleCursor.getColumnIndex(CallRuleEntry.COLUMN_CALL_TIME));
+	}
+	
+	/** Initializes the remaining information that is specific to call alerts,
+	 * and stores into the ContentValues as key-value pairs to be saved
+	 * to the database.
+	 * @param ruleValues the repository of key-value pairs to save in the database
+	 */		
+	protected void initializeAndStoreRemainingRuleData(ContentValues ruleValues) {
+		mCallQty = 3;
+		mCallTime = 15;
+		ruleValues.put(CallRuleEntry.COLUMN_CALL_QTY, mCallQty);
+		ruleValues.put(CallRuleEntry.COLUMN_CALL_TIME, mCallTime);
 	}
 	
 	/** {@inheritDoc} */

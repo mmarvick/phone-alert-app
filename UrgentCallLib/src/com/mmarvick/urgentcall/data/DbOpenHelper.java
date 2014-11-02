@@ -3,12 +3,13 @@ package com.mmarvick.urgentcall.data;
 import com.mmarvick.urgentcall.data.DbContract.RuleContactEntry;
 import com.mmarvick.urgentcall.data.DbContract.RuleEntry;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public abstract class DbOpenHelper extends SQLiteOpenHelper {
+	
+	public Context mContext;
 	
 	public static final int DATABASE_VERSION = 1;
 	
@@ -35,6 +36,7 @@ public abstract class DbOpenHelper extends SQLiteOpenHelper {
 
 	public DbOpenHelper(Context context, String name) {
 		super(context, name, null, DATABASE_VERSION);
+		mContext = context;
 	}
 
 	@Override
@@ -61,18 +63,6 @@ public abstract class DbOpenHelper extends SQLiteOpenHelper {
 		createTable(db, tableName, columns);
 	}
 	
-	private void createFirstRule(SQLiteDatabase db) {
-		ContentValues ruleValues = new ContentValues();
-		ruleValues.put(RuleEntry.COLUMN_TITLE, getFirstRuleName());
-		ruleValues.put(RuleEntry.COLUMN_ON_STATE, true);
-		ruleValues.put(RuleEntry.COLUMN_FILTER_BY, DbContractCallRule.ENTRY_FILTER_BY_EVERYONE);
-		ruleValues.put(RuleEntry.COLUMN_RING, true);
-		ruleValues.put(RuleEntry.COLUMN_VIBRATE, false);
-		ruleValues.put(RuleEntry.COLUMN_VOLUME, 1000);
-		createRemainingFirstRule(ruleValues);
-		db.insert(getRuleTableName(), null, ruleValues);
-	}
-	
 	protected void createTable(SQLiteDatabase db, String tableName, String columns) {
 		String sqlCreateTable =
 				"CREATE TABLE " + tableName + " (" +
@@ -84,7 +74,6 @@ public abstract class DbOpenHelper extends SQLiteOpenHelper {
 	protected abstract String getRuleTableName();
 	protected abstract String getRuleContactTableName();
 	protected abstract String createRemainingRuleColumns();
-	protected abstract void createRemainingFirstRule(ContentValues ruleValues);
-	protected abstract String getFirstRuleName();
+	protected abstract void createFirstRule(SQLiteDatabase db);
 
 }

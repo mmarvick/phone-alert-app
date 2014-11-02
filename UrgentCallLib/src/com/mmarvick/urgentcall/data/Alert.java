@@ -29,7 +29,7 @@ public abstract class Alert {
 	protected Context mContext;
 	
 	/** The id corresponding to the row of the alert */
-	private int mRuleId;
+	private long mRuleId;
 	
 	/** The title of the alert */
 	private String mTitle;
@@ -56,15 +56,72 @@ public abstract class Alert {
 	
 	/** A list of lookups for blocked contacts */
 	private List<String> mBlockedContacts;
+
+	/** Constructor for an Alert not currently in the database, with all
+	 * initial values generated as defaults. Also adds the Alert to the
+	 * database.
+	 * 
+	 * @param context the current context
+	 */	
+	public Alert(Context context) {
+		this(context, null, false);
+	}
 	
-	/** Constructor for an Alert.
+	/** Constructor for an Alert not currently in the database, with all
+	 * initial values generated as defaults. Also adds the Alert to the
+	 * database.
+	 * 
+	 * @param context the current context
+	 * @param db a writable database for call rules
+	 * @param isInitial <code>true</code> if is the initial rule created when
+	 * the application runs for the first time; <code>false</code> if not 
+	 */	
+	public Alert(Context context, SQLiteDatabase db, boolean isInitial) {
+		if (!isInitial) {
+			mTitle = getNewAlertName();
+		} else {
+			mTitle = getRuleInitialName();
+		}
+		
+		mOnState = true;
+		mFilterBy = DbContract.ENTRY_FILTER_BY_EVERYONE;
+		mRing = true;
+		mVibrate = false;
+		mVolume = 1000;
+		mAllowedContacts = new ArrayList<String>();
+		mBlockedContacts = new ArrayList<String>();
+		
+		ContentValues ruleValues = new ContentValues();
+		ruleValues.put(RuleEntry.COLUMN_TITLE, mTitle);
+		ruleValues.put(RuleEntry.COLUMN_ON_STATE, mOnState);
+		ruleValues.put(RuleEntry.COLUMN_FILTER_BY, mFilterBy);
+		ruleValues.put(RuleEntry.COLUMN_RING, mRing);
+		ruleValues.put(RuleEntry.COLUMN_VIBRATE, mVibrate);
+		ruleValues.put(RuleEntry.COLUMN_VOLUME, mVolume);
+		
+		initializeAndStoreRemainingRuleData(ruleValues);
+		
+		boolean closeWhenDone = false;
+		
+		if (db == null) {
+			db = getWritableDatabase();
+			closeWhenDone = true;
+		}
+		mRuleId = db.insert(getTableName(), null, ruleValues);
+		
+		if (closeWhenDone) {
+			db.close();
+		}
+	}
+	
+	/** Constructor for an Alert already in the database.
 	 * 
 	 * @param context (required) context of the alert
 	 * @param id (required) row number of the alert
 	 * @throws IndexOutOfBoundsException no row exists in the alert table
 	 * with that id
 	 */
-	public Alert(Context context, int id) {
+	public Alert(Context context, long id) {
 		mContext = context;
 		SQLiteDatabase database = getReadableDatabase();
 		Cursor ruleCursor = database.query(getTableName(),
@@ -138,6 +195,23 @@ public abstract class Alert {
 	 * positioned at the table row to read alert data from
 	 */
 	protected abstract void loadRemainingRuleData(Cursor ruleCursor);
+
+	/** Initializes the remaining information that is alert-specific (not common to
+	 * all types of alerts), and stores into the ContentValues as key-value
+	 * pairs to be saved to the database.
+	 * @param ruleValues the repository of key-value pairs to save in the database
+	 */	
+	protected abstract void initializeAndStoreRemainingRuleData(ContentValues ruleValues);
+	
+	/** Get the name of the alert for a specific alert type
+	 * @return the name of the type of alert
+	 */
+	protected abstract String getAlertTypeName();
+	
+	/** Get the name of the initial alert
+	 * @return the name of the type of alert
+	 */
+	protected abstract String getRuleInitialName();	
 	
 	/** Gets the alert title
 	 * @return the alert title
@@ -338,6 +412,13 @@ public abstract class Alert {
 				newValues,
 				RuleEntry._ID + " =  " + mRuleId, null);
 		database.close();
+	}
+	
+	/** Gets the name of a new alert
+	 * @return the alert name
+	 */
+	private String getNewAlertName() {
+		return "New " + getAlertTypeName();
 	}
 
 	/** Checks to see if a contact fulfills the contact criteria of the alert.

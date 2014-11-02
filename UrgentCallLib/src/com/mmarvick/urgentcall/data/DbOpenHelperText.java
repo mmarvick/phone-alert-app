@@ -45,6 +45,7 @@ public class DbOpenHelperText extends DbOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		super.onCreate(db);
 		createRulePhraseTable(db);
+		new AlertText(mContext, db, true);
 	}	
 	
 	private void createRulePhraseTable(SQLiteDatabase db) {
@@ -56,13 +57,8 @@ public class DbOpenHelperText extends DbOpenHelper {
 	/** {@inheritDoc} */
 	protected String createRemainingRuleColumns() {
 		String sqlCreateColumns = SEPARATOR + 
-				TextRuleEntry.COLUMN_ALERT_DURATION + INTEGER_TYPE + NOT_NULL + SEPARATOR;
+				TextRuleEntry.COLUMN_ALERT_DURATION + INTEGER_TYPE + NOT_NULL;
 		return sqlCreateColumns;
-	}
-	
-	/** {@inheritDoc} */
-	protected void createFirstRule(SQLiteDatabase db) {
-		//TODO: new AlertText(mContext, db, true);
 	}
 	
 	/** {@inheritDoc} */

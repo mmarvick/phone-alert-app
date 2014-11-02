@@ -26,17 +26,23 @@ public class DbOpenHelperCall extends DbOpenHelper {
 		super(context, DATABASE_FILE);
 	}
 	
+	/** Automatically called when constructing the call alert database tables
+	 * for the first time. Creates the call rule table, rule contact table,
+	 * and initial entry in the rule table.
+	 * @param db the database
+	 */
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		super.onCreate(db);
+		new AlertCall(mContext, db, true);
+	}		
+	
 	/** {@inheritDoc} */
 	protected String createRemainingRuleColumns() {
 		String sqlCreateColumns = SEPARATOR + 
 				CallRuleEntry.COLUMN_CALL_QTY + INTEGER_TYPE + NOT_NULL + SEPARATOR +
 				CallRuleEntry.COLUMN_CALL_TIME + INTEGER_TYPE + NOT_NULL;
 		return sqlCreateColumns;
-	}
-	
-	/** {@inheritDoc} */
-	protected void createFirstRule(SQLiteDatabase db) {
-		new AlertCall(mContext, db, true);
 	}
 	
 	/** {@inheritDoc} */

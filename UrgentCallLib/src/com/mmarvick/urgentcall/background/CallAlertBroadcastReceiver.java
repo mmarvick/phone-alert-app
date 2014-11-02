@@ -2,6 +2,7 @@ package com.mmarvick.urgentcall.background;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.data.AlertCall;
@@ -54,23 +55,9 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 				boolean vibrate = false;
 				int volume = 0;
 				
-				DbOpenHelperCall dbOpenHelper = new DbOpenHelperCall(context);
-				SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
-				Cursor ruleCursor = database.query(CallRuleEntry.TABLE_NAME,
-						new String[] {CallRuleEntry._ID},
-						null, null, null, null, null);
-				ArrayList<Integer> callAlerts = new ArrayList<Integer>();
-				ruleCursor.moveToFirst();
-				while (!ruleCursor.isAfterLast()) {
-					callAlerts.add(ruleCursor.getInt(ruleCursor.getColumnIndex(CallRuleEntry._ID)));
-					ruleCursor.moveToNext();
-					Log.e("UC", "Added an alert");
-				}
-				ruleCursor.close();
+				List<AlertCall> callAlerts = AlertCall.getAlerts(context);
 				
-				for (int id : callAlerts) {
-					Log.e("UC", "Checking alert: " + id);
-					AlertCall alert = new AlertCall(context, id);
+				for (AlertCall alert : callAlerts) {
 					if (alert.shouldAlert(phoneNumber)) {
 						shouldAlert = true;
 						if (alert.getRing()) {

@@ -1,6 +1,8 @@
 package com.mmarvick.urgentcall.data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.CallLog;
 import android.util.Log;
 
+import com.mmarvick.urgentcall.data.DbContract.RuleEntry;
 import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleContactEntry;
 import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
 
@@ -28,6 +31,32 @@ public class AlertCall extends Alert {
 	/** The time span within which calls must be made to trigger a call alert
 	 * in minutes */
 	private int mCallTime;
+	
+	/** Returns a list of all call alerts in the database
+	 * @param context the context
+	 * @return a list of AlertCall objects representing each currently stored
+	 * call alert
+	 */
+	public static List<AlertCall> getAlerts(Context context) {
+		DbOpenHelperCall dbOpenHelper = new DbOpenHelperCall(context);
+		SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+		List<AlertCall> callAlerts = new ArrayList<AlertCall>();
+		
+		Cursor ruleCursor = database.query(CallRuleEntry.TABLE_NAME,
+				new String[] {CallRuleEntry._ID},
+				null, null, null, null, null);
+		
+		ruleCursor.moveToFirst();
+		while (!ruleCursor.isAfterLast()) {
+			long alertId = ruleCursor.getInt(ruleCursor.getColumnIndex(CallRuleEntry._ID));
+			callAlerts.add(new AlertCall(context, alertId));
+			ruleCursor.moveToNext();
+		}
+		
+		ruleCursor.close();
+		
+		return callAlerts;
+	}	
 
 	/** Constructor for an AlertCall not currently in the database, with all
 	 * initial values generated as defaults. Also adds the Alert to the

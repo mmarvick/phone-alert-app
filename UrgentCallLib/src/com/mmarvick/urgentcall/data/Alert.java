@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mmarvick.urgentcall.data.DbContract.RuleContactEntry;
 import com.mmarvick.urgentcall.data.DbContract.RuleEntry;
+import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.util.Log;
 
 /** Object that represents one alert (call or text) rule, keeps track of
  * information associated with it, and saves changes to the database when updated.
@@ -59,7 +61,7 @@ public abstract class Alert {
 	
 	/** A list of lookups for blocked contacts */
 	private List<String> mBlockedContacts;
-
+	
 	/** Constructor for an Alert not currently in the database, with all
 	 * initial values generated as defaults. Also adds the Alert to the
 	 * database.

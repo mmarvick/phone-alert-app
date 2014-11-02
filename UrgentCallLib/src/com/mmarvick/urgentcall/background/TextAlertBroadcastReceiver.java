@@ -1,6 +1,10 @@
 package com.mmarvick.urgentcall.background;
 
+import java.util.List;
+
 import com.mmarvick.urgentcall.Constants;
+import com.mmarvick.urgentcall.data.AlertCall;
+import com.mmarvick.urgentcall.data.AlertText;
 import com.mmarvick.urgentcall.data.OldPrefHelper;
 import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.data.OldRulesDbHelper;
@@ -38,51 +42,35 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 		if (OldPrefHelper.getState(context, Constants.APP_STATE) == RulesEntryOld.STATE_ON
 				&& !OldPrefHelper.isSnoozing(context)) {
 			
-			if (messageAlert(context, incomingNumber, message)) {
-				alertAction(context);					
+			boolean shouldAlert = false;
+			boolean ring = false;
+			boolean vibrate = false;
+			int volume = 0;
+			
+			List<AlertText> textAlerts = AlertText.getAlerts(context);
+			
+			for (AlertText alert : textAlerts) {
+				if (alert.shouldAlert(incomingNumber, message)) {
+					shouldAlert = true;
+					if (alert.getRing()) {
+						ring = true;
+						if (alert.getVolume() > volume) {
+							volume = alert.getVolume();
+						}
+					}
+					if (alert.getVibrate()) {
+						vibrate = true;
+					}
+				}
+			}
+			
+			if (shouldAlert) {
+				alertAction(context);
 			}
 			
 		}
 	}
 	
-	
-	private boolean isOn(Context context, String alertType, String incomingNumber) {
-		String lookup = dbHelper.getLookupFromNumber(incomingNumber);
-		int urgentCallState = OldPrefHelper.getState(context, alertType);
-		int userState = dbHelper.getUserState(alertType, lookup);
-		
-		switch(urgentCallState) {
-		
-		case Constants.URGENT_CALL_STATE_ON:
-			return true;
-		case Constants.URGENT_CALL_STATE_OFF:
-			return false;
-		case Constants.URGENT_CALL_STATE_WHITELIST:
-			if (userState == RulesEntryOld.STATE_ON) {
-				return true;
-			} else {
-				return false;
-			}
-		case Constants.URGENT_CALL_STATE_BLACKLIST:
-			if (userState == RulesEntryOld.STATE_OFF) {
-				return false;
-			} else {
-				return true;
-			}		
-		default:
-			return true;
-		}
-	}
-	
-	private boolean messageAlert(Context context, String incomingNumber, String message) {
-		if (isOn(context, RulesEntryOld.MSG_STATE, incomingNumber)) {
-			if (message.toLowerCase().contains(OldPrefHelper.getMessageToken(context).toLowerCase())) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
 	
 	private void alertAction(Context context) {
 		Intent alarmService = new Intent(context, MessageAlarmService.class);

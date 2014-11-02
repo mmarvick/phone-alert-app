@@ -24,6 +24,32 @@ public class AlertText extends Alert {
 	
 	/** A list of phrases to trigger from in a text */
 	private List<String> mPhrases;	
+	
+	/** Returns a list of all text alerts in the database
+	 * @param context the context
+	 * @return a list of AlertText objects representing each currently stored
+	 * text alert
+	 */
+	public static List<AlertText> getAlerts(Context context) {
+		DbOpenHelperText dbOpenHelper = new DbOpenHelperText(context);
+		SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+		List<AlertText> textAlerts = new ArrayList<AlertText>();
+		
+		Cursor ruleCursor = database.query(TextRuleEntry.TABLE_NAME,
+				new String[] {TextRuleEntry._ID},
+				null, null, null, null, null);
+		
+		ruleCursor.moveToFirst();
+		while (!ruleCursor.isAfterLast()) {
+			long alertId = ruleCursor.getInt(ruleCursor.getColumnIndex(TextRuleEntry._ID));
+			textAlerts.add(new AlertText(context, alertId));
+			ruleCursor.moveToNext();
+		}
+		
+		ruleCursor.close();
+		
+		return textAlerts;
+	}		
 
 	/** Constructor for an AlertText not currently in the database, with all
 	 * initial values generated as defaults. Also adds the Alert to the
@@ -46,6 +72,7 @@ public class AlertText extends Alert {
 	 */	
 	public AlertText(Context context, SQLiteDatabase db, boolean isInitial) {
 		super(context, db, isInitial);
+		addPhrase("Urgent!", db);
 	}	
 	
 	/** Constructor for an AlertText already in the database.
@@ -91,7 +118,18 @@ public class AlertText extends Alert {
 	 * exists.
 	 * @param phrase the phrase to add
 	 */
-	public void addPhrase(String phrase) {
+	public void addPhrase(String phrase) {	
+		addPhrase(phrase, null);
+	}
+	
+	/** Adds a phrase to the list of phrases that will trigger a text alert and
+	 * saves it in the database. It will automatically trim whitespace from the
+	 * front and back of the phrase, and will not add the phrase if it already
+	 * exists.
+	 * @param phrase the phrase to add
+	 * @param db (optional) a writable database for the alert rules
+	 */
+	public void addPhrase(String phrase, SQLiteDatabase db) {
 		String trimmedPhrase = phrase.trim();
 		
 		boolean alreadyHas = false;
@@ -102,12 +140,20 @@ public class AlertText extends Alert {
 		}
 		
 		if (!alreadyHas) {
-			SQLiteDatabase database = getWritableDatabase();
+			boolean needToClose = false;
+			
+			if (db == null) {
+				SQLiteDatabase database = getWritableDatabase();
+				needToClose = true;
+			}
 			ContentValues phraseValues = new ContentValues();
 			phraseValues.put(TextRulePhraseEntry.COLUMN_ALERT_RULE_ID, mRuleId);
 			phraseValues.put(TextRulePhraseEntry.COLUMN_TEXT_PHRASE, trimmedPhrase);
-			database.insert(getPhraseTableName(), null, phraseValues);
-			database.close();
+				db.insert(getPhraseTableName(), null, phraseValues);
+			
+			if (needToClose) {
+				db.close();
+			}
 			
 			mPhrases.add(trimmedPhrase);
 		}
@@ -185,7 +231,6 @@ public class AlertText extends Alert {
 		ruleValues.put(TextRuleEntry.COLUMN_ALERT_DURATION, mAlertDuration);
 		
 		mPhrases = new ArrayList<String>();
-		addPhrase("Urgent!");
 	}
 
 	/** {@inheritDoc} */

@@ -68,7 +68,6 @@ public abstract class DbOpenHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		createRuleTable(db);
 		createRuleContactTable(db);
-		createFirstRule(db);
 	}
 
 	/** Automatically called when upgrading the database schema 
@@ -131,10 +130,5 @@ public abstract class DbOpenHelper extends SQLiteOpenHelper {
 	 * @return the SQLite statement for the column definitions
 	 */
 	protected abstract String createRemainingRuleColumns();
-	
-	/** Creates the first rule in the rule table
-	 * @param db the writable database
-	 */
-	protected abstract void createFirstRule(SQLiteDatabase db);
 
 }

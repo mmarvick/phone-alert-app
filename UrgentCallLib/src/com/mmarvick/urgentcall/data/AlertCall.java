@@ -59,7 +59,7 @@ public class AlertCall extends Alert {
 	 * @throws IndexOutOfBoundsException no row exists in the call alert table
 	 * with that id
 	 */
-	public AlertCall(Context context, int id) {
+	public AlertCall(Context context, long id) {
 		super(context, id);
 	}
 	
@@ -159,6 +159,11 @@ public class AlertCall extends Alert {
 		mCallTime = 15;
 		ruleValues.put(CallRuleEntry.COLUMN_CALL_QTY, mCallQty);
 		ruleValues.put(CallRuleEntry.COLUMN_CALL_TIME, mCallTime);
+	}
+	
+	/** {@inheritDoc} */
+	protected void performRemainingDropCommands(SQLiteDatabase db) {
+		// nothing needed
 	}
 	
 	/** {@inheritDoc} */

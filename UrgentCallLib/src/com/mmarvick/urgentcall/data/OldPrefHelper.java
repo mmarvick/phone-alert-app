@@ -50,6 +50,10 @@ public class OldPrefHelper {
 		return Uri.parse(getPrefs(context).getString(alertType + Constants.ALERT_SOUND, def));
 	}
 	
+	public static String getMessageSoundString(Context context, String alertType) {
+		return getPrefs(context).getString(alertType + Constants.ALERT_SOUND, null);	
+	}
+	
 	public static void setMessageSound(Context context, String alertType, Uri sound) {
 		Editor editor = getPrefs(context).edit();
 		editor.putString(alertType + Constants.ALERT_SOUND, sound.toString());
@@ -74,6 +78,10 @@ public class OldPrefHelper {
 	public static float getMessageVolumeValue(Context context, String alertType) {
 		int volume = getPrefs(context).getInt(alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_DEFAULT);
 		return (float) (1 - (Math.log(Constants.ALERT_VOLUME_MAX - volume) / Math.log(Constants.ALERT_VOLUME_MAX)));
+	}
+	
+	public static int getMessageVolumeIntValue(Context context, String alertType) {
+		return getPrefs(context).getInt(alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_DEFAULT);
 	}
 	
 	public static String getMessageHow(Context context, String alertType) {

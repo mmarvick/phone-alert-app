@@ -51,6 +51,9 @@ public abstract class Alert {
 	/** The value of the volume of the ring, out of 1000 */
 	private int mVolume;
 	
+	/** The uri of the ringtone to play stored as a String */
+	private String mTone;
+	
 	/** A list of lookups for allowed contacts */
 	private List<String> mAllowedContacts;
 	
@@ -77,6 +80,8 @@ public abstract class Alert {
 	 * the application runs for the first time; <code>false</code> if not 
 	 */	
 	public Alert(Context context, SQLiteDatabase db, boolean isInitial) {
+		mContext = context;
+		
 		if (!isInitial) {
 			mTitle = getNewAlertName();
 		} else {
@@ -203,6 +208,11 @@ public abstract class Alert {
 	 */	
 	protected abstract void initializeAndStoreRemainingRuleData(ContentValues ruleValues);
 	
+	/** Drops any additional information from the database that is alert-specific
+	 * (not common to all types of alerts).
+	 */
+	protected abstract void performRemainingDropCommands(SQLiteDatabase db);
+	
 	/** Get the name of the alert for a specific alert type
 	 * @return the name of the type of alert
 	 */
@@ -212,6 +222,17 @@ public abstract class Alert {
 	 * @return the name of the type of alert
 	 */
 	protected abstract String getRuleInitialName();	
+
+	/** Removes an alert and all data associated with it. You should
+	 * set all references to this Alert to null after deleting.
+	 */	
+	public void delete() {
+		SQLiteDatabase db = getReadableDatabase();
+		db.delete(getTableName(), RuleEntry._ID + " = " + mRuleId, null);
+		db.delete(getContactTableName(), RuleContactEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId, null);
+		performRemainingDropCommands(db);
+		db.close();
+	}
 	
 	/** Gets the alert title
 	 * @return the alert title
@@ -328,7 +349,24 @@ public abstract class Alert {
 		newValues.put(RuleEntry.COLUMN_VOLUME, volume);
 		updateRuleTable(newValues);
 		mVolume = volume;
-	}		
+	}	
+	
+	/** Gets the ringtone to play's uri as a String
+	 * @return the uri of the ringtone as a String
+	 */
+	public String getTone() {
+		return mTone;
+	}
+
+	/** Sets the ringtone to play's uri as a String
+	 * @param tone the uri of the ringtone as a String
+	 */
+	public void setTone(String tone) {
+		ContentValues newValues = new ContentValues();
+		newValues.put(RuleEntry.COLUMN_TONE, tone);
+		updateRuleTable(newValues);
+		mTone = tone;
+	}
 	
 	/** Returns a list of the lookup values for all contacts on the "allow
 	 * list." Note that having an "allow list" does not necessarily mean

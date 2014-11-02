@@ -6,6 +6,7 @@ import java.util.List;
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.OldRulesDbOpenHelper;
 import com.mmarvick.urgentcall.settings.SettingsActivity;
 import com.mmarvick.urgentcall.widgets.MyViewPager;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
@@ -22,6 +23,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.pm.PackageInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,6 +64,13 @@ public class MainActivity extends ActionBarActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		/* ------- TEMPORARY, AND TO UPDATE THE DATABASE ------------*/
+		OldRulesDbOpenHelper updateDb = new OldRulesDbOpenHelper(MainActivity.this);
+		SQLiteDatabase updateDbDb = updateDb.getReadableDatabase();
+		updateDbDb.close();		
+		
+		
 		setContentView(R.layout.activity_main);
 		
 		checkDisclaimer();		
@@ -151,6 +160,7 @@ public class MainActivity extends ActionBarActivity
 		checkTwoVersions();
 		updateSettings();	//update control panel views
 		super.onResume();
+		
 	}
 	
 

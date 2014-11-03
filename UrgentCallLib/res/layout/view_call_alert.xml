@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/customborder" >
+    android:layout_height="wrap_content" >
     
 	<RelativeLayout
 	    android:id="@+id/linearLayoutHeading"
@@ -12,24 +10,24 @@
 	    android:background="@drawable/customheader"
 	    android:orientation="horizontal" >
         
-	    <TextView
-	       android:id="@+id/textViewAlertName"
-	       android:layout_width="wrap_content"
-	       android:layout_height="wrap_content"
-	       android:layout_gravity="center_vertical"
-	       android:layout_marginLeft="10dp"
-	       android:layout_centerVertical="true"
-	       android:textAppearance="?android:attr/textAppearanceLarge"
-	       android:textColor="#ffffff"
-	       android:text="Repeat Call Alert" />
-         
-	    <ToggleButton
-	        android:id="@+id/toggleButtonAlarm"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:layout_centerVertical="true"
-	        android:layout_marginRight="10dp" />         
+		<TextView	        
+			android:id="@+id/textViewAlertName"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginLeft="10dp"
+			android:layout_centerVertical="true"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textColor="#ffffff"
+			android:text="Repeat Call Alert" />
+    
+		<ToggleButton
+		    android:id="@+id/toggleButtonAlertOn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_centerVertical="true"
+		    android:layout_marginRight="10dp" />         
         
     </RelativeLayout>
 

@@ -47,11 +47,10 @@ public class MainActivity extends ActionBarActivity
 	private static boolean testMode = true;
 	
 	public static final int TAB_HOME = 0;
-	public static final int TAB_MSG = 1;
-	public static final int TAB_RC = 2;
-	public static final int TAB_SC = 3;
+	public static final int TAB_CALL = 1;
+	public static final int TAB_MSG = 2;
 	public static final String [] fragmentTitles = new String[]
-			{"Home", "Text", "Repeat\nCall", "Single\nCall"};
+			{"Home", "Call", "Text"};
 	
 	private ActionBar actionBar;
 	private MyPagerAdapter mAdapter;
@@ -183,7 +182,7 @@ public class MainActivity extends ActionBarActivity
 	@Override
 	public void onBackPressed() {
 		int tab = mViewPager.getCurrentItem();
-		if (tab == TAB_RC || tab == TAB_MSG || tab == TAB_SC) {
+		if (tab == TAB_CALL || tab == TAB_MSG) {
 			mViewPager.setCurrentItem(TAB_HOME);
 		} else {
 			super.onBackPressed();
@@ -200,13 +199,7 @@ public class MainActivity extends ActionBarActivity
 			mChecker.execute();
 			Log.e("Checker", "Checker made!");
 		}
-		
-		for (int i = 0; i < mAdapter.getCount(); i++) {
-			TabFragment frag =  (TabFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(i));
-			if (frag != null && frag.isAdded()) {
-				frag.fragUpdateSettings();
-			}
-		}
+	
 	}
 	
 	private String getFragmentTag(int fragmentPosition) {
@@ -236,20 +229,16 @@ public class MainActivity extends ActionBarActivity
 		@Override
 		public Fragment getItem(int position) {
 			if (position == 1) {
-				return new MessageFragment();
+				return new CallFragment();
 			} else if (position == 2) {
-				return new RepeatCallFragment();
-			} else if (position == 3 && !testMode) {
-				return new SingleCallFragment();
-			} else if (position == 3 && testMode) {
-				return new TestFragment();
+				return new MessageFragment();
 			}
 			return new HomeFragment();
 		}
 
 		@Override
 		public int getCount() {
-			return 4;
+			return 3;
 		}		
 		
 	}

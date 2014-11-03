@@ -389,6 +389,26 @@ public abstract class Alert {
 		return mBlockedContacts;
 	}
 	
+	/** Returns a list of the names for all contacts on the "allow
+	 * list." Note that having an "allow list" does not necessarily mean
+	 * <code>getFilterBy()</code> returns a
+	 * <code>DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY</code> value.
+	 * @return list of "allow list" contacts
+	 */
+	public List<String> getAllowedContactNames() {
+		return mAllowedContacts;
+	}
+
+	/** Returns a list of the names for all contacts on the "block
+	 * list." Note that having an "block list" does not necessarily mean
+	 * <code>getFilterBy()</code> returns a
+	 * <code>DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED</code> value.
+	 * @return list of "block list" contacts
+	 */	
+	public List<String> getBlockedContactNames() {
+		return mBlockedContacts;
+	}	
+	
 	/** Adds a contact to the "allow list" or "block list" and adds it to
 	 * the alert rule contact database. Note, you may also want to set
 	 * <code>setFilterBy(DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY</code> to

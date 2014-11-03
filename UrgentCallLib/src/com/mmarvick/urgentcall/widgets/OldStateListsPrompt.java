@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RadioButton;
 
-public class StateListsPrompt {
+public class OldStateListsPrompt {
 	private RadioButton onRadio;
 	private RadioButton whitelistRadio;
 	private RadioButton blacklistRadio;;
@@ -30,11 +30,11 @@ public class StateListsPrompt {
 	private AlertDialog.Builder alertDialogBuilder;
 	private OnOptionsChangedListener mOnOptionsChangedListener;
 	
-	public StateListsPrompt(final Context context, final String alertType, String title) {
+	public OldStateListsPrompt(final Context context, final String alertType, String title) {
 		this(context, alertType, title, true);
 	}
 
-	public StateListsPrompt(final Context context, final String alertType, String title, boolean showListButton) {
+	public OldStateListsPrompt(final Context context, final String alertType, String title, boolean showListButton) {
 		this.context = context;
 		this.alertType = alertType;
 		this.showListButton = showListButton;

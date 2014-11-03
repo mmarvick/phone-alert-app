@@ -5,9 +5,9 @@ import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.OldPrefHelper;
 import com.mmarvick.urgentcall.data.OldRulesDbHelper;
 import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
-import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
+import com.mmarvick.urgentcall.widgets.OldEditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
-import com.mmarvick.urgentcall.widgets.StateListsPrompt;
+import com.mmarvick.urgentcall.widgets.OldStateListsPrompt;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -61,7 +61,7 @@ public class RepeatCallFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View arg0) {
-				EditTextIntPrompt callNumberPrompt = new EditTextIntPrompt(getMainActivity(), Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+				OldEditTextIntPrompt callNumberPrompt = new OldEditTextIntPrompt(getMainActivity(), Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
 						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
 				callNumberPrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 					
@@ -81,7 +81,7 @@ public class RepeatCallFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				EditTextIntPrompt callTimePrompt = new EditTextIntPrompt(getMainActivity(), Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+				OldEditTextIntPrompt callTimePrompt = new OldEditTextIntPrompt(getMainActivity(), Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
 						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
 				callTimePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 					
@@ -101,7 +101,7 @@ public class RepeatCallFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				StateListsPrompt rcStatePrompt = new StateListsPrompt(getMainActivity(), RulesEntryOld.RC_STATE,
+				OldStateListsPrompt rcStatePrompt = new OldStateListsPrompt(getMainActivity(), RulesEntryOld.RC_STATE,
 						getMainActivity().getString(R.string.state_change_dialog_title_rc));
 				rcStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						
@@ -115,16 +115,9 @@ public class RepeatCallFragment extends TabFragment {
 				rcStatePrompt.show();
 			}
 		});		
-		
-		fragUpdateSettings();		
+			
 		return view;
     }
-	
-	@Override
-	public void fragUpdateSettings() {
-		setButtonState();
-		setText();
-	}
 	
 	private void setButtonState() {
 		if (OldPrefHelper.getState(getMainActivity().getApplicationContext(), RulesEntryOld.RC_STATE) == Constants.URGENT_CALL_STATE_OFF) {

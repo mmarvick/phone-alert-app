@@ -124,7 +124,7 @@ public class AlertCall extends Alert {
 		ContentValues newValues = new ContentValues();
 		newValues.put(CallRuleEntry.COLUMN_CALL_TIME, callTime);
 		updateRuleTable(newValues);		
-		mCallQty = callTime;	
+		mCallTime = callTime;	
 	}	
 	
 	/** Checks to see if all the criteria of this alert have been met by the

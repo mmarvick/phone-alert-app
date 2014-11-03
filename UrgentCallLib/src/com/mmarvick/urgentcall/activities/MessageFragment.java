@@ -7,7 +7,7 @@ import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.data.OldRulesDbHelper;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
-import com.mmarvick.urgentcall.widgets.StateListsPrompt;
+import com.mmarvick.urgentcall.widgets.OldStateListsPrompt;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -79,7 +79,7 @@ public class MessageFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				StateListsPrompt msgStatePrompt = new StateListsPrompt(getMainActivity(), RulesEntryOld.MSG_STATE,
+				OldStateListsPrompt msgStatePrompt = new OldStateListsPrompt(getMainActivity(), RulesEntryOld.MSG_STATE,
 						getMainActivity().getString(R.string.state_change_dialog_title_msg));
 				msgStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						
@@ -93,15 +93,8 @@ public class MessageFragment extends TabFragment {
 			}
 		});		
 		
-		fragUpdateSettings();
 		return view;
     }
-	
-	@Override
-	public void fragUpdateSettings() {
-		setButtonState();
-		setText();
-	}
 	
 	private void setButtonState() {
 		if (OldPrefHelper.getState(getMainActivity().getApplicationContext(), RulesEntryOld.MSG_STATE) == Constants.URGENT_CALL_STATE_OFF) {

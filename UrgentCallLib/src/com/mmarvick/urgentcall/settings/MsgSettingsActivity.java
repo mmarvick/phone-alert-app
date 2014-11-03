@@ -4,10 +4,10 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.OldPrefHelper;
 import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
-import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
+import com.mmarvick.urgentcall.widgets.OldEditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
-import com.mmarvick.urgentcall.widgets.StateListsPrompt;
+import com.mmarvick.urgentcall.widgets.OldStateListsPrompt;
 
 import android.os.Bundle;
 import android.preference.Preference;
@@ -62,7 +62,7 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				StateListsPrompt msgStatePrompt = new StateListsPrompt(MsgSettingsActivity.this, alertType,
+				OldStateListsPrompt msgStatePrompt = new OldStateListsPrompt(MsgSettingsActivity.this, alertType,
 						getApplicationContext().getString(R.string.state_change_dialog_title_msg), false);
 				msgStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						
@@ -81,7 +81,7 @@ public class MsgSettingsActivity extends AlertSettingsActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				EditTextIntPrompt msgTimePrompt = new EditTextIntPrompt(MsgSettingsActivity.this, 1, 60,
+				OldEditTextIntPrompt msgTimePrompt = new OldEditTextIntPrompt(MsgSettingsActivity.this, 1, 60,
 						alertType + Constants.ALERT_TIME, 10, "How long? (seconds)");
 				msgTimePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 					

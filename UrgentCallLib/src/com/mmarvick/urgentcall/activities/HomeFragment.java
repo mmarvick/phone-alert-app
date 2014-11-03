@@ -47,31 +47,7 @@ public class HomeFragment extends TabFragment {
 		mTextSnoozeFor = (TextView) view.findViewById(R.id.textView_home_snooze_for);
 		mTextSnoozeTime = (TextView) view.findViewById(R.id.textView_home_snooze_time);
 		mTextSafelySilence = (TextView) view.findViewById(R.id.textView_home_safely_silence); 
-		mButtonAppState = (Button) view.findViewById(R.id.button_home_state);
-		
-		mLayoutMsgState.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				getMainActivity().setTab(MainActivity.TAB_MSG);
-			}
-		});
-		
-		mLayoutRCState.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				getMainActivity().setTab(MainActivity.TAB_RC);
-			}
-		});
-		
-		mLayoutSCState.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				getMainActivity().setTab(MainActivity.TAB_SC);
-			}
-		});		
+		mButtonAppState = (Button) view.findViewById(R.id.button_home_state);	
 		
 		mButtonAppState.setOnClickListener(new OnClickListener() {
 			
@@ -90,22 +66,8 @@ public class HomeFragment extends TabFragment {
 			}
 		});
 		
-		fragUpdateSettings();
 		return view;
     }
-	
-	@Override
-	public void fragUpdateSettings() {
-		showTextViews();
-		setStateText(mTextMsgState, RulesEntryOld.MSG_STATE);
-		setStateText(mTextRCState, RulesEntryOld.RC_STATE);
-		setStateText(mTextSCState, RulesEntryOld.SC_STATE);
-		setSnoozeTime();
-		
-		mTextAllOffState.setTextColor(Color.RED);
-		
-		setButtonState();
-	}
 	
 	public void setStateText(TextView textView, String alertType) {		
 		if (textView != null) {

@@ -13,33 +13,32 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
-public class EditTextIntPrompt {
+public class OldEditTextIntPrompt {
 	private int min;
 	private int max;
 	private String title;
 	private Context context;
 	
 	private AlertDialog.Builder alertDialogBuilder;
-	private OnIntValueUpdatedListener mOnIntValueUpdatedListener;
+	private OnOptionsChangedListener mOnOptionsChangedListener;
 	private EditText userInput;
 	
-	public EditTextIntPrompt(final Context context, final int min, final int max, final int current, final String title) {
+	public OldEditTextIntPrompt(final Context context, final int min, final int max, final String name, final int def, final String title) {
 		this.min = min;
 		this.max = max;
 		this.title = title;
 		this.context = context;
 		
 		LayoutInflater li = LayoutInflater.from(context);
-		View promptView = li.inflate(R.layout.dialog_edit_text, null);
+		View promptView = li.inflate(R.layout.dialog_edit_text,  null);
 		
 		alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setView(promptView);
 		
 		userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
 		userInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-		String setText = "" + current;
+		String setText = "" + OldPrefHelper.getIntValue(context, name, def);
 		
 		//Set initial EditText text and move cursor to the end
 		userInput.setText(setText);
@@ -48,6 +47,7 @@ public class EditTextIntPrompt {
 		//Set max length of the EditText
 		userInput.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int) Math.floor(Math.log10(max) + 1))});
 
+		
 		alertDialogBuilder
 			.setTitle(title)
 			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -59,17 +59,18 @@ public class EditTextIntPrompt {
 					try {
 						value = Integer.parseInt(userInput.getText().toString());
 						if (value < min) {
-							alertOutOfRange(value);
+							value = min;
+							alertRange(value);
 						} else if (value > max) {
-							alertOutOfRange(value);
-						} else {
-							if (mOnIntValueUpdatedListener != null) mOnIntValueUpdatedListener.onIntValueUpdated(value);
+							value = max;
+							alertRange(value);
 						}
+						OldPrefHelper.setIntValue(context, name, value);					
 					} catch (NumberFormatException e) {
 						
 					}
 
-					
+					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
 				}
 			})
 			.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -94,12 +95,12 @@ public class EditTextIntPrompt {
 		imm.showSoftInput(userInput, InputMethodManager.SHOW_IMPLICIT);
 	}
 	
-	private void alertOutOfRange(int value) {
+	private void alertRange(int value) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 		
 		alertDialogBuilder
 			.setTitle("Out of range")
-			.setMessage(title + " must be between " + min + " and " + max + ".")
+			.setMessage(title + " must be between " + min + " and " + max + ". The value is being set to " + value + ".")
 			.setCancelable(false)
 			.setPositiveButton("OK", null);
 		
@@ -107,8 +108,8 @@ public class EditTextIntPrompt {
 		alertDialog.show();
 	}
 	
-	public void setOnIntValueUpdatedListener(OnIntValueUpdatedListener listener) {
-		mOnIntValueUpdatedListener = listener;
+	public void setOnOptionsChangedListener(OnOptionsChangedListener listener) {
+		mOnOptionsChangedListener = listener;
 	}	
 
 }

@@ -4,9 +4,9 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.OldPrefHelper;
 import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
-import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
+import com.mmarvick.urgentcall.widgets.OldEditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
-import com.mmarvick.urgentcall.widgets.StateListsPrompt;
+import com.mmarvick.urgentcall.widgets.OldStateListsPrompt;
 
 import android.os.Bundle;
 import android.preference.Preference;
@@ -41,7 +41,7 @@ public class RCSettingsActivity extends AlertSettingsActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				EditTextIntPrompt callNumberPrompt = new EditTextIntPrompt(RCSettingsActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
+				OldEditTextIntPrompt callNumberPrompt = new OldEditTextIntPrompt(RCSettingsActivity.this, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
 						Constants.CALL_QTY, Constants.CALL_QTY_DEFAULT, Constants.CALL_QTY_TITLE);
 				callNumberPrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 					
@@ -61,7 +61,7 @@ public class RCSettingsActivity extends AlertSettingsActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				EditTextIntPrompt callTimePrompt = new EditTextIntPrompt(RCSettingsActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
+				OldEditTextIntPrompt callTimePrompt = new OldEditTextIntPrompt(RCSettingsActivity.this, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
 						Constants.CALL_MIN, Constants.CALL_MIN_DEFAULT, Constants.CALL_MIN_TITLE);
 				callTimePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 					
@@ -81,7 +81,7 @@ public class RCSettingsActivity extends AlertSettingsActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				StateListsPrompt msgStatePrompt = new StateListsPrompt(RCSettingsActivity.this, alertType,
+				OldStateListsPrompt msgStatePrompt = new OldStateListsPrompt(RCSettingsActivity.this, alertType,
 						getApplicationContext().getString(R.string.state_change_dialog_title_msg), false);
 				msgStatePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 						

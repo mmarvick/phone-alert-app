@@ -21,7 +21,7 @@ public class Constants {
 	// Repeated call setting for quantity of calls
 	public final static String CALL_QTY = "CALL_QTY";
 	public final static String CALL_QTY_TITLE = "Number of calls";
-	public final static int CALL_QTY_MIN = 2;
+	public final static int CALL_QTY_MIN = 1;
 	public final static int CALL_QTY_MAX = 9;
 	public final static int CALL_QTY_DEFAULT = 3;
 	

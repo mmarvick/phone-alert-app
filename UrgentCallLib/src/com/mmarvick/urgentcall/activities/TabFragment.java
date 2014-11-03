@@ -20,5 +20,4 @@ public abstract class TabFragment extends Fragment {
 		return mActivity;
 	}
 	
-	public abstract void fragUpdateSettings();
 }

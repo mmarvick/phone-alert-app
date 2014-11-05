@@ -14,7 +14,8 @@
     <string name="action_rate">Rate</string>
     <string name="action_share">Share</string>
     <string name="action_upgrade">Upgrade</string>
-    <string name="action_add_contact">Add a contact</string>    
+    <string name="action_add_contact">Add a contact</string>  
+    <string name="action_add_alert">Add an alert</string>  
     
     <string name="status_heading">Urgent Call is</string>
     <string name="status_home_msg_name">Text Alerts are&#160;</string>

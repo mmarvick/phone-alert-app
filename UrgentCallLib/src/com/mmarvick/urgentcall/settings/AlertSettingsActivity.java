@@ -9,7 +9,6 @@ import com.mmarvick.urgentcall.activities.ContactListActivity;
 import com.mmarvick.urgentcall.data.OldPrefHelper;
 import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
-import com.mmarvick.urgentcall.widgets.SliderPrompt;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
 import android.content.Intent;
@@ -128,26 +127,7 @@ public class AlertSettingsActivity extends PreferenceActivity {
 				return true;
 			}
 		});			
-		
-		volume.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				SliderPrompt volumePrompt = new SliderPrompt(AlertSettingsActivity.this, Constants.ALERT_VOLUME_DEFAULT,
-						alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_MAX, "Volume", R.drawable.ic_action_ring_volume);
-				volumePrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
-					
-					@Override
-					public void onOptionsChanged() {
-						setStates();
-						
-					}
-				});
-				
-				volumePrompt.show();
-				return true;
-			}
-		});			
 	}
     
     protected void setStates() {

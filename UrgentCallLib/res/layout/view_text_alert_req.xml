@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mmarvick.urgentcall.views.RelativeLayoutBugHack xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >    
+
+    <TextView
+        android:id="@+id/textViewMessagePhraseContaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="72dp"
+        android:text="Messages containing"
+        android:textAppearance="?android:attr/textAppearanceMedium" />    
+    
+    <ImageButton
+        android:id="@+id/imageButtonMessagePhrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/textViewMessagePhraseContaining"
+        android:src="@drawable/ic_action_email" />        
+
+    <TextView
+        android:id="@+id/textViewMessagePhrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imageButtonMessagePhrase"
+        android:layout_alignTop="@id/imageButtonMessagePhrase"
+        android:layout_toRightOf="@id/imageButtonMessagePhrase"
+        android:layout_marginLeft="16dp"       
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="center_vertical"        
+        android:text="15 Minutes" />     
+    
+    <TextView
+        android:id="@+id/textViewFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewMessagePhrase"
+        android:layout_alignLeft="@id/textViewMessagePhrase"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:text="from" />    
+    
+
+
+</com.mmarvick.urgentcall.views.RelativeLayoutBugHack>

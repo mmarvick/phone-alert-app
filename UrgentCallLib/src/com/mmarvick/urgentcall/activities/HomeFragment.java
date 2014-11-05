@@ -7,6 +7,7 @@ import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class HomeFragment extends TabFragment {
+public class HomeFragment extends Fragment {
 	private LinearLayout mLayoutMsgState;
 	private LinearLayout mLayoutRCState;
 	private LinearLayout mLayoutSCState;
@@ -53,16 +54,16 @@ public class HomeFragment extends TabFragment {
 			
 			@Override
 			public void onClick(View v) {
-				if (OldPrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
-					getMainActivity().endSnooze();
+				if (OldPrefHelper.isSnoozing(getActivity().getApplicationContext())) {
+					//getActivity().endSnooze();
 				}
-				else if (OldPrefHelper.getState(getMainActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-					OldPrefHelper.setState(getMainActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
+				else if (OldPrefHelper.getState(getActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+					OldPrefHelper.setState(getActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
 				} else {
-					OldPrefHelper.setState(getMainActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
+					OldPrefHelper.setState(getActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
 				}
 				
-				getMainActivity().updateSettings();
+				//getActivity().updateSettings();
 			}
 		});
 		
@@ -71,19 +72,19 @@ public class HomeFragment extends TabFragment {
 	
 	public void setStateText(TextView textView, String alertType) {		
 		if (textView != null) {
-			if (OldPrefHelper.getState(getMainActivity().getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
-				textView.setText(getMainActivity().getString(R.string.status_nocaps_off));
+			if (OldPrefHelper.getState(getActivity().getApplicationContext(), alertType) == Constants.URGENT_CALL_STATE_OFF) {
+				textView.setText(getActivity().getString(R.string.status_nocaps_off));
 				textView.setTextColor(Color.RED);
 			} else {
-				textView.setText(getMainActivity().getString(R.string.status_nocaps_on));
+				textView.setText(getActivity().getString(R.string.status_nocaps_on));
 				textView.setTextColor(Color.GREEN);
 			}
 		}
 	}
 	
 	private void showTextViews() {
-		int state = OldPrefHelper.getState(getMainActivity(), Constants.APP_STATE);
-		if (state == Constants.URGENT_CALL_STATE_OFF || OldPrefHelper.isSnoozing(getMainActivity())) {
+		int state = OldPrefHelper.getState(getActivity(), Constants.APP_STATE);
+		if (state == Constants.URGENT_CALL_STATE_OFF || OldPrefHelper.isSnoozing(getActivity())) {
 			mTextSafelySilence.setVisibility(View.INVISIBLE);
 			mLayoutMsgState.setVisibility(View.INVISIBLE);
 			mLayoutRCState.setVisibility(View.INVISIBLE);
@@ -97,7 +98,7 @@ public class HomeFragment extends TabFragment {
 			mLayoutAllOff.setVisibility(View.INVISIBLE);
 		}
 		
-		if (OldPrefHelper.isSnoozing(getMainActivity())) {
+		if (OldPrefHelper.isSnoozing(getActivity())) {
 			mTextSnoozeFor.setVisibility(View.VISIBLE);
 			mTextSnoozeTime.setVisibility(View.VISIBLE);
 		} else {
@@ -107,22 +108,22 @@ public class HomeFragment extends TabFragment {
 	}	
 	
 	private void setButtonState() {
-		if (OldPrefHelper.isSnoozing(getMainActivity().getApplicationContext())) {
-			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_snoozing));
+		if (OldPrefHelper.isSnoozing(getActivity().getApplicationContext())) {
+			mButtonAppState.setText(getActivity().getString(R.string.status_allcaps_snoozing));
 			mButtonAppState.setTextColor(Color.RED);			
 		}
-		else if (OldPrefHelper.getState(getMainActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_off));
+		else if (OldPrefHelper.getState(getActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+			mButtonAppState.setText(getActivity().getString(R.string.status_allcaps_off));
 			mButtonAppState.setTextColor(Color.RED);
 		} else {
-			mButtonAppState.setText(getMainActivity().getString(R.string.status_allcaps_on));
+			mButtonAppState.setText(getActivity().getString(R.string.status_allcaps_on));
 			mButtonAppState.setTextColor(Color.GREEN);
 		}
 	}
 	
 	public void setSnoozeTime() {
-		if (OldPrefHelper.isSnoozing(getMainActivity())) {
-			long time = OldPrefHelper.snoozeRemaining(getMainActivity());
+		if (OldPrefHelper.isSnoozing(getActivity())) {
+			long time = OldPrefHelper.snoozeRemaining(getActivity());
 			long allsec = time / 1000;
 			long sec = allsec % 60;
 			long min = (allsec % 3600) / 60;

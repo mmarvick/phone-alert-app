@@ -231,7 +231,7 @@ public class MainActivity extends ActionBarActivity
 			if (position == 1) {
 				return new CallFragment();
 			} else if (position == 2) {
-				return new MessageFragment();
+				return new TextFragment();
 			}
 			return new HomeFragment();
 		}

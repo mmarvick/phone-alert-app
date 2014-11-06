@@ -14,7 +14,7 @@ public class CallFragment extends AlertFragment {
 	}
 	
 	protected AlertView createAlertView() {
-		return new CallAlertView(getActivity());
+		return new CallAlertView(getActivity(), this);
 	}
 	
 	protected Alert createAlert() {

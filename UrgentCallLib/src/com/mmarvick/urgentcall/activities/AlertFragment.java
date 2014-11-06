@@ -3,6 +3,8 @@ package com.mmarvick.urgentcall.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.mmarvick.urgentcall.views.AlertView.OnDeleteListener;
 public abstract class AlertFragment extends Fragment {
 	protected List<AlertView> alertViews;
 	protected View mView;
+	protected int nextId;
 	
 	protected abstract List<? extends Alert> getAlerts();
 	protected abstract AlertView createAlertView();
@@ -31,10 +34,11 @@ public abstract class AlertFragment extends Fragment {
 		
 		setHasOptionsMenu(true);
 		
-		View fragmentView = inflater.inflate(R.layout.fragment_call, container, false);
+		View fragmentView = inflater.inflate(R.layout.fragment_alert, container, false);
 		mView = fragmentView.findViewById(R.id.linearLayoutForAlerts);
 		
 		alertViews = new ArrayList<AlertView>();
+		nextId = 1000;
 		
 		for (Alert alert : getAlerts()) {
 			addAlert(alert);
@@ -51,6 +55,7 @@ public abstract class AlertFragment extends Fragment {
 	protected void addAlert(Alert alert) {
 		AlertView alertView = createAlertView();
 		alertView.setAlert(alert);
+		alertView.setId(nextId++);
 		alertView.setOnDeleteListener(new OnDeleteListener() {
 			
 			@Override
@@ -83,4 +88,14 @@ public abstract class AlertFragment extends Fragment {
 		
 		return false;
 	}	
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		for (AlertView alertView : alertViews) {
+			if (alertView.getId() == requestCode && resultCode == Activity.RESULT_OK) {
+				alertView.updateAlertTone(data);
+			}
+			
+		}
+	}
 }

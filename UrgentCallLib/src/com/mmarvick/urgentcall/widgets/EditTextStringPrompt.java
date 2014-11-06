@@ -18,10 +18,10 @@ public class EditTextStringPrompt {
 	private int minLength;
 	
 	private AlertDialog.Builder alertDialogBuilder;
-	private OnOptionsChangedListener mOnOptionsChangedListener;
+	private OnStringValueUpdatedListener mOnStringValueUpdatedListener;
 	private EditText userInput;
 	
-	public EditTextStringPrompt(final Context context, final int minLength, final String name, final String def, final String title) {
+	public EditTextStringPrompt(final Context context, final int minLength, final String def, final String title) {
 		this.minLength = minLength;
 		this.title = title;
 		this.context = context;
@@ -33,11 +33,10 @@ public class EditTextStringPrompt {
 		alertDialogBuilder.setView(promptView);
 		
 		userInput = (EditText) promptView.findViewById(R.id.edit_text_prompt_editText);
-		String setText = OldPrefHelper.getMessageToken(context);
 		
 		//Set initial EditText text and move cursor to the end
-		userInput.setText(setText);
-		userInput.setSelection(setText.length());
+		userInput.setText(def);
+		userInput.setSelection(def.length());
 		
 
 		
@@ -51,10 +50,10 @@ public class EditTextStringPrompt {
 					if (value.length() < minLength) {
 						alertLength();
 					} else {
-						OldPrefHelper.setMessageToken(context, value);
+						if (mOnStringValueUpdatedListener != null) mOnStringValueUpdatedListener.onStringValueUpdated(value);
 					}
 
-					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
+					
 				}
 			})
 			.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -92,8 +91,8 @@ public class EditTextStringPrompt {
 		alertDialog.show();
 	}
 	
-	public void setOnOptionsChangedListener(OnOptionsChangedListener listener) {
-		mOnOptionsChangedListener = listener;
-	}	
+	public void setOnStringValueUpdatedListener(OnStringValueUpdatedListener listener) {
+		mOnStringValueUpdatedListener = listener;
+	}		
 
 }

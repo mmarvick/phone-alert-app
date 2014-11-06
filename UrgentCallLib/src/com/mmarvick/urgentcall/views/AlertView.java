@@ -7,25 +7,38 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.Alert;
 import com.mmarvick.urgentcall.data.DbContract;
+import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.FilterPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
+import com.mmarvick.urgentcall.widgets.OnStringValueUpdatedListener;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Vibrator;
+import android.provider.Settings;
+import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public abstract class AlertView extends RelativeLayout {
 	protected Context mContext;
+	protected Fragment mFragment;
 	protected View mView;
 	protected View mPreView;
 	protected View mPostView;
@@ -40,27 +53,26 @@ public abstract class AlertView extends RelativeLayout {
 	protected ImageButton imageButtonRing;
 	protected ImageButton imageButtonTone;
 	protected ImageButton imageButtonExpand;
-	protected ImageButton imageButtonDelete;	
+	protected ImageButton imageButtonDelete;
 	
 	protected TextView textViewAlertName;
 	protected TextView textViewFilterBy;	
+	protected TextView textViewTone;
+	protected TextView textViewSettings;
 	
 	protected SeekBar seekBarVolume;
 	
 	protected boolean mExpanded;	
 	
-	public AlertView(Context context) {
-		this(context, null);
-	}
-	
-	public AlertView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	public AlertView(Context context, Fragment fragment) {
+		super(context, null);
+		mContext = new ContextThemeWrapper(context, R.style.AppThemeLight);
+		mFragment = fragment;
+		
+		LayoutInflater inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).cloneInContext(mContext);
 		mView = inflater.inflate(R.layout.view_alert, this);
 		inflatePreView();
 		inflatePostView();
-		
-		mContext = context;
 	}
 	
 	public void setAlert(Alert alert) {
@@ -80,11 +92,23 @@ public abstract class AlertView extends RelativeLayout {
 	}	
 	
 	public void promptTitle() {
-		//TODO
+		EditTextStringPrompt titlePrompt = new EditTextStringPrompt(mContext, 0,
+				mAlert.getTitle(), "Rename alert");
+		
+		titlePrompt.setOnStringValueUpdatedListener(new OnStringValueUpdatedListener() {
+			
+			@Override
+			public void onStringValueUpdated(String value) {
+				updateAlertTitle(value);
+				
+			}
+		});	
+		
+		titlePrompt.show();	
 	}
 	
-	public void updateAlertTitle() {
-		//TODO
+	public void updateAlertTitle(String value) {
+		mAlert.setTitle(value);
 		updateViewTitle();
 	}
 	
@@ -191,19 +215,50 @@ public abstract class AlertView extends RelativeLayout {
 	}	
 	
 	private void promptTone() {
-		// TODO
+		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mAlert.getTone());
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI);	
+		
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select an alert sound");
+		
+		mFragment.startActivityForResult(intent, this.getId());
 	}
 	
-	private void updateAlertTone() {
-		// TODO
+	public void updateAlertTone(Intent data) {
+		Uri tone = (Uri) data.getExtras().get(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+		mAlert.setTone(tone);
+		updateViewTone();
 	}
 	
-	private void updateViewTone() {
-		// TODO
+	public void updateViewTone() {
+		textViewTone.setText(mAlert.getToneName(mContext));
 	}	
 	
 	public void promptDelete() {
-		delete();
+		AlertDialog.Builder deleteAlertBuilder = new AlertDialog.Builder(mContext);
+		deleteAlertBuilder
+			.setMessage("Do you really want to delete this alert?")
+			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					delete();
+					
+				}
+			})
+			.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+					
+				}
+			})
+			.create().show();
 	}
 	
 	private void toggleExpand() {
@@ -258,6 +313,8 @@ public abstract class AlertView extends RelativeLayout {
 		imageButtonDelete = (ImageButton) mView.findViewById(R.id.imageButtonDelete);
 		textViewAlertName = (TextView) mView.findViewById(R.id.textViewAlertName);
 		textViewFilterBy = (TextView) mView.findViewById(R.id.textViewCallFrom);
+		textViewTone = (TextView) mView.findViewById(R.id.textViewTone);
+		textViewSettings = (TextView) mView.findViewById(R.id.textViewSettings);
 		seekBarVolume = (SeekBar) mView.findViewById(R.id.seekBarVolume);
 	}
 	
@@ -268,6 +325,8 @@ public abstract class AlertView extends RelativeLayout {
 		expandable.add(imageButtonTone);
 		expandable.add(imageButtonDelete);
 		expandable.add(seekBarVolume);
+		expandable.add(textViewTone);
+		expandable.add(textViewSettings);
 	}
 	
 	public void initView() {
@@ -276,6 +335,7 @@ public abstract class AlertView extends RelativeLayout {
 		updateViewFilterBy();
 		updateViewVibrate();
 		updateViewRingAndVolume();
+		updateViewTone();
 		updateViewExpand();
 	}
 	
@@ -370,7 +430,7 @@ public abstract class AlertView extends RelativeLayout {
 			
 			@Override
 			public void onClick(View v) {
-				//TODO
+				promptTitle();
 				
 			}
 		});

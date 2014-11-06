@@ -7,6 +7,7 @@ import com.mmarvick.urgentcall.data.AlertCall;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnIntValueUpdatedListener;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewStub;
@@ -25,12 +26,8 @@ public class CallAlertView extends AlertView {
 	private TextView textViewCallTime;
 	private TextView textViewCallTimeWithin;
 	
-	public CallAlertView(Context context) {
-		super(context, null);
-	}
-	
-	public CallAlertView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+	public CallAlertView(Context context, Fragment fragment) {
+		super(context, fragment);
 	}
 	
 	public void promptCallQty() {

@@ -5,9 +5,12 @@ import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.AlertCall;
 import com.mmarvick.urgentcall.data.AlertText;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
+import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnIntValueUpdatedListener;
+import com.mmarvick.urgentcall.widgets.OnStringValueUpdatedListener;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewStub;
@@ -22,12 +25,8 @@ public class TextAlertView extends AlertView {
 	private TextView textViewMessagePhrase;
 	private TextView textViewMessageAlertDuration;
 
-	public TextAlertView(Context context) {
-		super(context, null);
-	}
-	
-	public TextAlertView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+	public TextAlertView(Context context, Fragment fragment) {
+		super(context, fragment);
 	}	
 
 	@Override
@@ -45,16 +44,29 @@ public class TextAlertView extends AlertView {
 	}
 	
 	private void promptMessagePhrase() {
+		EditTextStringPrompt phrasePrompt = new EditTextStringPrompt(mContext, 0,
+				getAlertText().getSinglePhrase(), "Phrase to alert with");
 		
+		phrasePrompt.setOnStringValueUpdatedListener(new OnStringValueUpdatedListener() {
+			
+			@Override
+			public void onStringValueUpdated(String value) {
+				updateAlertMessagePhrase(value);
+				
+			}
+		});	
+		
+		phrasePrompt.show();		
 	}
 	
-	private void updateAlertMessagePhrase() {
+	private void updateAlertMessagePhrase(String value) {
+		getAlertText().setSinglePhrase(value);
 		
 		updateViewMessagePhrase();
 	}
 	
 	private void updateViewMessagePhrase() {
-		
+		textViewMessagePhrase.setText(getAlertText().getSinglePhrase());
 	}
 	
 	private void promptDuration() {

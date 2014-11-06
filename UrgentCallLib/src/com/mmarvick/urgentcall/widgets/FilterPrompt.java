@@ -69,9 +69,7 @@ public class FilterPrompt {
 				
 				@Override
 				public void onClick(View arg0) {
-					whitelistButton.setVisibility(View.GONE);
-					blacklistButton.setVisibility(View.GONE);
-					
+					enableDisableButtons();
 				}
 			});
 			
@@ -79,9 +77,7 @@ public class FilterPrompt {
 				
 				@Override
 				public void onClick(View arg0) {
-					whitelistButton.setVisibility(View.VISIBLE);
-					blacklistButton.setVisibility(View.GONE);			
-					
+					enableDisableButtons();
 				}
 			});
 			
@@ -89,9 +85,7 @@ public class FilterPrompt {
 				
 				@Override
 				public void onClick(View arg0) {
-					whitelistButton.setVisibility(View.GONE);
-					blacklistButton.setVisibility(View.VISIBLE);
-					
+					enableDisableButtons();
 				}
 			});
 			
@@ -103,15 +97,21 @@ public class FilterPrompt {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					if (onRadio.isChecked()) {
-						alert.setFilterBy(DbContract.ENTRY_FILTER_BY_EVERYONE);
-					} else if (whitelistRadio.isChecked()) {
-						alert.setFilterBy(DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY);
-					} else if (blacklistRadio.isChecked()) {
-						alert.setFilterBy(DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED);
-					} 
-					
-					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
+					if (whitelistRadio.isChecked() && alert.getAllowedContacts().isEmpty()) {
+						
+					} else if (blacklistRadio.isChecked() && alert.getBlockedContacts().isEmpty()) {
+						
+					} else {
+						if (onRadio.isChecked()) {
+							alert.setFilterBy(DbContract.ENTRY_FILTER_BY_EVERYONE);
+						} else if (whitelistRadio.isChecked()) {
+							alert.setFilterBy(DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY);
+						} else if (blacklistRadio.isChecked()) {
+							alert.setFilterBy(DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED);
+						} 
+						
+						if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
+					}
 				}
 			});
 		}
@@ -131,21 +131,30 @@ public class FilterPrompt {
 		switch (filterBy) {
 		case DbContract.ENTRY_FILTER_BY_EVERYONE:
 			onRadio.setChecked(true);
-			whitelistButton.setVisibility(View.GONE);
-			blacklistButton.setVisibility(View.GONE);
 			break;
 		case DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY:
-			whitelistRadio.setChecked(true);
-			whitelistButton.setVisibility(View.VISIBLE);
-			blacklistButton.setVisibility(View.GONE);			
+			whitelistRadio.setChecked(true);			
 			break;
 		case DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED:
-			blacklistRadio.setChecked(true);
-			whitelistButton.setVisibility(View.GONE);
-			blacklistButton.setVisibility(View.VISIBLE);			
+			blacklistRadio.setChecked(true);			
 			break;
 		}
 		
+		enableDisableButtons();
+		
+	}
+	
+	private void enableDisableButtons() {
+		if (whitelistRadio.isChecked()) {
+			whitelistButton.setVisibility(View.VISIBLE);
+			blacklistButton.setVisibility(View.GONE);			
+		} else if (blacklistRadio.isChecked()) {
+			whitelistButton.setVisibility(View.GONE);
+			blacklistButton.setVisibility(View.VISIBLE);			
+		} else {
+			whitelistButton.setVisibility(View.GONE);
+			blacklistButton.setVisibility(View.GONE);
+		}	
 	}
 	
 	private void upgradeNote() {

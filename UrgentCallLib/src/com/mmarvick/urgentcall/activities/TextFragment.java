@@ -14,7 +14,7 @@ public class TextFragment extends AlertFragment {
 	}
 	
 	protected AlertView createAlertView() {
-		return new TextAlertView(getActivity());
+		return new TextAlertView(getActivity(), this);
 	}
 	
 	protected Alert createAlert() {

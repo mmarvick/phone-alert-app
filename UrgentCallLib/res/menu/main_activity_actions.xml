@@ -3,7 +3,7 @@
     xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
     
  	<item android:id="@+id/action_snooze"
-	    android:icon="@drawable/ic_action_time"
+	    android:icon="@drawable/ic_action_snooze"
 	    android:title="@string/action_snooze"
 	    yourapp:showAsAction="ifRoom" />
 
@@ -25,9 +25,4 @@
 	     android:title="@string/action_upgrade"
 	     yourapp:showAsAction="collapseActionView" />	
 
-	<item
-         android:id="@+id/action_settings"
-         android:icon="@drawable/ic_action_settings"
-         android:title="@string/action_settings"
-         yourapp:showAsAction="collapseActionView"/>
 </menu>

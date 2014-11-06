@@ -10,8 +10,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 
@@ -95,6 +97,7 @@ public abstract class Alert {
 		mVolume = 1000;
 		mAllowedContacts = new ArrayList<String>();
 		mBlockedContacts = new ArrayList<String>();
+		mTone = Settings.System.DEFAULT_ALARM_ALERT_URI.toString();
 		
 		ContentValues ruleValues = new ContentValues();
 		ruleValues.put(RuleEntry.COLUMN_TITLE, mTitle);
@@ -103,6 +106,7 @@ public abstract class Alert {
 		ruleValues.put(RuleEntry.COLUMN_RING, mRing);
 		ruleValues.put(RuleEntry.COLUMN_VIBRATE, mVibrate);
 		ruleValues.put(RuleEntry.COLUMN_VOLUME, mVolume);
+		ruleValues.put(RuleEntry.COLUMN_TONE, mTone);
 		
 		initializeAndStoreRemainingRuleData(ruleValues);
 		
@@ -145,6 +149,7 @@ public abstract class Alert {
 		mRing = DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_RING)));
 		mVibrate = DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VIBRATE)));
 		mVolume = ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VOLUME));
+		mTone = ruleCursor.getString(ruleCursor.getColumnIndex(RuleEntry.COLUMN_TONE));
 		
 		loadRemainingRuleData(database, ruleCursor);
 		
@@ -233,6 +238,13 @@ public abstract class Alert {
 		db.delete(getContactTableName(), RuleContactEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId, null);
 		performRemainingDropCommands(db);
 		db.close();
+	}
+	
+	/** Gets the id of the alert
+	 * @return id the alert id
+	 */
+	public long getId() {
+		return mRuleId;
 	}
 	
 	/** Gets the alert title
@@ -355,10 +367,24 @@ public abstract class Alert {
 	/** Gets the ringtone to play's uri as a String
 	 * @return the uri of the ringtone as a String
 	 */
-	public String getTone() {
-		return mTone;
+	public Uri getTone() {
+		return Uri.parse(mTone);
 	}
 
+	/** Gets the ringtone's name as a String
+	 * @return the name of the ringtone as a String
+	 */	
+	public String getToneName(Context context) {
+		if (mTone.equals(Settings.System.DEFAULT_ALARM_ALERT_URI.toString())) {
+			return "Default Alarm Sound";
+		}
+		return RingtoneManager.getRingtone(context, getTone()).getTitle(context);
+	}
+
+	public void setTone(Uri tone) {
+		setTone(tone.toString());
+	}
+	
 	/** Sets the ringtone to play's uri as a String
 	 * @param tone the uri of the ringtone as a String
 	 */
@@ -480,7 +506,37 @@ public abstract class Alert {
 	 * @return the alert name
 	 */
 	private String getNewAlertName() {
-		return "New " + getAlertTypeName();
+		String base = "New " + getAlertTypeName();
+		
+		ArrayList<String> existingNames = new ArrayList<String>();
+		
+		SQLiteDatabase database = getReadableDatabase();
+		Cursor ruleCursor = database.query(getTableName(),
+				new String[] {RuleEntry.COLUMN_TITLE},
+				null, null, null, null, null);
+		ruleCursor.moveToFirst();
+		
+		while (!ruleCursor.isAfterLast()) {
+			existingNames.add(ruleCursor.getString(ruleCursor.getColumnIndex(RuleEntry.COLUMN_TITLE)));
+			ruleCursor.moveToNext();
+		}
+		
+		ruleCursor.close();
+		
+		if (!existingNames.contains(base) && !existingNames.contains(base + " #1")) {
+			return base;
+		}
+		
+		int count = 2;
+		
+		String newName;
+		
+		do {
+			newName = base + " #" + count;
+			count++;
+		} while (existingNames.contains(newName));
+		
+		return newName;
 	}
 
 	/** Checks to see if a contact fulfills the contact criteria of the alert.

@@ -20,7 +20,8 @@
 			android:layout_marginLeft="10dp"
 			android:layout_centerVertical="true"
 			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:textColor="#000000"
 			android:text="Repeat Call Alert" />
     
 		<ToggleButton
@@ -58,16 +59,27 @@
         android:layout_toRightOf="@+id/imageButtonCallFrom"
         android:layout_marginLeft="16dp"       
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_vertical"        
+        android:gravity="center_vertical"    
         android:text="Anyone" />
+    
+    <TextView
+        android:id="@+id/textViewSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageButtonCallFrom"
+        android:layout_alignLeft="@id/imageButtonCallFrom"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="12dp"       
+        android:textAppearance="?android:attr/textAppearanceLarge"   
+        android:text="Alert Settings:" />
     
     <ImageButton
         android:id="@+id/imageButtonVibrate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageButtonCallFrom"
+        android:layout_below="@id/textViewSettings"
         android:layout_alignLeft="@id/viewStubPre"
-        android:layout_marginTop="36dp"        
+        android:layout_marginTop="6dp"
         android:src="@drawable/ic_action_vibrate" /> 
         
     <ImageButton
@@ -93,7 +105,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/imageButtonVibrate"
         android:layout_alignLeft="@id/viewStubPre"        
-        android:src="@drawable/ic_action_tone" />  
+        android:src="@drawable/ic_action_ringtone" />  
+        
+    <TextView
+        android:id="@+id/textViewTone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageButtonTone"
+        android:layout_alignTop="@id/imageButtonTone"
+        android:layout_toRightOf="@+id/imageButtonTone"
+        android:layout_marginLeft="16dp"       
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="center_vertical" />	
         
 	<ViewStub 
 	    android:id="@+id/viewStubPost"

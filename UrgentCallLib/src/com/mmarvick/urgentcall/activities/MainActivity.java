@@ -7,7 +7,6 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.OldPrefHelper;
 import com.mmarvick.urgentcall.data.OldRulesDbOpenHelper;
-import com.mmarvick.urgentcall.settings.SettingsActivity;
 import com.mmarvick.urgentcall.widgets.MyViewPager;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.RateDialog;
@@ -45,6 +44,8 @@ public class MainActivity extends ActionBarActivity
 	implements TimePickerDialog.OnTimeSetListener{
 	
 	private static boolean testMode = true;
+	
+	private HomeFragment homeFragment;
 	
 	public static final int TAB_HOME = 0;
 	public static final int TAB_CALL = 1;
@@ -157,7 +158,10 @@ public class MainActivity extends ActionBarActivity
 	@Override
 	public void onResume() {
 		checkTwoVersions();
-		updateSettings();	//update control panel views
+		initSnooze();
+		if (homeFragment != null) {
+			homeFragment.updateViewState();	//update control panel views
+		}
 		super.onResume();
 		
 	}
@@ -171,6 +175,10 @@ public class MainActivity extends ActionBarActivity
 			mChecker = null;
 		}
 		super.onPause();
+	}
+	
+	public void setHomeFragment(HomeFragment homeFragment) {
+		this.homeFragment = homeFragment;
 	}
 	
 	// Used to set the tab
@@ -189,25 +197,8 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 	
-	// Updates all the views on the control panel. This needs to be called when settings changed (e.g. an alert
-	// is turned off, the app starts snoozing, the keyword for an incoming message changes, or the activity is loaded)
-	public void updateSettings() {
-		disableEnableWhenOff();
-		
-		if (OldPrefHelper.isSnoozing(getApplicationContext()) && (mChecker == null || mChecker.isCancelled())) {
-			mChecker = new PeriodicChecker();
-			mChecker.execute();
-			Log.e("Checker", "Checker made!");
-		}
-	
-	}
-	
-	private String getFragmentTag(int fragmentPosition) {
-	     return "android:switcher:" + mViewPager.getId() + ":" + fragmentPosition;
-	}	
-	
 	// Prevent the user from switching tabs or scrolling when the alerts are snoozed or off
-	private void disableEnableWhenOff() {
+	public void disableEnableWhenOff() {
 		if (OldPrefHelper.isSnoozing(getApplicationContext())
 				|| OldPrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 			mViewPager.setCurrentItem(TAB_HOME);
@@ -244,9 +235,36 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	// A prompt to snooze
-	private void showSnooze() {
+	private void promptSnooze() {
 		SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
 		snooze.show();
+	}
+	
+	private void beginSnooze(long snoozeTime) {
+		//TODO: Hack! Added 1/2 s to make snooze time show up correctly when first set.		
+		if (snoozeTime > 0) {
+			snoozeTime += 500;
+		}
+		OldPrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
+		initSnooze();
+	}
+	
+	private void initSnooze() {
+		if (OldPrefHelper.isSnoozing(getApplicationContext())) {
+			if (mChecker != null) {
+				mChecker.cancel(true);
+				mChecker = null;
+			}
+			mChecker = new PeriodicChecker();
+			mChecker.execute();
+			
+			disableEnableWhenOff();
+			if (homeFragment != null) {
+				homeFragment.updateViewState();
+				homeFragment.updateViewSnooze();
+			}
+			Log.e("Checker", "Checker made!");
+		}
 	}
 	
 	// A prompt to end snooze app
@@ -257,22 +275,34 @@ public class MainActivity extends ActionBarActivity
 			
 			@Override
 			public void onOptionsChanged() {
-				updateSettings(); //updates views on control panel
+				snoozeEnded();
 			}
 		});
 
 	}	
 	
+	public void snoozeEnded() {
+		if (homeFragment != null) {
+			homeFragment.updateViewState(); //updates views on control panel
+		}	
+		disableEnableWhenOff();
+	}
+	
+	public void snoozeUpdate() {
+		Log.e("Time:",""+OldPrefHelper.snoozeRemaining(getApplicationContext()));
+		if (!(OldPrefHelper.isSnoozing(getApplicationContext())) && endSnoozeDialog != null) {
+			endSnoozeDialog.cancel();
+		}	
+		if (homeFragment != null) {
+			homeFragment.updateViewSnooze();
+		}
+	}
+	
 	// Return value from the snooze prompt
 	@Override
 	public void onTimeSet(TimePicker view, int hours, int minutes) {
 		long snoozeTime = hours * 3600000 + minutes * 60000;
-		//TODO: Hack! Added 1/2 s to make snooze time show up correctly when first set.
-		if (snoozeTime > 0) {
-			snoozeTime += 500;
-		}
-		OldPrefHelper.setSnoozeTime(getApplicationContext(), snoozeTime);
-		updateSettings(); // updates views on control panel
+		beginSnooze(snoozeTime);
 	}	
 	
 	@Override
@@ -296,70 +326,34 @@ public class MainActivity extends ActionBarActivity
 	
 	// Generate message and intent to share app with other users
 	private void share() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.share_type_subject))
-				.setItems(R.array.share_types, new OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Intent shareIntent = new Intent();
-						
-						String message = "";
-						String subject = "";
-						String intentPickerTitle = "";
-						
-						switch (which) {
-						case 0:
-						default:
-							subject = getString(R.string.share_uc_subject);
-							message = getString(R.string.share_uc_1) + getString(R.string.share_app_url);
-							intentPickerTitle = getString(R.string.share_uc_by);
-							break;
-						case 1:
-							subject = getString(R.string.share_msg_subject);
-							message += getString(R.string.share_msg_1) + "\"" + OldPrefHelper.getMessageToken(getApplicationContext()) + "\"";
-							message += getString(R.string.share_msg_2) + getString(R.string.share_app_url);
-							intentPickerTitle = getString(R.string.share_msg_by);							
-							break;
-						case 2:
-							subject = getString(R.string.share_rc_subject);
-							message += getString(R.string.share_rc_1) + OldPrefHelper.getRepeatedCallQty(getApplicationContext());
-							message += getString(R.string.share_rc_2) + OldPrefHelper.getRepeatedCallMins(getApplicationContext());
-							message += getString(R.string.share_rc_3) + getString(R.string.share_app_url);
-							intentPickerTitle = getString(R.string.share_rc_by);
-							break;
-						case 3:
-							subject = getString(R.string.share_sc_subject);
-							message = getString(R.string.share_sc_1) + getString(R.string.share_app_url);
-							intentPickerTitle = getString(R.string.share_sc_by);							
-							break;
-						}
 
-						shareIntent.setAction(Intent.ACTION_SEND);
-						shareIntent.setType("text/plain");
-						shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-						shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-						shareIntent.putExtra(Intent.EXTRA_TEXT, message);
-						startActivity(Intent.createChooser(shareIntent, intentPickerTitle));
-						
-					}
-				});
-		builder.create().show();
+		Intent shareIntent = new Intent();
+		
+		String message = "";
+		String subject = "";
+		String intentPickerTitle = "";
+		
+		subject = getString(R.string.share_uc_subject);
+		message = getString(R.string.share_uc_1) + getString(R.string.share_app_url);
+		intentPickerTitle = getString(R.string.share_uc_by);
+
+		shareIntent.setAction(Intent.ACTION_SEND);
+		shareIntent.setType("text/plain");
+		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+		startActivity(Intent.createChooser(shareIntent, intentPickerTitle));
+		
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    int itemId = item.getItemId();
-		if (itemId == R.id.action_settings) {
-			Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-			startActivity(i);
-			return true;
-		} else
 		if (itemId == R.id.action_snooze) {
 			if (OldPrefHelper.isSnoozing(getApplicationContext())) {
 				endSnooze();
 			} else {
-				showSnooze();
+				promptSnooze();
 			}
 			return true;
 		} else if (itemId == R.id.action_share) {
@@ -385,13 +379,10 @@ public class MainActivity extends ActionBarActivity
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				runOnUiThread(new Runnable() { public void run() {updateSettings();}});
-				Log.e("Time:",""+OldPrefHelper.snoozeRemaining(getApplicationContext()));
-				if (!(OldPrefHelper.isSnoozing(getApplicationContext()))) {
-					endSnoozeDialog.cancel();
-				}
+				runOnUiThread(new Runnable() { public void run() {snoozeUpdate();}});
 			}
 			cancel(true);
+			runOnUiThread(new Runnable() { public void run() {snoozeEnded();}});
 			return null;
 		}
 	}
@@ -455,7 +446,9 @@ public class MainActivity extends ActionBarActivity
 						OldPrefHelper.disclaimerResumeBackup(getApplicationContext());
 						
 						// Refresh values due to state change
-						updateSettings();
+						if (homeFragment != null) {
+							homeFragment.updateViewState();
+						}
 					}
 				})
 				.setNegativeButton(getString(R.string.disclaimer_disagree), new DialogInterface.OnClickListener() {

@@ -103,6 +103,27 @@ public class AlertText extends Alert {
 		updateRuleTable(newValues);		
 		mAlertDuration = alertDuration;	
 	}
+	
+	/** Returns the first phrase that will trigger a text alert. Not for
+	 * long-term use.
+	 * @return String phrase
+	 */
+	public String getSinglePhrase() {
+		if (mPhrases.size() > 0) {
+			return mPhrases.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	/** Removes all phrases from the list of acceptable phrases for a text
+	 * alert, and replaces it with the passed phrase. Not for long-term use.
+	 * @param s the phrase to allow text alerts with
+	 */
+	public void setSinglePhrase(String s) {
+		mPhrases.clear();
+		addPhrase(s);
+	}
 
 	/** Returns a list of the lookup values for all phrases that will trigger
 	 * a text alert.

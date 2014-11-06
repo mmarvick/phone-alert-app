@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="4dp"
         android:src="@drawable/ic_action_call" />
     
     <TextView

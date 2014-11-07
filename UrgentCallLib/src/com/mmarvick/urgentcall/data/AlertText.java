@@ -16,9 +16,6 @@ public class AlertText extends Alert {
 	/** The default name of a text alert */
 	public static final String ALERT_TEXT_TYPE_NAME = "Text Alert";
 	
-	/** The default name of the initial text alert */
-	public static final String RULE_TEXT_INITIAL_NAME = ALERT_TEXT_TYPE_NAME;
-	
 	/** The alert duration in seconds */
 	private int mAlertDuration;
 	
@@ -58,7 +55,7 @@ public class AlertText extends Alert {
 	 * @param context the current context
 	 */
 	public AlertText(Context context) {
-		super(context);
+		this(context, null, false);
 	}
 
 	/** Constructor for an AlertText not currently in the database, with all
@@ -121,7 +118,10 @@ public class AlertText extends Alert {
 	 * @param s the phrase to allow text alerts with
 	 */
 	public void setSinglePhrase(String s) {
-		mPhrases.clear();
+		ArrayList<String> oldPhrases = new ArrayList<String>(mPhrases);
+		for (String phrase : oldPhrases) {
+			removePhrase(phrase);
+		}
 		addPhrase(s);
 	}
 
@@ -256,18 +256,13 @@ public class AlertText extends Alert {
 
 	/** {@inheritDoc} */
 	protected void performRemainingDropCommands(SQLiteDatabase db) {
-		db.delete(getContactTableName(), TextRulePhraseEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId, null);
+		db.delete(getPhraseTableName(), TextRulePhraseEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId, null);
 
 	}
 
 	/** {@inheritDoc} */
 	protected String getAlertTypeName() {
 		return ALERT_TEXT_TYPE_NAME;
-	}
-	
-	/** {@inheritDoc} */
-	protected String getRuleInitialName() {
-		return RULE_TEXT_INITIAL_NAME;
 	}	
 
 	/** {@inheritDoc} */

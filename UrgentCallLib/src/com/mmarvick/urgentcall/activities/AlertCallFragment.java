@@ -7,7 +7,7 @@ import com.mmarvick.urgentcall.data.AlertCall;
 import com.mmarvick.urgentcall.views.AlertView;
 import com.mmarvick.urgentcall.views.CallAlertView;
 
-public class CallFragment extends AlertFragment {
+public class AlertCallFragment extends AlertFragment {
 	
 	protected List<? extends Alert> getAlerts() {
 		return AlertCall.getAlerts(getActivity());

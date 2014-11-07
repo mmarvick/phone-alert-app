@@ -40,38 +40,44 @@
 	    android:layout_below="@id/linearLayoutHeading"
 	    android:layout_marginLeft="10dp"
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" />      
-
-    <ImageButton
-        android:id="@+id/imageButtonCallFrom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewStubPre"
-        android:layout_alignLeft="@id/viewStubPre"        
-        android:src="@drawable/ic_action_group" />
-    
-    <TextView
-        android:id="@+id/textViewCallFrom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageButtonCallFrom"
-        android:layout_alignTop="@id/imageButtonCallFrom"
-        android:layout_toRightOf="@+id/imageButtonCallFrom"
-        android:layout_marginLeft="16dp"       
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_vertical"    
-        android:text="Anyone" />
-    
+	    android:layout_height="wrap_content" />  
+	        
+	<com.mmarvick.urgentcall.views.RelativeLayoutBugHack
+	    android:id="@+id/relativeLayoutCallFrom"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/viewStubPre"
+	    android:layout_alignLeft="@id/viewStubPre" >
+			
+	    <ImageButton
+	        android:id="@+id/imageButtonCallFrom"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_centerVertical="true"  
+	        android:src="@drawable/ic_action_group" />
+	    
+	    <TextView
+	        android:id="@+id/textViewCallFrom"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true" 
+	        android:layout_centerVertical="true"
+	        android:layout_marginLeft="62dp"                
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+    </com.mmarvick.urgentcall.views.RelativeLayoutBugHack>
+	    
     <TextView
         android:id="@+id/textViewSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageButtonCallFrom"
-        android:layout_alignLeft="@id/imageButtonCallFrom"
+        android:layout_below="@id/relativeLayoutCallFrom"
+        android:layout_alignLeft="@id/relativeLayoutCallFrom"
         android:layout_marginLeft="3dp"
-        android:layout_marginTop="12dp"       
-        android:textAppearance="?android:attr/textAppearanceLarge"   
-        android:text="Alert Settings:" />
+        android:layout_marginTop="12dp"     
+        android:text="Alert Settings:"  
+        android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <ImageButton
         android:id="@+id/imageButtonVibrate"
@@ -113,8 +119,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageButtonTone"
         android:layout_alignTop="@id/imageButtonTone"
-        android:layout_toRightOf="@+id/imageButtonTone"
-        android:layout_marginLeft="16dp"       
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="72dp"    
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:gravity="center_vertical" />	
         

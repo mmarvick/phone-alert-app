@@ -1,17 +1,17 @@
 package com.mmarvick.urgentcall.widgets;
 
-import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.activities.ContactListActivity;
+import com.mmarvick.urgentcall.activities.AlertFragment;
+import com.mmarvick.urgentcall.activities.ContactListFragment;
 import com.mmarvick.urgentcall.data.Alert;
 import com.mmarvick.urgentcall.data.DbContract;
-import com.mmarvick.urgentcall.data.OldPrefHelper;
-import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +19,8 @@ import android.widget.Button;
 import android.widget.RadioButton;
 
 public class FilterPrompt {
-	private final Context context;
+	private final Context mContext;
+	private final Fragment mFragment;
 	private final Alert alert;
 	
 	private RadioButton onRadio;
@@ -32,8 +33,9 @@ public class FilterPrompt {
 	private OnOptionsChangedListener mOnOptionsChangedListener;
 	
 
-	public FilterPrompt(final Context context, final Alert alert, final String title) {
-		this.context = context;
+	public FilterPrompt(final Context context, final Fragment fragment, final Alert alert, final String title) {
+		this.mContext = context;
+		this.mFragment = fragment;
 		this.alert = alert;
 		
 		if (context.getResources().getBoolean(R.bool.paid_version)) {
@@ -53,7 +55,7 @@ public class FilterPrompt {
 				
 				@Override
 				public void onClick(View arg0) {
-			        //TODO
+			        showListDialog(DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY);
 				}
 			});
 			
@@ -61,7 +63,7 @@ public class FilterPrompt {
 				
 				@Override
 				public void onClick(View arg0) {
-			        //TODO
+			        showListDialog(DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED);
 				}
 			});
 			
@@ -98,9 +100,9 @@ public class FilterPrompt {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if (whitelistRadio.isChecked() && alert.getAllowedContacts().isEmpty()) {
-						
+						alertListIsEmpty(true);
 					} else if (blacklistRadio.isChecked() && alert.getBlockedContacts().isEmpty()) {
-						
+						alertListIsEmpty(false);
 					} else {
 						if (onRadio.isChecked()) {
 							alert.setFilterBy(DbContract.ENTRY_FILTER_BY_EVERYONE);
@@ -110,8 +112,9 @@ public class FilterPrompt {
 							alert.setFilterBy(DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED);
 						} 
 						
-						if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
 					}
+					
+					if (mOnOptionsChangedListener != null) mOnOptionsChangedListener.onOptionsChanged();
 				}
 			});
 		}
@@ -119,11 +122,36 @@ public class FilterPrompt {
 	}
 	
 	public void show() {
-		if (context.getResources().getBoolean(R.bool.paid_version)) {
+		if (mContext.getResources().getBoolean(R.bool.paid_version)) {
 			alertDialogBuilder.create().show();
 		} else {
 			upgradeNote();
 		}
+	}
+	
+	public void alertListIsEmpty(boolean allowList) {
+		alert.setFilterBy(DbContract.ENTRY_FILTER_BY_EVERYONE);
+		
+		String message = "You need to add some people to the blocked contacts " +
+				"list if you only want to prevent blocked contacts from coming through!";
+		
+		if (allowList) {
+			message = "You need to add some people to the allowed contacts list " +
+					"if you only want to let allowed callers through!";
+		}
+		
+		new AlertDialog.Builder(mContext)
+		.setMessage(message)
+		.setPositiveButton("OK", null)
+		.create().show();	
+	}
+	
+	public void showListDialog(int listType) {
+		FragmentManager manager = ((ActionBarActivity) mContext).getSupportFragmentManager();
+		
+		ContactListFragment dialog = new ContactListFragment(alert, listType, (AlertFragment) mFragment);
+
+		dialog.show(manager, "dialog");
 	}
 	
 	private void select() {
@@ -158,7 +186,7 @@ public class FilterPrompt {
 	}
 	
 	private void upgradeNote() {
-		UpgradeDialog.upgradeDialog(context, context.getString(R.string.upgrade_body_state));
+		UpgradeDialog.upgradeDialog(mContext, mContext.getString(R.string.upgrade_body_filter_by));
 	}
 	
 	public void setOnOptionsChangedListener(OnOptionsChangedListener listener) {

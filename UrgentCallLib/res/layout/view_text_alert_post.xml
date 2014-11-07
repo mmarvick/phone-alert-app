@@ -17,10 +17,9 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/imageButtonMessageDuration"
         android:layout_alignTop="@id/imageButtonMessageDuration"
-        android:layout_toRightOf="@id/imageButtonMessageDuration"
-        android:layout_marginLeft="16dp"       
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="62dp"     
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_vertical"        
-        android:text="10 Seconds" />       
+        android:gravity="center_vertical" />       
 
 </com.mmarvick.urgentcall.views.RelativeLayoutBugHack>

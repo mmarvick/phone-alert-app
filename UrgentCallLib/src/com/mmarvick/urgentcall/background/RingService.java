@@ -1,7 +1,7 @@
 package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
-import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.app.Service;
@@ -22,63 +22,57 @@ public class RingService extends Service {
 	private Vibrator vibrator;
 	private int streamVolumeInit;
 	
+	public static int startidStatic;
+	
 	TelephonyManager telephonyManager;
 	
-	private float volume;
+	private int volume;
 	private Uri toneUri;
 	private boolean ring;
 	private boolean vibrate;
+	
+	public static final String RING = "RING";
+	public static final String VIBRATE = "VIBRATE";
+	public static final String TONE = "TONE";
+	public static final String VOLUME = "VOLUME";
 
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
+	
+	@Override
+	public void onCreate() {
+		audio = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+		streamVolumeInit = audio.getStreamVolume(AudioManager.STREAM_ALARM);
+		media = new MediaPlayer();
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		super.onCreate();
+	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid) {
-		int alertType = intent.getIntExtra(Constants.ALERT_TYPE, Constants.CALL_ALERT_TYPE_BOTH);
+		startidStatic = startid;
 		
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		telephonyManager.listen(new TeleListener(), PhoneStateListener.LISTEN_CALL_STATE);
 		
-		ring = false;
-		vibrate = false;
-		
-		float rcVolume = OldPrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.RC_STATE);
-		float scVolume = OldPrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.SC_STATE);
-		OldPrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.RC_STATE);
-		OldPrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.SC_STATE);
-		
-		if (alertType == Constants.CALL_ALERT_TYPE_RC) {
-			volume = rcVolume;
-			setHowToAlert(RulesEntryOld.RC_STATE);
-			
-		} else if (alertType == Constants.CALL_ALERT_TYPE_SC) {
-			volume = scVolume;
-			setHowToAlert(RulesEntryOld.SC_STATE);
-		} else {
-			
-			if (rcVolume >= scVolume) {
-				volume = rcVolume;				
-			} else {
-				volume = scVolume;			
-			}
-			
-			setHowToAlert(RulesEntryOld.SC_STATE);
-			setHowToAlert(RulesEntryOld.RC_STATE);			
-		}
+		ring = intent.getBooleanExtra(RING,  true);
+		vibrate = intent.getBooleanExtra(VIBRATE, true);
+		toneUri = (Uri) intent.getExtras().get(TONE);
+		volume = intent.getIntExtra(VOLUME, 1000);
 
 		if (ring) {
-			audio = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+			
 			
 			audio.setStreamMute(AudioManager.STREAM_RING, true);
 			
-			streamVolumeInit = audio.getStreamVolume(AudioManager.STREAM_ALARM);
+			
 			audio.setStreamVolume(AudioManager.STREAM_ALARM, audio.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
 			
-			media = new MediaPlayer();
+			
 			try {
-				media.setVolume(volume, volume);
+				media.setVolume(getVolume(volume), getVolume(volume));
 				media.setDataSource(this, toneUri);
 				media.setAudioStreamType(AudioManager.STREAM_ALARM);
 				media.setLooping(true);
@@ -90,7 +84,6 @@ public class RingService extends Service {
 		}		
 		
 		if (vibrate) {
-			vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 			long[] pattern = {0, 100, 0};
 			vibrator.vibrate(pattern, 0);		
 		}
@@ -109,19 +102,12 @@ public class RingService extends Service {
 		if (vibrate) {
 			vibrator.cancel();
 		}
+		
+		stopSelf(startidStatic);
 	}	
 	
-	public void setHowToAlert(String alertType) {
-		String howToAlert = OldPrefHelper.getMessageHow(getApplicationContext(), alertType);
-		
-		if (howToAlert.equals(Constants.ALERT_HOW_RING) || howToAlert.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
-			ring = true;
-			toneUri = OldPrefHelper.getMessageSound(getApplicationContext(), alertType);
-		}
-		
-		if (howToAlert.equals(Constants.ALERT_HOW_VIBE) || howToAlert.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
-			vibrate = true;
-		}		
+	private float getVolume(int volume) {
+		return (float) (1 - (Math.log(Constants.ALERT_VOLUME_MAX - volume) / Math.log(Constants.ALERT_VOLUME_MAX)));
 	}
 	
 	private class TeleListener extends PhoneStateListener {

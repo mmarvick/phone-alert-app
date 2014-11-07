@@ -41,8 +41,8 @@ public class OldRulesDbOpenHelper extends SQLiteOpenHelper {
 		
 		// Update the alert
 		updateAlert(oldDb, alertCall, RulesEntryOld.RC_STATE);
-		alertCall.setCallQty(OldPrefHelper.getRepeatedCallQty(mContext));
-		alertCall.setCallTime(OldPrefHelper.getRepeatedCallMins(mContext));
+		alertCall.setCallQty(PrefHelper.getRepeatedCallQty(mContext));
+		alertCall.setCallTime(PrefHelper.getRepeatedCallMins(mContext));
 		
 		
 		/* SC ALERT */
@@ -74,7 +74,7 @@ public class OldRulesDbOpenHelper extends SQLiteOpenHelper {
 		
 		// Update the alert
 		updateAlert(oldDb, alertText, RulesEntryOld.MSG_STATE);
-		alertText.setAlertDuration(OldPrefHelper.getMessageTime(mContext, RulesEntryOld.MSG_STATE));
+		alertText.setAlertDuration(PrefHelper.getMessageTime(mContext, RulesEntryOld.MSG_STATE));
 		
 		List<String> badPhrases = alertText.getPhrases();
 		
@@ -82,31 +82,36 @@ public class OldRulesDbOpenHelper extends SQLiteOpenHelper {
 			alertText.removePhrase(badPhrase);
 		}
 		
-		alertText.addPhrase(OldPrefHelper.getMessageToken(mContext));
+		alertText.addPhrase(PrefHelper.getMessageToken(mContext));
 		
 	}
 	
 	private void updateAlert(SQLiteDatabase oldDb, Alert alert, String type) {
 		
-		int oldState = OldPrefHelper.getState(mContext, type);
-		int backupState = OldPrefHelper.getBackupState(mContext, type);
-		int oldStyleFilterState = (oldState == Constants.URGENT_CALL_STATE_OFF) ? backupState : oldState;
+		int oldState = PrefHelper.getState(mContext, type);
+		int backupState = PrefHelper.getBackupState(mContext, type);
 		
+		Log.e("UC OLDSTATE", "" + oldState);
+		int oldStyleFilterState = (oldState == Constants.URGENT_CALL_STATE_OFF) ? backupState : oldState;
+		Log.e("UC OLDFILTERSTATE", "" + oldStyleFilterState);
 		alert.setOnState(oldState != Constants.URGENT_CALL_STATE_OFF);
 		
 		switch (oldStyleFilterState) {
 			case (Constants.URGENT_CALL_STATE_WHITELIST):
+				Log.e("UC FILTER", "ALLOWED!");
 				alert.setFilterBy(DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY);
 				break;
 			case (Constants.URGENT_CALL_STATE_BLACKLIST):
+				Log.e("UC FILTER", "BLOCKED!");
 				alert.setFilterBy(DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED);
 				break;
 			default:
+				Log.e("UC FILTER", "ALL!");
 				alert.setFilterBy(DbContract.ENTRY_FILTER_BY_EVERYONE);
 				break;
 		}
 		
-		String oldAlertHow = OldPrefHelper.getMessageHow(mContext, type);
+		String oldAlertHow = PrefHelper.getMessageHow(mContext, type);
 		
 		if (oldAlertHow.equals(Constants.ALERT_HOW_VIBE)) {
 			alert.setRing(false);
@@ -119,9 +124,11 @@ public class OldRulesDbOpenHelper extends SQLiteOpenHelper {
 			alert.setVibrate(false);
 		}
 
-		alert.setVolume(OldPrefHelper.getMessageVolumeIntValue(mContext, type));
+		alert.setVolume(PrefHelper.getMessageVolumeIntValue(mContext, type));
 		
-		alert.setTone(OldPrefHelper.getMessageSoundString(mContext, type));
+		if (PrefHelper.getMessageSoundString(mContext, type) != null) {
+			alert.setTone(PrefHelper.getMessageSoundString(mContext, type));
+		}
 		
 		Cursor callers = oldDb.query(RulesEntryOld.TABLE_NAME,
 				new String[] {RulesEntryOld.COLUMN_NAME_CONTACT_LOOKUP, type},

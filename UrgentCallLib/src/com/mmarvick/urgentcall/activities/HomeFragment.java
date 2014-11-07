@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.activities;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.PrefHelper;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -39,13 +39,13 @@ public class HomeFragment extends Fragment {
     }
 	
 	private void toggleState() {
-		if (OldPrefHelper.isSnoozing(getActivity().getApplicationContext())) {
+		if (PrefHelper.isSnoozing(getActivity().getApplicationContext())) {
 			((MainActivity) getActivity()).endSnooze();
 		}
-		else if (OldPrefHelper.getState(getActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-			OldPrefHelper.setState(getActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
+		else if (PrefHelper.getState(getActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+			PrefHelper.setState(getActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
 		} else {
-			OldPrefHelper.setState(getActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
+			PrefHelper.setState(getActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
 		}
 		
 		((MainActivity) getActivity()).disableEnableWhenOff();
@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
 	}
 	
 	public void updateViewState() {
-		if (OldPrefHelper.isSnoozing(getActivity().getApplicationContext())) {
+		if (PrefHelper.isSnoozing(getActivity().getApplicationContext())) {
 			mTextSnoozeFor.setVisibility(View.VISIBLE);
 			mTextSnoozeTime.setVisibility(View.VISIBLE);
 			
@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
 			mTextSnoozeFor.setVisibility(View.INVISIBLE);
 			mTextSnoozeTime.setVisibility(View.INVISIBLE);	
 			
-			if (OldPrefHelper.getState(getActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+			if (PrefHelper.getState(getActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
 				mTextSafelySilence.setVisibility(View.INVISIBLE);
 				mButtonAppState.setText(getActivity().getString(R.string.status_allcaps_off));
 				mButtonAppState.setTextColor(Color.RED);
@@ -78,8 +78,8 @@ public class HomeFragment extends Fragment {
 	}
 	
 	public void updateViewSnooze() {
-		if (OldPrefHelper.isSnoozing(getActivity())) {
-			long time = OldPrefHelper.snoozeRemaining(getActivity());
+		if (PrefHelper.isSnoozing(getActivity())) {
+			long time = PrefHelper.snoozeRemaining(getActivity());
 			long allsec = time / 1000;
 			long sec = allsec % 60;
 			long min = (allsec % 3600) / 60;

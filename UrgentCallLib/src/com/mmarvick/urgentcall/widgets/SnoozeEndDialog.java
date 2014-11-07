@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.PrefHelper;
 
 public class SnoozeEndDialog {
 	private AlertDialog dialog;
@@ -20,7 +20,7 @@ public class SnoozeEndDialog {
 			.setCancelable(true)
 			.setPositiveButton(context.getString(R.string.cancel_snooze_dialog_yes), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
-					OldPrefHelper.setSnoozeTime(context, 0);
+					PrefHelper.setSnoozeTime(context, 0);
 					mOnOptionsChangedListener.onOptionsChanged();
 				}
 			})

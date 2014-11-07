@@ -101,6 +101,10 @@ public class TextAlertView extends AlertView {
 		textViewMessageAlertDuration.setText(durationText);
 	}
 	
+	protected View getLastImageButton() {
+		return imageButtonMessageAlertDuration;
+	}	
+	
 	@Override
 	public void findViews() {
 		super.findViews();

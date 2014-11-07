@@ -18,8 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageButtonCallNum"
         android:layout_alignTop="@id/imageButtonCallNum"
-        android:layout_toRightOf="@+id/imageButtonCallNum"
-        android:layout_marginLeft="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="62dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:gravity="center_vertical"
         android:text="3 Calls" />
@@ -47,12 +47,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageButtonCallTime"
         android:layout_alignTop="@id/imageButtonCallTime"
-        android:layout_toRightOf="@+id/imageButtonCallTime"
-        android:layout_marginLeft="16dp"       
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="62dp"      
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_vertical"        
-        android:text="15 Minutes" /> 
-        
+        android:gravity="center_vertical" />    
         
     <TextView
         android:id="@+id/textViewFrom"

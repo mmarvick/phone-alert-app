@@ -12,7 +12,7 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
-public class OldPrefHelper {
+public class PrefHelper {
 
 	public static int getState(Context context, String alertType) {
 		int def = Constants.URGENT_CALL_STATE_ON;
@@ -54,27 +54,6 @@ public class OldPrefHelper {
 		return getPrefs(context).getString(alertType + Constants.ALERT_SOUND, null);	
 	}
 	
-	public static void setMessageSound(Context context, String alertType, Uri sound) {
-		Editor editor = getPrefs(context).edit();
-		editor.putString(alertType + Constants.ALERT_SOUND, sound.toString());
-		editor.commit();
-	}	
-	
-	public static void setMessageHow(Context context, String alertType, String how) {
-		Editor editor = getPrefs(context).edit();
-		editor.putString(alertType + Constants.ALERT_HOW, how);
-		editor.commit();
-	}		
-	
-	public static String getMessageVolumePercent(Context context, String alertType) {
-		int volume = getPrefs(context).getInt(alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_DEFAULT);
-		int percent = volume * 100 / Constants.ALERT_VOLUME_DEFAULT;
-		if (volume > 0 && percent == 0) {
-			percent = 1;
-		}
-		return percent + "%";
-	}
-	
 	public static float getMessageVolumeValue(Context context, String alertType) {
 		int volume = getPrefs(context).getInt(alertType + Constants.ALERT_VOLUME, Constants.ALERT_VOLUME_DEFAULT);
 		return (float) (1 - (Math.log(Constants.ALERT_VOLUME_MAX - volume) / Math.log(Constants.ALERT_VOLUME_MAX)));
@@ -94,12 +73,6 @@ public class OldPrefHelper {
 	
 	public static String getMessageToken(Context context) {
 		return getPrefs(context).getString(Constants.MSG_MESSAGE, Constants.MSG_MESSAGE_DEFAULT);
-	}
-	
-	public static void setMessageToken(Context context, String value) {
-		Editor editor = getPrefs(context).edit();
-		editor.putString(Constants.MSG_MESSAGE, value);
-		editor.commit();
 	}
 		
 	

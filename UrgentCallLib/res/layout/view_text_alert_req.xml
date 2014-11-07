@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="72dp"
+        android:layout_marginLeft="62dp"
         android:layout_marginTop="8dp"
         android:text="Messages containing"
         android:textAppearance="?android:attr/textAppearanceMedium" />    
@@ -28,11 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/imageButtonMessagePhrase"
         android:layout_alignTop="@id/imageButtonMessagePhrase"
-        android:layout_toRightOf="@id/imageButtonMessagePhrase"
-        android:layout_marginLeft="16dp"       
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="62dp"    
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_vertical"        
-        android:text="15 Minutes" />     
+        android:gravity="center_vertical" />     
     
     <TextView
         android:id="@+id/textViewFrom"
@@ -40,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewMessagePhrase"
         android:layout_alignLeft="@id/textViewMessagePhrase"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="from" />    
     
 

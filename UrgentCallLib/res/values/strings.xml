@@ -54,8 +54,8 @@
     <string name="status_nocaps_on">on</string>
     <string name="status_nocaps_off">off</string>
     
-    <string name="list_fragment_list_allowed">Allowed for</string>
-    <string name="list_fragment_list_blocked">Blocked from</string>
+    <string name="list_fragment_list_allowed">Allowed Contacts</string>
+    <string name="list_fragment_list_blocked">Blocked Contacts</string>
     <string name="list_fragment_alert_msg">Text Alerts</string>
     <string name="list_fragment_alert_rc">Repeat Call Alerts</string>
     <string name="list_fragment_alert_sc">Single Call Alerts</string>
@@ -64,15 +64,12 @@
     <string name="upgrade_title_menu">Upgrade to Pro</string>
     <string name="upgrade_body_general">Would you like to upgrade?</string>
     <string name="upgrade_body_menu">
-    Upgrading to Urgent Call Pro gives you more control over who can trigger an alarm. You also get the ablity to easily snooze the alarms for a short period of time.</string>
-    <string name="upgrade_body_snooze">
-    Users of Urgent Call Pro can snooze alerts for a period of time.\n\n\
-\	Users of Urgent Call Lite must turn the application off and on manually.</string>
-    <string name="upgrade_body_state">
+    Upgrading to Urgent Call Pro gives you more control over who can trigger an alarm. You also get the ablity to add additional call and text alerts.</string>
+    <string name="upgrade_body_filter_by">
     Users of Urgent Call Pro can filter alerts with an allow list or block list.\n\n\
 \	Users of Urgent Call Lite must leave the alerts on or off for everyone.</string>
-    <string name="upgrade_body_sc">
-    Only users of Urgent Call Pro can enable single call alerts.</string>
+    <string name="upgrade_body_add_alert">
+    Users of Urgent Call Pro can add additional call and text alerts.</string>
     <string name="snooze_dialog_title">Snooze for&#8230;</string> 
     
     <string name="cancel_snooze_dialog_title">Cancel Snooze?</string>

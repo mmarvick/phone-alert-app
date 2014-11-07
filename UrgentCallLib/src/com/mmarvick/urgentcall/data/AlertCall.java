@@ -21,9 +21,6 @@ public class AlertCall extends Alert {
 	/** The default name of a call alert */
 	public static final String ALERT_CALL_TYPE_NAME = "Call Alert";
 	
-	/** The default name of the initial call alert */
-	public static final String RULE_CALL_INITIAL_NAME = "Repeated Call Alert";	
-	
 	/** The call threshold for a call alert */
 	private int mCallQty;
 	
@@ -187,11 +184,6 @@ public class AlertCall extends Alert {
 	/** {@inheritDoc} */
 	protected String getAlertTypeName() {
 		return ALERT_CALL_TYPE_NAME;
-	}
-	
-	/** {@inheritDoc} */
-	protected String getRuleInitialName() {
-		return RULE_CALL_INITIAL_NAME;
 	}	
 	
 	/** {@inheritDoc} */

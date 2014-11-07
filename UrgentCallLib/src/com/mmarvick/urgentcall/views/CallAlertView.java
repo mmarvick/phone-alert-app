@@ -108,6 +108,10 @@ public class CallAlertView extends AlertView {
 		// DO NOTHING
 	}
 	
+	protected View getLastImageButton() {
+		return imageButtonTone;
+	}
+	
 	@Override
 	public void findViews() {
 		super.findViews();

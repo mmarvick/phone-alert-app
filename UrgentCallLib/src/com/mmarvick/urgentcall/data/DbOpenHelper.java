@@ -37,7 +37,7 @@ public abstract class DbOpenHelper extends SQLiteOpenHelper {
 			RuleEntry.COLUMN_FILTER_BY + INTEGER_TYPE + NOT_NULL + SEPARATOR +
 			RuleEntry.COLUMN_RING + INTEGER_TYPE + NOT_NULL + SEPARATOR +
 			RuleEntry.COLUMN_VIBRATE + INTEGER_TYPE + NOT_NULL + SEPARATOR +
-			RuleEntry.COLUMN_TONE + TEXT_TYPE + SEPARATOR +
+			RuleEntry.COLUMN_TONE + TEXT_TYPE + NOT_NULL + SEPARATOR +
 			RuleEntry.COLUMN_VOLUME + INTEGER_TYPE + NOT_NULL;
 	
 	/** SQLite column definitions that are common to rule contact databases for

@@ -1,7 +1,7 @@
 package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
-import com.mmarvick.urgentcall.data.OldPrefHelper;
+import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.app.Service;
@@ -17,8 +17,21 @@ import android.os.Vibrator;
 public class MessageAlarmService extends Service {
 	private AudioManager audio;
 	private MediaPlayer media;
+	private Vibrator vibrator;
 	private int streamVolumeInit;
 
+	private int volume;
+	private int actualDuration;
+	private Uri toneUri;
+	private boolean ring;
+	private boolean vibrate;
+	
+	public static final String RING = "RING";
+	public static final String VIBRATE = "VIBRATE";
+	public static final String TONE = "TONE";
+	public static final String VOLUME = "VOLUME";
+	public static final String DURATION = "DURATION";
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -29,6 +42,7 @@ public class MessageAlarmService extends Service {
 		audio = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 		streamVolumeInit = audio.getStreamVolume(AudioManager.STREAM_ALARM);
 		media = new MediaPlayer();
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		super.onCreate();
 	}
 	
@@ -36,21 +50,21 @@ public class MessageAlarmService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startid) {
 		final int startidStatic = startid;
 		
-		String alertHow = OldPrefHelper.getMessageHow(getApplicationContext(), RulesEntryOld.MSG_STATE);
-		long time = OldPrefHelper.getMessageTime(getApplicationContext(), RulesEntryOld.MSG_STATE) * 1000;
+		ring = intent.getBooleanExtra(RING,  true);
+		vibrate = intent.getBooleanExtra(VIBRATE, true);
+		toneUri = (Uri) intent.getExtras().get(TONE);
+		volume = intent.getIntExtra(VOLUME, 1000);
+		actualDuration = 1000 * intent.getIntExtra(DURATION, 10);
 		
-		if (alertHow.equals(Constants.ALERT_HOW_RING) || alertHow.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
-			Uri toneUri = OldPrefHelper.getMessageSound(getApplicationContext(), RulesEntryOld.MSG_STATE);
+		if (ring) {
 			audio.setStreamVolume(AudioManager.STREAM_ALARM, audio.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
-			
-			float targetVolume = (OldPrefHelper.getMessageVolumeValue(getApplicationContext(), RulesEntryOld.MSG_STATE)); //* audio.getStreamMaxVolume(AudioManager.STREAM_ALARM));
 			
 			if (media.isPlaying()) {
 				media.reset();
 			}
 	
 			try {
-				media.setVolume(targetVolume, targetVolume);
+				media.setVolume(getVolume(volume), getVolume(volume));
 				media.setDataSource(this, toneUri);
 				media.setAudioStreamType(AudioManager.STREAM_ALARM);
 				media.setLooping(true);
@@ -61,9 +75,8 @@ public class MessageAlarmService extends Service {
 			}
 		}
 		
-		if (alertHow.equals(Constants.ALERT_HOW_VIBE)|| alertHow.equals(Constants.ALERT_HOW_RING_AND_VIBE)) {
-			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			vibrator.vibrate(time);
+		if (vibrate) {
+			vibrator.vibrate(actualDuration);
 		}
 		
 		new Handler().postDelayed(new Runnable() {
@@ -72,7 +85,7 @@ public class MessageAlarmService extends Service {
 
 				stopSelf(startidStatic);
 			}
-		}, time);
+		}, actualDuration);
 		
 		return Service.START_STICKY;
 	}
@@ -83,4 +96,8 @@ public class MessageAlarmService extends Service {
 		audio.setStreamVolume(AudioManager.STREAM_ALARM, streamVolumeInit, 0);	//TODO: Do we need to do this? If the stream is muted but the mediaplayer is not, what happens?
 	}
 
+	private float getVolume(int volume) {
+		return (float) (1 - (Math.log(Constants.ALERT_VOLUME_MAX - volume) / Math.log(Constants.ALERT_VOLUME_MAX)));
+	}	
+	
 }

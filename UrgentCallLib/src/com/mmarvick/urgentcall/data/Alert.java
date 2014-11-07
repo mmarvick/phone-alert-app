@@ -14,6 +14,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 
@@ -87,7 +88,7 @@ public abstract class Alert {
 		if (!isInitial) {
 			mTitle = getNewAlertName();
 		} else {
-			mTitle = getRuleInitialName();
+			mTitle = getAlertTypeName();
 		}
 		
 		mOnState = true;
@@ -223,11 +224,6 @@ public abstract class Alert {
 	 * @return the name of the type of alert
 	 */
 	protected abstract String getAlertTypeName();
-	
-	/** Get the name of the initial alert
-	 * @return the name of the type of alert
-	 */
-	protected abstract String getRuleInitialName();	
 
 	/** Removes an alert and all data associated with it. You should
 	 * set all references to this Alert to null after deleting.
@@ -358,6 +354,11 @@ public abstract class Alert {
 	 * @param volume volume as an integer from 0 through 1000
 	 */	
 	public void setVolume(int volume) {
+		if (volume < 100) {
+			volume = 100;
+		} else if (volume > 1000) {
+			volume = 1000;
+		}
 		ContentValues newValues = new ContentValues();
 		newValues.put(RuleEntry.COLUMN_VOLUME, volume);
 		updateRuleTable(newValues);
@@ -402,7 +403,7 @@ public abstract class Alert {
 	 * @return list of "allow list" contacts
 	 */
 	public List<String> getAllowedContacts() {
-		return mAllowedContacts;
+		return new ArrayList<String>(mAllowedContacts);
 	}
 
 	/** Returns a list of the lookup values for all contacts on the "block
@@ -412,27 +413,40 @@ public abstract class Alert {
 	 * @return list of "block list" contacts
 	 */	
 	public List<String> getBlockedContacts() {
-		return mBlockedContacts;
+		return new ArrayList<String>(mBlockedContacts);
 	}
 	
 	/** Returns a list of the names for all contacts on the "allow
 	 * list." Note that having an "allow list" does not necessarily mean
 	 * <code>getFilterBy()</code> returns a
 	 * <code>DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY</code> value.
-	 * @return list of "allow list" contacts
+	 * @return list of "allow list" contact names
 	 */
 	public List<String> getAllowedContactNames() {
-		return mAllowedContacts;
+		return getContactNames(mAllowedContacts);
 	}
 
 	/** Returns a list of the names for all contacts on the "block
 	 * list." Note that having an "block list" does not necessarily mean
 	 * <code>getFilterBy()</code> returns a
 	 * <code>DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED</code> value.
-	 * @return list of "block list" contacts
+	 * @return list of "block list" contact names
 	 */	
 	public List<String> getBlockedContactNames() {
-		return mBlockedContacts;
+		return getContactNames(mBlockedContacts);
+	}	
+	
+	/** Returns a list of the names for a list of contact lookups.
+	 * @return list of contact names
+	 */		
+	//TODO: Revise this so that it doesn't keep opening the database!
+	// preferably, make getNameFromLookup use this function instead
+	public List<String> getContactNames(List<String> contacts) {
+		List<String> names = new ArrayList<String>(contacts.size());
+		for (String lookup : contacts) {
+			names.add(getNameFromLookup(lookup));
+		}
+		return names;
 	}	
 	
 	/** Adds a contact to the "allow list" or "block list" and adds it to
@@ -444,24 +458,34 @@ public abstract class Alert {
 	 * @param lookup the lookup value of the contact in the phone's contact database
 	 * @param list <code>DbContract.ENTRY_LIST_ALLOW_LIST</code> to add to the allow list;
 	 * <code>DbContract.ENTRY_LIST_BLOCK_LIST</code> to add to the block list
+	 * @return <code>true</code> if added; <code>false</code>
 	 */
-	public void addContact(String lookup, int list) {
+	public boolean addContact(String lookup, int list) {
 		if (list == DbContract.ENTRY_LIST_ALLOW_LIST && !mAllowedContacts.contains(lookup) ||
 				list == DbContract.ENTRY_LIST_BLOCK_LIST && !mBlockedContacts.contains(lookup)) {
+			long success;
+			
 			SQLiteDatabase database = getWritableDatabase();
 			ContentValues contact = new ContentValues();
 			contact.put(RuleContactEntry.COLUMN_ALERT_RULE_ID, mRuleId);
 			contact.put(RuleContactEntry.COLUMN_LOOKUP, lookup);
 			contact.put(RuleContactEntry.COLUMN_LIST, list);		
-			database.insert(getContactTableName(), null, contact);
+			success = database.insert(getContactTableName(), null, contact);
 			database.close();
+			
+			if (success == -1) {
+				return false;
+			}
 			
 			if (list == DbContract.ENTRY_LIST_ALLOW_LIST) {
 				mAllowedContacts.add(lookup);
 			} else {
 				mBlockedContacts.add(lookup);
 			}
+			return true;
 		}
+		
+		return false;
 	}
 
 	/** Removes a contact from the "allow list" or "block list" and removes it
@@ -478,10 +502,10 @@ public abstract class Alert {
 	public void removeContact(String lookup, int list) {
 		SQLiteDatabase database = getWritableDatabase();
 		database.delete(getContactTableName(), 
-				RuleContactEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId + " AND " +
-						RuleContactEntry.COLUMN_LIST + " = " + list + " AND " +
-						RuleContactEntry.COLUMN_LOOKUP + " = " + lookup,
-				null);
+				RuleContactEntry.COLUMN_ALERT_RULE_ID + " = ? AND " +
+						RuleContactEntry.COLUMN_LIST + " = ? AND " +
+						RuleContactEntry.COLUMN_LOOKUP + " = ?",
+				new String[] {"" + mRuleId, "" + list, lookup});
 		database.close();
 		
 		if (list == DbContract.ENTRY_LIST_ALLOW_LIST) {
@@ -592,6 +616,21 @@ public abstract class Alert {
 		cursor.close();
 		
 		return lookup;
+	}
+	
+	/** Gets the name in the phone's contact list from a lookup
+	 * @param the lookup key for the contact
+	 * @return the name for the contact
+	 */	
+	public String getNameFromLookup(String lookup) {
+		Cursor cursor = mContext.getContentResolver().query(Contacts.CONTENT_URI,
+				new String[] {CONTACT_NAME},
+				CONTACT_LOOKUP + "=?",
+				new String[] {lookup}, null);
+		cursor.moveToFirst();
+		String name = cursor.getString(cursor.getColumnIndex(CONTACT_NAME));
+		cursor.close();
+		return name;		
 	}
 
 }

@@ -22,6 +22,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -46,6 +47,8 @@ public abstract class AlertView extends RelativeLayout {
 	protected Alert mAlert;
 	protected ArrayList<View> expandable;
 	
+	protected RelativeLayoutBugHack layoutFilterBy;
+	
 	protected ToggleButton toggleButtonAlertOn;	
 	
 	protected ImageButton imageButtonFilterBy;
@@ -62,14 +65,14 @@ public abstract class AlertView extends RelativeLayout {
 	
 	protected SeekBar seekBarVolume;
 	
-	protected boolean mExpanded;	
+	protected boolean mExpanded;
 	
 	public AlertView(Context context, Fragment fragment) {
 		super(context, null);
-		mContext = new ContextThemeWrapper(context, R.style.AppThemeLight);
+		mContext = context;
 		mFragment = fragment;
 		
-		LayoutInflater inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).cloneInContext(mContext);
+		LayoutInflater inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).cloneInContext(new ContextThemeWrapper(context, R.style.AppThemeLight));
 		mView = inflater.inflate(R.layout.view_alert, this);
 		inflatePreView();
 		inflatePostView();
@@ -86,6 +89,7 @@ public abstract class AlertView extends RelativeLayout {
 	
 	protected abstract void inflatePreView();
 	protected abstract void inflatePostView();
+	protected abstract View getLastImageButton();
 	
 	public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
 		mOnDeleteListener = onDeleteListener;
@@ -126,7 +130,7 @@ public abstract class AlertView extends RelativeLayout {
 	}
 	
 	public void promptFilterBy() {
-		FilterPrompt filterPrompt = new FilterPrompt(mContext, mAlert, "Filter by");
+		FilterPrompt filterPrompt = new FilterPrompt(mContext, mFragment, mAlert, "Filter by");
 		
 		filterPrompt.setOnOptionsChangedListener(new OnOptionsChangedListener() {
 			
@@ -160,15 +164,16 @@ public abstract class AlertView extends RelativeLayout {
 			}
 		} else {
 			List<String> blocked = mAlert.getBlockedContactNames();
-			filterByText = "Everyone Except";
+			filterByText = "Everyone but";
 			if (blocked.size() <= 2) {
-				filterByText += getNames(blocked);
+				filterByText += "\n" + getNames(blocked);
 			} else {
-				filterByText = "\n" + blocked.size() + " Blocked Contacts";
+				filterByText += "\n" + blocked.size() + " Blocked Contacts";
 			}
 		}
 		
 		textViewFilterBy.setText(filterByText);
+		
 	}
 	
 	private void toggleAlertVibrate() {
@@ -267,7 +272,7 @@ public abstract class AlertView extends RelativeLayout {
 	}
 	
 	private void updateViewExpand() {
-		
+
 		for (View v : expandable) {
 			if (mExpanded) {
 				v.setVisibility(VISIBLE);
@@ -281,10 +286,22 @@ public abstract class AlertView extends RelativeLayout {
 		if (mExpanded) {
 			imageButtonExpandParams.addRule(ALIGN_BOTTOM, R.id.imageButtonDelete);
 		} else {
-			imageButtonExpandParams.addRule(ALIGN_BOTTOM, R.id.imageButtonCallFrom);
+			imageButtonExpandParams.addRule(ALIGN_BOTTOM, layoutFilterBy.getId());
 		}
+		
+		updateViewDelete();
+		
 	}	
 	
+	public void updateViewDelete() {
+		if (!getResources().getBoolean(R.bool.paid_version)) {
+			if (mExpanded) {
+				imageButtonDelete.setVisibility(INVISIBLE);
+			} else {
+				imageButtonDelete.setVisibility(GONE);
+			}
+		}
+	}
 	
 	public void delete() {
 		mAlert.delete();
@@ -297,7 +314,10 @@ public abstract class AlertView extends RelativeLayout {
 	private String getNames(List<String> contacts) {
 		String names = "";
 		for (int i = 0; i < contacts.size(); i++) {
-			names += "\n" + contacts.get(i);
+			names += contacts.get(i);
+			if (i < contacts.size() - 1) {
+				names += "\n";
+			}
 		}
 		return names;
 	}	
@@ -316,6 +336,7 @@ public abstract class AlertView extends RelativeLayout {
 		textViewTone = (TextView) mView.findViewById(R.id.textViewTone);
 		textViewSettings = (TextView) mView.findViewById(R.id.textViewSettings);
 		seekBarVolume = (SeekBar) mView.findViewById(R.id.seekBarVolume);
+		layoutFilterBy = (RelativeLayoutBugHack) mView.findViewById(R.id.relativeLayoutCallFrom);
 	}
 	
 	public void setExpandable() {
@@ -337,6 +358,7 @@ public abstract class AlertView extends RelativeLayout {
 		updateViewRingAndVolume();
 		updateViewTone();
 		updateViewExpand();
+		updateViewDelete();
 	}
 	
 	public void initCallbacks() {
@@ -409,7 +431,7 @@ public abstract class AlertView extends RelativeLayout {
 			
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				// DO NOTHING
+				updateViewRingAndVolume();
 			}
 			
 			@Override
@@ -435,9 +457,6 @@ public abstract class AlertView extends RelativeLayout {
 			}
 		});
 	}
-	
-	
-	
 	
 	public interface OnDeleteListener {
 		

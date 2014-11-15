@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +24,6 @@ public abstract class AlertFragment extends Fragment {
 	protected List<AlertView> alertViews;
 	protected View mView;
 	protected int nextId;
-	protected ContactListFragment mContactListFragment;
 	
 	protected abstract List<? extends Alert> getAlerts();
 	protected abstract AlertView createAlertView();
@@ -74,10 +72,6 @@ public abstract class AlertFragment extends Fragment {
 		alertViews.add(alertView);
 		((ViewGroup) mView).addView(alertView);		
 	}		
-	
-	public void setContactListFragment(ContactListFragment contactListFragment) {
-		mContactListFragment = contactListFragment;
-	}
 
 	
 	private void removeView(View v) {
@@ -102,10 +96,6 @@ public abstract class AlertFragment extends Fragment {
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (mContactListFragment != null && requestCode == ContactListFragment.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-			mContactListFragment.contactAdded(data);
-			
-		}
 		for (AlertView alertView : alertViews) {
 			if (alertView.getId() == requestCode && resultCode == Activity.RESULT_OK) {
 				alertView.updateAlertTone(data);

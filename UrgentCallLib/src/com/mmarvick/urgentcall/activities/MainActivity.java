@@ -7,6 +7,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
 import com.mmarvick.urgentcall.data.OldRulesDbOpenHelper;
+import com.mmarvick.urgentcall.views.AlertView;
 import com.mmarvick.urgentcall.widgets.MyViewPager;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.RateDialog;
@@ -14,6 +15,7 @@ import com.mmarvick.urgentcall.widgets.SnoozeDialog;
 import com.mmarvick.urgentcall.widgets.SnoozeEndDialog;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.TimePickerDialog;
@@ -58,8 +60,23 @@ public class MainActivity extends ActionBarActivity
 	private MyViewPager mViewPager;
 	private PeriodicChecker mChecker;
 	private SnoozeEndDialog endSnoozeDialog;	
+	protected ContactListFragment mContactListFragment;
 	
 	private boolean mCanChangeTabs = true;
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (mContactListFragment != null && requestCode == ContactListFragment.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+			mContactListFragment.contactAdded(data);
+			
+		}
+
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	public void setContactListFragment(ContactListFragment contactListFragment) {
+		mContactListFragment = contactListFragment;
+	}	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

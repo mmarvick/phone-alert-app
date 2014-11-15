@@ -33,30 +33,39 @@ public class ContactListFragment extends DialogFragment {
 	private int mListType;
 	private List<String> mContacts;
 	private AlertFragment mAlertFragment;
-	ContactsArrayAdapter mAdapter;
+	private ContactsArrayAdapter mAdapter;
 	
 	public static final int REQUEST_CODE = 0;
 	public static final String FILTER_BY = "FILTER_BY";
 	public static final String ALERT = "ALERT";	
 	
-	public ContactListFragment(Alert alert, int listType, AlertFragment alertFragment) {
+	public ContactListFragment() {
+		super();
+		init();
+	}
+	
+	public ContactListFragment(Alert alert, int listType) {
 		super();
 		
-		mAlertFragment = alertFragment;
 		mAlert = alert;
 		mListType = listType;
 		
-		if (mListType == DbContract.ENTRY_LIST_ALLOW_LIST) {
-			mContacts = alert.getAllowedContacts();
-		} else {
-			mContacts = alert.getBlockedContacts();
-		}
+		init();
 		
-		mAlertFragment.setContactListFragment(this);
+	}
+	
+	public void init() {
+		if (mListType == DbContract.ENTRY_LIST_ALLOW_LIST) {
+			mContacts = mAlert.getAllowedContacts();
+		} else {
+			mContacts = mAlert.getBlockedContacts();
+		}
+			
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		((MainActivity) getActivity()).setContactListFragment(this);
 		ListView view = new ListView(getActivity());
 		
 		mAdapter = new ContactsArrayAdapter(getActivity(), mContacts);
@@ -93,7 +102,7 @@ public class ContactListFragment extends DialogFragment {
 	
 	private void addContact() {
 		Intent contactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-		mAlertFragment.startActivityForResult(contactIntent, REQUEST_CODE);		
+		getActivity().startActivityForResult(contactIntent, REQUEST_CODE);		
 	}
 	
 	public void contactAdded(Intent data) {

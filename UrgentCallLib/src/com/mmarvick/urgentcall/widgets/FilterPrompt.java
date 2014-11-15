@@ -149,7 +149,7 @@ public class FilterPrompt {
 	public void showListDialog(int listType) {
 		FragmentManager manager = ((ActionBarActivity) mContext).getSupportFragmentManager();
 		
-		ContactListFragment dialog = new ContactListFragment(alert, listType, (AlertFragment) mFragment);
+		ContactListFragment dialog = new ContactListFragment(alert, listType);
 
 		dialog.show(manager, "dialog");
 	}

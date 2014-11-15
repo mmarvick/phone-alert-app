@@ -18,6 +18,9 @@ import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
  * information associated with it, and saves changes to the database when updated.
  */
 public class AlertCall extends Alert {
+	/** A string identifying the alert type of a call alert */
+	public static final String ALERT_TYPE = "CALL_ALERT";
+	
 	/** The default name of a call alert */
 	public static final String ALERT_CALL_TYPE_NAME = "Call Alert";
 	
@@ -206,5 +209,10 @@ public class AlertCall extends Alert {
 	protected SQLiteDatabase getWritableDatabase() {
 		DbOpenHelperCall dbOpenHelper = new DbOpenHelperCall(mContext);
 		return dbOpenHelper.getWritableDatabase();		
+	}
+	
+	/** {@inheritDoc} */
+	public String getAlertType() {
+		return ALERT_TYPE;
 	}
 }

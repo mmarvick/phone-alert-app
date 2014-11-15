@@ -9,6 +9,7 @@ import com.mmarvick.urgentcall.data.DbContract;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -149,7 +150,13 @@ public class FilterPrompt {
 	public void showListDialog(int listType) {
 		FragmentManager manager = ((ActionBarActivity) mContext).getSupportFragmentManager();
 		
-		ContactListFragment dialog = new ContactListFragment(alert, listType);
+		Bundle args = new Bundle();
+		args.putInt(ContactListFragment.FILTER_BY, listType);
+		args.putString(ContactListFragment.ALERT_CLASS, alert.getAlertType());
+		args.putLong(ContactListFragment.ALERT_ID, alert.getId());
+		
+		ContactListFragment dialog = new ContactListFragment();
+		dialog.setArguments(args);
 
 		dialog.show(manager, "dialog");
 	}

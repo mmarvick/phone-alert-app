@@ -224,6 +224,11 @@ public abstract class Alert {
 	 * @return the name of the type of alert
 	 */
 	protected abstract String getAlertTypeName();
+	
+	/** Get the identifier of the alert for a specific alert type
+	 * @return the name of the type of alert
+	 */
+	public abstract String getAlertType();
 
 	/** Removes an alert and all data associated with it. You should
 	 * set all references to this Alert to null after deleting.

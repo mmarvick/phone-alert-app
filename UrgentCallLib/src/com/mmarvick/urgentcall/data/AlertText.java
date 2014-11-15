@@ -13,6 +13,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class AlertText extends Alert {
+	/** A string identifying the alert type of a text alert */
+	public static final String ALERT_TYPE = "TEXT_ALERT";
+	
 	/** The default name of a text alert */
 	public static final String ALERT_TEXT_TYPE_NAME = "Text Alert";
 	
@@ -289,6 +292,11 @@ public class AlertText extends Alert {
 	protected SQLiteDatabase getWritableDatabase() {
 		DbOpenHelperText dbOpenHelper = new DbOpenHelperText(mContext);
 		return dbOpenHelper.getWritableDatabase();		
+	}
+	
+	/** {@inheritDoc} */
+	public String getAlertType() {
+		return ALERT_TYPE;
 	}
 
 }

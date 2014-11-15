@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.Alert;
+import com.mmarvick.urgentcall.data.AlertCall;
+import com.mmarvick.urgentcall.data.AlertText;
 import com.mmarvick.urgentcall.data.DbContract;
 
 import android.app.AlertDialog;
@@ -36,23 +38,11 @@ public class ContactListFragment extends DialogFragment {
 	private ContactsArrayAdapter mAdapter;
 	
 	public static final int REQUEST_CODE = 0;
+	public static final String ALERT_CLASS = "ALERT_CLASS";
+	public static final String ALERT_CLASS_CALL = "ALERT_CLASS_CALL";
+	public static final String ALERT_CLASS_TEXT = "ALERT_CLASS_TEXT";
+	public static final String ALERT_ID = "ALERT_ID";
 	public static final String FILTER_BY = "FILTER_BY";
-	public static final String ALERT = "ALERT";	
-	
-	public ContactListFragment() {
-		super();
-		init();
-	}
-	
-	public ContactListFragment(Alert alert, int listType) {
-		super();
-		
-		mAlert = alert;
-		mListType = listType;
-		
-		init();
-		
-	}
 	
 	public void init() {
 		if (mListType == DbContract.ENTRY_LIST_ALLOW_LIST) {
@@ -65,6 +55,21 @@ public class ContactListFragment extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		Bundle args = getArguments();
+		
+		String alertType = args.getString(ALERT_CLASS);
+		long alertId = args.getLong(ALERT_ID);
+		
+		if (alertType.equals(AlertCall.ALERT_TYPE)) {
+			mAlert = new AlertCall(getActivity(), alertId);
+		} else if (alertType.equals(AlertText.ALERT_TYPE)) {
+			mAlert = new AlertText(getActivity(), alertId);
+		}
+		
+		mListType = args.getInt(FILTER_BY);
+		
+		init();
+		
 		((MainActivity) getActivity()).setContactListFragment(this);
 		ListView view = new ListView(getActivity());
 		

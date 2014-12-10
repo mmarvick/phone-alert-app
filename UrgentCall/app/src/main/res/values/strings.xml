@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    
+    <string name="package_pro">com.mmarvick.uc_pro</string>
+    <string name="package_lite">com.mmarvick.uc_lite</string>
+    <string name="url_play_app">market://details?id=</string>
+	<string name="url_play_web">http://play.google.com/store/apps/details?id=</string>
+	<string name="share_app_url">http://goo.gl/oSzaUk</string>
+    
+    <string name="action_settings">Settings</string>
+    <string name="action_snooze">Snooze</string>
+    <string name="action_rate">Rate</string>
+    <string name="action_share">Share</string>
+    <string name="action_upgrade">Upgrade</string>
+    <string name="action_add_contact">Add a contact</string>  
+    <string name="action_add_alert">Add an alert</string>  
+    
+    <string name="status_heading">Urgent Call is</string>
+    <string name="status_home_msg_name">Text Alerts are&#160;</string>
+    <string name="status_home_rc_name">Repeat Call Alerts are&#160;</string>
+    <string name="status_home_sc_name">Single Call Alerts are&#160;</string>
+    <string name="status_home_all_alerts">All alerts are&#160;</string>
+    
+    <string name="message_text_intro">text messages containing</string>
+    <string name="message_text_will_trigger">will trigger an alarm</string>
+    <string name="message_text_anyone">from anyone</string>
+    <string name="message_text_whitelist_before">from&#160;</string>
+    <string name="message_text_whitelist_after">&#160;allowed texters only</string>
+    <string name="message_text_blacklist_before">from everyone except&#160;</string>
+    <string name="message_text_blacklist_after">&#160;blocked texters</string>
+    <string name="message_text_turned_off">text alerts are caused by a text message with a key word or phrase</string>
+    
+    <string name="rc_text_calls">&#160;calls in&#160;</string>
+    <string name="rc_text_mins">&#160;minutes</string>
+    <string name="rc_text_will_trigger">will trigger an alarm</string>
+    <string name="rc_text_anyone">from any caller</string>
+    <string name="rc_text_whitelist_before">from&#160;</string>
+    <string name="rc_text_whitelist_after">&#160;allowed callers only</string>
+    <string name="rc_text_blacklist_before">from everyone except&#160;</string>
+    <string name="rc_text_blacklist_after">&#160;blocked callers</string> 
+    <string name="rc_text_turned_off">repeated call alerts are caused by multiple calls from a person in a short time</string>
+    
+    <string name="sc_text_intro">a single call</string>
+    <string name="sc_text_will_trigger">will trigger an alarm</string>
+    <string name="sc_text_whitelist_before">from&#160;</string>
+    <string name="sc_text_whitelist_after">&#160;allowed users only</string>
+    <string name="sc_text_turned_off">single call alerts allow the most important people to get to you in just one call</string> 
+    
+    <string name="status_allcaps_on">ON</string>
+    <string name="status_allcaps_off">OFF</string>
+    <string name="status_allcaps_snoozing">SNOOZING</string>
+    <string name="status_nocaps_on">on</string>
+    <string name="status_nocaps_off">off</string>
+    
+    <string name="list_fragment_list_allowed">Allowed Contacts</string>
+    <string name="list_fragment_list_blocked">Blocked Contacts</string>
+    <string name="list_fragment_alert_msg">Text Alerts</string>
+    <string name="list_fragment_alert_rc">Repeat Call Alerts</string>
+    <string name="list_fragment_alert_sc">Single Call Alerts</string>
+    
+    <string name="upgrade_title">Pro Version Only</string>
+    <string name="upgrade_title_menu">Upgrade to Pro</string>
+    <string name="upgrade_body_general">Would you like to upgrade?</string>
+    <string name="upgrade_body_menu">
+    Upgrading to Urgent Call Pro gives you more control over who can trigger an alarm. You also get the ablity to add additional call and text alerts.</string>
+    <string name="upgrade_body_filter_by">
+    Users of Urgent Call Pro can filter alerts with an allow list or block list.\n\n\
+\	Users of Urgent Call Lite must leave the alerts on or off for everyone.</string>
+    <string name="upgrade_body_add_alert">
+    Users of Urgent Call Pro can add additional call and text alerts.</string>
+    <string name="snooze_dialog_title">Snooze for&#8230;</string> 
+    
+    <string name="cancel_snooze_dialog_title">Cancel Snooze?</string>
+    <string name="cancel_snooze_dialog_body">Do you want to cancel the current snooze?</string>
+    <string name="cancel_snooze_dialog_yes">Yes</string>
+    <string name="cancel_snooze_dialog_no">No</string>
+    
+    <string name="rate_dialog_title">Rate Urgent Call</string>
+    <string name="rate_dialog_body">Would you like to rate this app? We\'d really appreciate it!</string>
+    <string name="rate_dialog_yes">Yes!</string>
+    <string name="rate_dialog_no">Maybe Later</string>    
+      
+    <string name="state_change_dialog_title_msg">Text alerts on for&#8230;</string>
+    <string name="state_change_dialog_title_rc">Repeat call alerts on for&#8230;</string>
+    <string name="state_change_dialog_on">Everyone</string>
+    <string name="state_change_dialog_whitelist">Allowed callers only</string>
+    <string name="state_change_dialog_blacklist">Everyone except blocked callers</string>
+    <string name="state_change_dialog_ok">OK</string>
+    <string name="state_change_dialog_edit_whitelist_button">Allowed Contacts&#8230;</string>
+    <string name="state_change_dialog_edit_blacklist_button">Blocked Contacts&#8230;</string>
+    
+    <string name="tab_change_prohibitted_dialog_off_title">Urgent Call is off</string>
+    <string name="tab_change_prohibitted_dialog_off_message">Urgent Call must be turned on in order to change the settings of individual alerts.</string>
+	<string name="tab_change_prohibitted_dialog_snooze_title">Urgent Call is snoozing</string>
+    <string name="tab_change_prohibitted_dialog_snooze_message">Urgent Call must be active in order to change the settings of individual alerts.</string>    
+    <string name="tab_change_prohibitted_dialog_ok">OK</string>
+    
+    <string name="pro_installed_title">Thank you!</string>
+    <string name="pro_installed_body">Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.</string>
+    <string name="pro_installed_ok">OK</string>
+
+    
+    
+    <string name="share_type_subject">Tell friends about&#8230;</string>
+
+    <string name="share_uc_subject">Be reached in an emergency!</string>
+    <string name="share_uc_1">Try the Urgent Call app for Android to turn off distractions, but always be alerted when needed urgently. Learn more:&#160;</string>
+	<string name="share_uc_by">Select an app to share over&#8230;</string>     
+    
+    <string name="share_msg_subject">Reach me in an emergency!</string>
+    <string name="share_msg_1">Text me with &#160;</string>
+    <string name="share_msg_2">&#160; to alert my phone, even if silenced. To be reachable in an emergency too, add this app:&#160;</string>
+	<string name="share_msg_by">Select an app to share over&#8230;</string>    
+    
+    <string name="share_rc_subject">Reach me in an emergency!</string>
+    <string name="share_rc_1">Call me&#160;</string>
+    <string name="share_rc_2">&#160;times in&#160;</string>
+    <string name="share_rc_3">&#160;minutes to alert my phone, even if silenced. To be reachable in an emergency too, add this app:&#160;</string>
+	<string name="share_rc_by">Select an app to share over&#8230;</string>
+
+    <string name="share_sc_subject">Reach me whenever!</string>
+    <string name="share_sc_1">I\'ve set up my phone to always notify me of your calls, even when it\'s in silent mode. To do the same, add this app:&#160;</string>
+	<string name="share_sc_by">Select an app to share over&#8230;</string>	
+	
+</resources>

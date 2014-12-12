@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.util.Log;
 
 public class OldRulesDbOpenHelper extends SQLiteOpenHelper {
@@ -127,7 +128,7 @@ public class OldRulesDbOpenHelper extends SQLiteOpenHelper {
 		alert.setVolume(PrefHelper.getMessageVolumeIntValue(mContext, type));
 		
 		if (PrefHelper.getMessageSoundString(mContext, type) != null) {
-			alert.setTone(PrefHelper.getMessageSoundString(mContext, type));
+			alert.setTone(Uri.parse(PrefHelper.getMessageSoundString(mContext, type)));
 		}
 		
 		Cursor callers = oldDb.query(RulesEntryOld.TABLE_NAME,

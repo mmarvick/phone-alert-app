@@ -34,35 +34,6 @@ public abstract class Alert {
 	/** The id corresponding to the row of the alert */
 	protected long mRuleId;
 	
-	/** The title of the alert */
-	private String mTitle;
-	
-	/** The flag of whether the alert is on or off**/
-	private boolean mOnState;
-	
-	/** The value that specifies if the alert is for everyone, only allowed
-	 * users, or all but blocked users
-	 */
-	private int mFilterBy;
-	
-	/** The flat of whether to ring the phone or not */
-	private boolean mRing;
-	
-	/** The flag of whether to vibrate the phone or not */
-	private boolean mVibrate;
-	
-	/** The value of the volume of the ring, out of 1000 */
-	private int mVolume;
-	
-	/** The uri of the ringtone to play stored as a String */
-	private String mTone;
-	
-	/** A list of lookups for allowed contacts */
-	private List<String> mAllowedContacts;
-	
-	/** A list of lookups for blocked contacts */
-	private List<String> mBlockedContacts;
-	
 	/** Constructor for an Alert not currently in the database, with all
 	 * initial values generated as defaults. Also adds the Alert to the
 	 * database.
@@ -84,30 +55,30 @@ public abstract class Alert {
 	 */	
 	public Alert(Context context, SQLiteDatabase db, boolean isInitial) {
 		mContext = context;
-		
+
+        String title;
+
 		if (!isInitial) {
-			mTitle = getNewAlertName();
+			title = getNewAlertName();
 		} else {
-			mTitle = getAlertTypeName();
+			title = getAlertTypeName();
 		}
 		
-		mOnState = true;
-		mFilterBy = DbContract.ENTRY_FILTER_BY_EVERYONE;
-		mRing = true;
-		mVibrate = false;
-		mVolume = 1000;
-		mAllowedContacts = new ArrayList<String>();
-		mBlockedContacts = new ArrayList<String>();
-		mTone = Settings.System.DEFAULT_ALARM_ALERT_URI.toString();
+		boolean onState = true;
+		int filterBy = DbContract.ENTRY_FILTER_BY_EVERYONE;
+		boolean ring = true;
+		boolean vibrate = false;
+		int volume = 1000;
+		String tone = Settings.System.DEFAULT_ALARM_ALERT_URI.toString();
 		
 		ContentValues ruleValues = new ContentValues();
-		ruleValues.put(RuleEntry.COLUMN_TITLE, mTitle);
-		ruleValues.put(RuleEntry.COLUMN_ON_STATE, mOnState);
-		ruleValues.put(RuleEntry.COLUMN_FILTER_BY, mFilterBy);
-		ruleValues.put(RuleEntry.COLUMN_RING, mRing);
-		ruleValues.put(RuleEntry.COLUMN_VIBRATE, mVibrate);
-		ruleValues.put(RuleEntry.COLUMN_VOLUME, mVolume);
-		ruleValues.put(RuleEntry.COLUMN_TONE, mTone);
+		ruleValues.put(RuleEntry.COLUMN_TITLE, title);
+		ruleValues.put(RuleEntry.COLUMN_ON_STATE, onState);
+		ruleValues.put(RuleEntry.COLUMN_FILTER_BY, filterBy);
+		ruleValues.put(RuleEntry.COLUMN_RING, ring);
+		ruleValues.put(RuleEntry.COLUMN_VIBRATE, vibrate);
+		ruleValues.put(RuleEntry.COLUMN_VOLUME, volume);
+		ruleValues.put(RuleEntry.COLUMN_TONE, tone);
 		
 		initializeAndStoreRemainingRuleData(ruleValues);
 		
@@ -117,7 +88,7 @@ public abstract class Alert {
 			db = getWritableDatabase();
 			closeWhenDone = true;
 		}
-		mRuleId = db.insert(getTableName(), null, ruleValues);
+		mRuleId = db.insert(getRuleTableName(), null, ruleValues);
 		
 		if (closeWhenDone) {
 			db.close();
@@ -133,53 +104,22 @@ public abstract class Alert {
 	 */
 	public Alert(Context context, long id) {
 		mContext = context;
-		SQLiteDatabase database = getReadableDatabase();
-		Cursor ruleCursor = database.query(getTableName(),
-				null,
-				RuleEntry._ID + " =  " + id,
-				null, null, null, null);
-		
-		if (!ruleCursor.moveToFirst()) {
-			throw new IndexOutOfBoundsException();
-		}
-		
-		mRuleId = id;
-		mTitle = ruleCursor.getString(ruleCursor.getColumnIndex(RuleEntry.COLUMN_TITLE));
-		mOnState = DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_ON_STATE)));
-		mFilterBy = ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_FILTER_BY));
-		mRing = DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_RING)));
-		mVibrate = DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VIBRATE)));
-		mVolume = ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VOLUME));
-		mTone = ruleCursor.getString(ruleCursor.getColumnIndex(RuleEntry.COLUMN_TONE));
-		
-		loadRemainingRuleData(database, ruleCursor);
-		
-		ruleCursor.close();
-		
-		Cursor contactsCursor = database.query(getContactTableName(), 
-				new String[] {RuleContactEntry.COLUMN_LIST, RuleContactEntry.COLUMN_LOOKUP}, 
-				RuleContactEntry.COLUMN_ALERT_RULE_ID + " = " + id, 
-				null, null, null, null);
-		
-		mAllowedContacts = new ArrayList<String>();
-		mBlockedContacts = new ArrayList<String>();
-		
-		contactsCursor.moveToFirst();
-		
-		while (!contactsCursor.isAfterLast()) {
-			String lookup = contactsCursor.getString(contactsCursor.getColumnIndex(RuleContactEntry.COLUMN_LOOKUP));
-			if (contactsCursor.getInt(contactsCursor.getColumnIndex(RuleContactEntry.COLUMN_LIST)) == DbContract.ENTRY_LIST_ALLOW_LIST) {
-				mAllowedContacts.add(lookup);
-			} else {
-				mBlockedContacts.add(lookup);
-			}
-			contactsCursor.moveToNext();
-		}
-		
-		contactsCursor.close();
-		
-		database.close();
+        mRuleId = id;
 	}
+
+    protected Cursor getRuleCursor() {
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor ruleCursor = database.query(getRuleTableName(),
+                null,
+                RuleEntry._ID + " =  " + mRuleId,
+                null, null, null, null);
+
+        if (!ruleCursor.moveToFirst()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return ruleCursor;
+    }
 	
 	/** Gets a readable database for tables corresponding to the alert
 	 * @return the readable database */
@@ -192,21 +132,13 @@ public abstract class Alert {
 	/** Gets the name of the table corresponding to each alert
 	 * @return the rule table name
 	 */
-	protected abstract String getTableName();
+	protected abstract String getRuleTableName();
 	
 	/** Gets the name of the table corresponding to the contacts that an alert
 	 * applies to.
 	 * @return the rule contact table name
 	 */
 	protected abstract String getContactTableName();
-	
-	/** Gets the remaining information that is alert-specific (not common to
-	 * all types of alerts) from the database
-	 * @param database the database that has tables for the alert type
-	 * @param ruleCursor the Cursor that both contains and is currently
-	 * positioned at the table row to read alert data from
-	 */
-	protected abstract void loadRemainingRuleData(SQLiteDatabase database, Cursor ruleCursor);
 
 	/** Initializes the remaining information that is alert-specific (not common to
 	 * all types of alerts), and stores into the ContentValues as key-value
@@ -235,7 +167,7 @@ public abstract class Alert {
 	 */	
 	public void delete() {
 		SQLiteDatabase db = getReadableDatabase();
-		db.delete(getTableName(), RuleEntry._ID + " = " + mRuleId, null);
+		db.delete(getRuleTableName(), RuleEntry._ID + " = " + mRuleId, null);
 		db.delete(getContactTableName(), RuleContactEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId, null);
 		performRemainingDropCommands(db);
 		db.close();
@@ -252,7 +184,8 @@ public abstract class Alert {
 	 * @return the alert title
 	 */
 	public String getTitle() {
-		return mTitle;
+        Cursor ruleCursor = getRuleCursor();
+		return ruleCursor.getString(ruleCursor.getColumnIndex(RuleEntry.COLUMN_TITLE));
 	}
 	
 	/** Sets the alert title and saves it to the database
@@ -262,7 +195,6 @@ public abstract class Alert {
 		ContentValues newValues = new ContentValues();
 		newValues.put(RuleEntry.COLUMN_TITLE, title);
 		updateRuleTable(newValues);
-		mTitle = title;
 	}
 	
 	/** Gets the boolean state of whether the alert is on or off
@@ -270,7 +202,8 @@ public abstract class Alert {
 	 * <code>false</code> if it is off
 	 */
 	public boolean getOnState() {
-		return mOnState;
+        Cursor ruleCursor = getRuleCursor();
+        return DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_ON_STATE)));
 	}
 	
 	/** Sets the boolean state of whether the alert is on or off
@@ -281,7 +214,6 @@ public abstract class Alert {
 		ContentValues newValues = new ContentValues();
 		newValues.put(RuleEntry.COLUMN_ON_STATE, onState);
 		updateRuleTable(newValues);
-		mOnState = onState;
 	}	
 	
 	/** Gets the filter property of whether the alert is for everyone,
@@ -291,7 +223,8 @@ public abstract class Alert {
 	 * <code>DbContract.ENTRY_FILTER_BY_BLOCKED_IGNORED</code> if for all but blocked
 	 */
 	public int getFilterBy() {
-		return mFilterBy;
+        Cursor ruleCursor = getRuleCursor();
+        return ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_FILTER_BY));
 	}
 	
 	/** Sets the filter property of whether the alert is for everyone,
@@ -305,7 +238,6 @@ public abstract class Alert {
 		ContentValues newValues = new ContentValues();
 		newValues.put(RuleEntry.COLUMN_FILTER_BY, filterBy);
 		updateRuleTable(newValues);
-		mFilterBy = filterBy;
 	}		
 	
 	/** Gets the boolean flag for whether the alarm should cause the phone to ring,
@@ -313,7 +245,8 @@ public abstract class Alert {
 	 * @return <code>true</code> if it should ring; <code>false</code> if not
 	 */
 	public boolean getRing() {
-		return mRing;
+        Cursor ruleCursor = getRuleCursor();
+        return DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_RING)));
 	}
 
 	/** Sets the boolean flag for whether the alarm should cause the phone to ring,
@@ -324,14 +257,14 @@ public abstract class Alert {
 		ContentValues newValues = new ContentValues();
 		newValues.put(RuleEntry.COLUMN_RING, ring);
 		updateRuleTable(newValues);
-		mRing = ring;
 	}	
 	
 	/** Gets the boolean flag for whether the alarm should cause the phone to vibrate
 	 * @return <code>true</code> if it should vibrate; <code>false</code> if not
 	 */	
 	public boolean getVibrate() {
-		return mVibrate;
+        Cursor ruleCursor = getRuleCursor();
+        return  DbContract.intToBoolean(ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VIBRATE)));
 	}
 
 	/** Sets the boolean flag for whether the alarm should cause the phone to vibrate,
@@ -342,7 +275,6 @@ public abstract class Alert {
 		ContentValues newValues = new ContentValues();
 		newValues.put(RuleEntry.COLUMN_VIBRATE, vibrate);
 		updateRuleTable(newValues);
-		mVibrate = vibrate;
 	}		
 
 	/** Gets the volume as an integer from 0 through 1000. Note, this may be
@@ -351,7 +283,8 @@ public abstract class Alert {
 	 * @return volume as an integer from 0 through 1000
 	 */
 	public int getVolume() {
-		return mVolume;
+        Cursor ruleCursor = getRuleCursor();
+        return ruleCursor.getInt(ruleCursor.getColumnIndex(RuleEntry.COLUMN_VOLUME));
 	}
 
 	/** Sets the volume as an integer from 0 through 1000, and saves it to the
@@ -367,26 +300,36 @@ public abstract class Alert {
 		ContentValues newValues = new ContentValues();
 		newValues.put(RuleEntry.COLUMN_VOLUME, volume);
 		updateRuleTable(newValues);
-		mVolume = volume;
 	}	
 	
-	/** Gets the ringtone to play's uri as a String
-	 * @return the uri of the ringtone as a String
+	/** Gets the ringtone to play's uri
+	 * @return the uri of the ringtone
 	 */
 	public Uri getTone() {
-		return Uri.parse(mTone);
+		return Uri.parse(getToneString());
 	}
+
+    /** Gets the ringtone to play's uri as a String
+     * @return the uri of the ringtone as a String
+     */
+    private String getToneString() {
+        Cursor ruleCursor = getRuleCursor();
+        return ruleCursor.getString(ruleCursor.getColumnIndex(RuleEntry.COLUMN_TONE));
+    }
 
 	/** Gets the ringtone's name as a String
 	 * @return the name of the ringtone as a String
 	 */	
 	public String getToneName(Context context) {
-		if (mTone.equals(Settings.System.DEFAULT_ALARM_ALERT_URI.toString())) {
+		if (getToneString().equals(Settings.System.DEFAULT_ALARM_ALERT_URI.toString())) {
 			return "Default Alarm Sound";
 		}
 		return RingtoneManager.getRingtone(context, getTone()).getTitle(context);
 	}
 
+    /** Sets the ringtone to play's uri
+     * @param tone the uri of the ringtone
+     */
 	public void setTone(Uri tone) {
 		setTone(tone.toString());
 	}
@@ -394,11 +337,10 @@ public abstract class Alert {
 	/** Sets the ringtone to play's uri as a String
 	 * @param tone the uri of the ringtone as a String
 	 */
-	public void setTone(String tone) {
+	private void setTone(String tone) {
 		ContentValues newValues = new ContentValues();
 		newValues.put(RuleEntry.COLUMN_TONE, tone);
 		updateRuleTable(newValues);
-		mTone = tone;
 	}
 	
 	/** Returns a list of the lookup values for all contacts on the "allow
@@ -408,7 +350,7 @@ public abstract class Alert {
 	 * @return list of "allow list" contacts
 	 */
 	public List<String> getAllowedContacts() {
-		return new ArrayList<String>(mAllowedContacts);
+        return getContacts(DbContract.ENTRY_LIST_ALLOW_LIST);
 	}
 
 	/** Returns a list of the lookup values for all contacts on the "block
@@ -418,8 +360,40 @@ public abstract class Alert {
 	 * @return list of "block list" contacts
 	 */	
 	public List<String> getBlockedContacts() {
-		return new ArrayList<String>(mBlockedContacts);
+		return getContacts(DbContract.ENTRY_LIST_BLOCK_LIST);
 	}
+
+    /** Returns a list of the lookup values for all contacts on the block
+     * or allow list.
+     * @param list the list type, either <code>DbContract.ENTRY_LIST_ALLOW_LIST</code>
+     *             for allowed contacts, or <code>DbContract.ENTRY_LIST_BLOCK_LIST</code>
+     *             for blocked contacts
+     * @return list of contacts
+     */
+    private List<String> getContacts(int list) {
+        SQLiteDatabase database = getReadableDatabase();
+        List<String> contacts = new ArrayList<String>();
+
+        Cursor contactsCursor = database.query(getContactTableName(),
+                new String[] {RuleContactEntry.COLUMN_LIST, RuleContactEntry.COLUMN_LOOKUP},
+                RuleContactEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId,
+                null, null, null, null);
+
+        contactsCursor.moveToFirst();
+
+        while (!contactsCursor.isAfterLast()) {
+            String lookup = contactsCursor.getString(contactsCursor.getColumnIndex(RuleContactEntry.COLUMN_LOOKUP));
+            if (contactsCursor.getInt(contactsCursor.getColumnIndex(RuleContactEntry.COLUMN_LIST)) == list) {
+                contacts.add(lookup);
+            }
+            contactsCursor.moveToNext();
+        }
+
+        contactsCursor.close();
+        database.close();
+
+        return contacts;
+    }
 	
 	/** Returns a list of the names for all contacts on the "allow
 	 * list." Note that having an "allow list" does not necessarily mean
@@ -428,7 +402,7 @@ public abstract class Alert {
 	 * @return list of "allow list" contact names
 	 */
 	public List<String> getAllowedContactNames() {
-		return getContactNames(mAllowedContacts);
+		return getContactNames(getAllowedContacts());
 	}
 
 	/** Returns a list of the names for all contacts on the "block
@@ -438,7 +412,7 @@ public abstract class Alert {
 	 * @return list of "block list" contact names
 	 */	
 	public List<String> getBlockedContactNames() {
-		return getContactNames(mBlockedContacts);
+		return getContactNames(getBlockedContacts());
 	}	
 	
 	/** Returns a list of the names for a list of contact lookups.
@@ -447,7 +421,7 @@ public abstract class Alert {
 	//TODO: Revise this so that it doesn't keep opening the database!
 	// preferably, make getNameFromLookup use this function instead
 	public List<String> getContactNames(List<String> contacts) {
-		List<String> names = new ArrayList<String>(contacts.size());
+		List<String> names = new ArrayList<>(contacts.size());
 		for (String lookup : contacts) {
 			names.add(getNameFromLookup(lookup));
 		}
@@ -466,8 +440,8 @@ public abstract class Alert {
 	 * @return <code>true</code> if added; <code>false</code>
 	 */
 	public boolean addContact(String lookup, int list) {
-		if (list == DbContract.ENTRY_LIST_ALLOW_LIST && !mAllowedContacts.contains(lookup) ||
-				list == DbContract.ENTRY_LIST_BLOCK_LIST && !mBlockedContacts.contains(lookup)) {
+		if (list == DbContract.ENTRY_LIST_ALLOW_LIST && !getAllowedContacts().contains(lookup) ||
+				list == DbContract.ENTRY_LIST_BLOCK_LIST && !getBlockedContacts().contains(lookup)) {
 			long success;
 			
 			SQLiteDatabase database = getWritableDatabase();
@@ -481,12 +455,7 @@ public abstract class Alert {
 			if (success == -1) {
 				return false;
 			}
-			
-			if (list == DbContract.ENTRY_LIST_ALLOW_LIST) {
-				mAllowedContacts.add(lookup);
-			} else {
-				mBlockedContacts.add(lookup);
-			}
+
 			return true;
 		}
 		
@@ -512,12 +481,7 @@ public abstract class Alert {
 						RuleContactEntry.COLUMN_LOOKUP + " = ?",
 				new String[] {"" + mRuleId, "" + list, lookup});
 		database.close();
-		
-		if (list == DbContract.ENTRY_LIST_ALLOW_LIST) {
-			mAllowedContacts.remove(lookup);
-		} else {
-			mBlockedContacts.remove(lookup);
-		}		
+
 	}
 	
 	/** Updates the database rule for the passed parameters
@@ -525,7 +489,7 @@ public abstract class Alert {
 	 */
 	protected void updateRuleTable(ContentValues newValues) {
 		SQLiteDatabase database = getWritableDatabase();
-		database.update(getTableName(),
+		database.update(getRuleTableName(),
 				newValues,
 				RuleEntry._ID + " =  " + mRuleId, null);
 		database.close();
@@ -540,7 +504,7 @@ public abstract class Alert {
 		ArrayList<String> existingNames = new ArrayList<String>();
 		
 		SQLiteDatabase database = getReadableDatabase();
-		Cursor ruleCursor = database.query(getTableName(),
+		Cursor ruleCursor = database.query(getRuleTableName(),
 				new String[] {RuleEntry.COLUMN_TITLE},
 				null, null, null, null, null);
 		ruleCursor.moveToFirst();
@@ -578,14 +542,14 @@ public abstract class Alert {
 	 * <code>false</code> if not
 	 */
 	protected boolean meetsContactCriteria(String phoneNumber) {
-		if (mFilterBy == DbContract.ENTRY_FILTER_BY_EVERYONE) {
+		if (getFilterBy() == DbContract.ENTRY_FILTER_BY_EVERYONE) {
 			return true;
 		}
 		
 		String lookup = getLookupFromPhoneNumber(phoneNumber);
 		
-		if (mFilterBy == DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY) {
-			if (lookup != null && mAllowedContacts.contains(lookup)) {
+		if (getFilterBy() == DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY) {
+			if (lookup != null && getAllowedContacts().contains(lookup)) {
 				return true;
 			} else {
 				return false;
@@ -595,7 +559,7 @@ public abstract class Alert {
 		else {
 			if (lookup == null) {
 				return true;
-			} else if (mBlockedContacts.contains(lookup)) {
+			} else if (getBlockedContacts().contains(lookup)) {
 				return false;
 			} else {
 				return true;
@@ -624,7 +588,7 @@ public abstract class Alert {
 	}
 	
 	/** Gets the name in the phone's contact list from a lookup
-	 * @param the lookup key for the contact
+	 * @param lookup the lookup key for the contact
 	 * @return the name for the contact
 	 */	
 	public String getNameFromLookup(String lookup) {

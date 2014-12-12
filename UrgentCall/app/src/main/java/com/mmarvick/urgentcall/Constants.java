@@ -34,9 +34,7 @@ public class Constants {
 	
 	// Message alert setting for keyword
 	public final static String MSG_MESSAGE = "MSG_MESSAGE";
-	public final static String MSG_MESSAGE_TITLE = "Message Key";
 	public final static String MSG_MESSAGE_DEFAULT = "Urgent!";
-	public final static int MSG_MESSAGE_MIN = 5;
 	
 	// Volume alert setting
 	public final static int ALERT_VOLUME_MAX = 1000;
@@ -47,14 +45,7 @@ public class Constants {
 	public final static String ALERT_HOW_VIBE = "1";
 	public final static String ALERT_HOW_RING_AND_VIBE = "2";
 	public final static String ALERT_HOW_DEFAULT = ALERT_HOW_RING;
-	
-	// Message alarm constant for how long alert plays for
-	public final static int MSG_ALARM_TIME = 10;
-	
-	// Call alert type
-	public final static int CALL_ALERT_TYPE_RC = 0;
-	public final static int CALL_ALERT_TYPE_SC = 1;
-	public final static int CALL_ALERT_TYPE_BOTH = 2;
+
 	
 	// Most recently accepted disclaimer
 	public final static String DISCLAIMER_VERSION = "DISCLAIMER_VERSION";
@@ -70,14 +61,6 @@ public class Constants {
 	public final static String ALERT_VOLUME = "_VOLUME"; // volume for an alert
 	public final static String ALERT_SOUND = "_SOUND"; // sound for an alert
 	public final static String ALERT_HOW = "_HOW"; // how to alert (ring, vibrate, etc...)
-	
-	/* --------------- Intent Flags ---------------------- 
-	 * These are keys for values passed in the intent to the ContactListActivity so
-	 * that it knows whether to show a whitelist or blacklist, and for what alert type
-	 */
-	
-	public final static String ALERT_TYPE = "ALERT_TYPE";
-	public final static String USER_STATE = "USER_STATE";
 	
 
 }

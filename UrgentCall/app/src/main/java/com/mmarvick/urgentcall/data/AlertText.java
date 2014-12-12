@@ -19,12 +19,6 @@ public class AlertText extends Alert {
 	/** The default name of a text alert */
 	public static final String ALERT_TEXT_TYPE_NAME = "Text Alert";
 	
-	/** The alert duration in seconds */
-	private int mAlertDuration;
-	
-	/** A list of phrases to trigger from in a text */
-	private List<String> mPhrases;	
-	
 	/** Returns a list of all text alerts in the database
 	 * @param context the context
 	 * @return a list of AlertText objects representing each currently stored
@@ -90,7 +84,8 @@ public class AlertText extends Alert {
 	 * @return the duration in seconds that an alert lasts
 	 */
 	public int getAlertDuration() {
-		return mAlertDuration;
+        Cursor ruleCursor = getRuleCursor();
+		return ruleCursor.getInt(ruleCursor.getColumnIndex(TextRuleEntry.COLUMN_ALERT_DURATION));
 	}
 	
 	/** Sets the alert duration for the alert in seconds, and saves it to the
@@ -100,8 +95,7 @@ public class AlertText extends Alert {
 	public void setAlertDuration(int alertDuration) {
 		ContentValues newValues = new ContentValues();
 		newValues.put(TextRuleEntry.COLUMN_ALERT_DURATION, alertDuration);
-		updateRuleTable(newValues);		
-		mAlertDuration = alertDuration;	
+		updateRuleTable(newValues);
 	}
 	
 	/** Returns the first phrase that will trigger a text alert. Not for
@@ -109,8 +103,10 @@ public class AlertText extends Alert {
 	 * @return String phrase
 	 */
 	public String getSinglePhrase() {
-		if (mPhrases.size() > 0) {
-			return mPhrases.get(0);
+        List<String> phrases = getPhrases();
+
+		if (phrases.size() > 0) {
+			return phrases.get(0);
 		} else {
 			return null;
 		}
@@ -121,7 +117,7 @@ public class AlertText extends Alert {
 	 * @param s the phrase to allow text alerts with
 	 */
 	public void setSinglePhrase(String s) {
-		ArrayList<String> oldPhrases = new ArrayList<String>(mPhrases);
+		ArrayList<String> oldPhrases = new ArrayList<String>(getPhrases());
 		for (String phrase : oldPhrases) {
 			removePhrase(phrase);
 		}
@@ -133,7 +129,23 @@ public class AlertText extends Alert {
 	 * @return list of phrases
 	 */	
 	public List<String> getPhrases() {
-		return mPhrases;
+        List<String> phrases = new ArrayList<String>();
+        Cursor phrasesCursor = getReadableDatabase().query(getPhraseTableName(),
+                new String[]{TextRulePhraseEntry.COLUMN_TEXT_PHRASE},
+                TextRulePhraseEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId,
+                null, null, null, null);
+
+        phrasesCursor.moveToFirst();
+
+        while (!phrasesCursor.isAfterLast()) {
+            String phrase = phrasesCursor.getString(phrasesCursor.getColumnIndex(TextRulePhraseEntry.COLUMN_TEXT_PHRASE));
+            phrases.add(phrase);
+            phrasesCursor.moveToNext();
+        }
+
+        phrasesCursor.close();
+
+		return phrases;
 	}
 	
 	/** Adds a phrase to the list of phrases that will trigger a text alert and
@@ -157,7 +169,7 @@ public class AlertText extends Alert {
 		String trimmedPhrase = phrase.trim();
 		
 		boolean alreadyHas = false;
-		for (String existingPhrase : mPhrases) {
+		for (String existingPhrase : getPhrases()) {
 			if (existingPhrase.toLowerCase().trim().equals(trimmedPhrase.toLowerCase())) {
 				alreadyHas = true;
 			}
@@ -178,8 +190,6 @@ public class AlertText extends Alert {
 			if (needToClose) {
 				db.close();
 			}
-			
-			mPhrases.add(trimmedPhrase);
 		}
 	}
 	
@@ -193,9 +203,7 @@ public class AlertText extends Alert {
 				TextRulePhraseEntry.COLUMN_ALERT_RULE_ID + " = ? AND " +
 						TextRulePhraseEntry.COLUMN_TEXT_PHRASE + " = ?",
 				new String[] {"" + mRuleId, phrase});
-		database.close();	
-		
-		mPhrases.remove(phrase);
+		database.close();
 	}
 
 	/** Checks to see if all the criteria of this alert have been met by the
@@ -216,33 +224,12 @@ public class AlertText extends Alert {
 	 * <code>false</code> if not
 	 */	
 	private boolean meetsPhraseCriteria(String message) {
-		for (String phrase : mPhrases) {
+		for (String phrase : getPhrases()) {
 			if (message.toLowerCase().contains(phrase.toLowerCase().trim())) {
 				return true;
 			}
 		}
 		return false;
-	}	
-	
-	@Override
-	protected void loadRemainingRuleData(SQLiteDatabase database, Cursor ruleCursor) {
-		mAlertDuration = ruleCursor.getInt(ruleCursor.getColumnIndex(TextRuleEntry.COLUMN_ALERT_DURATION));
-
-		mPhrases = new ArrayList<String>();
-		Cursor phrasesCursor = database.query(getPhraseTableName(), 
-				new String[] {TextRulePhraseEntry.COLUMN_TEXT_PHRASE}, 
-				TextRulePhraseEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId, 
-				null, null, null, null);
-		
-		phrasesCursor.moveToFirst();
-		
-		while (!phrasesCursor.isAfterLast()) {
-			String phrase = phrasesCursor.getString(phrasesCursor.getColumnIndex(TextRulePhraseEntry.COLUMN_TEXT_PHRASE));
-			mPhrases.add(phrase);
-			phrasesCursor.moveToNext();
-		}
-		
-		phrasesCursor.close();
 	}
 
 	/** Initializes the remaining information that is specific to text alerts,
@@ -251,10 +238,8 @@ public class AlertText extends Alert {
 	 * @param ruleValues the repository of key-value pairs to save in the database
 	 */
 	protected void initializeAndStoreRemainingRuleData(ContentValues ruleValues) {
-		mAlertDuration = 10;
-		ruleValues.put(TextRuleEntry.COLUMN_ALERT_DURATION, mAlertDuration);
-		
-		mPhrases = new ArrayList<String>();
+		int alertDuration = 10;
+		ruleValues.put(TextRuleEntry.COLUMN_ALERT_DURATION, alertDuration);
 	}
 
 	/** {@inheritDoc} */
@@ -269,7 +254,7 @@ public class AlertText extends Alert {
 	}	
 
 	/** {@inheritDoc} */
-	protected String getTableName() {
+	protected String getRuleTableName() {
 		return TextRuleEntry.TABLE_NAME;
 	}
 	

@@ -12,14 +12,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ContactListFragment extends DialogFragment {
 	private Alert mAlert;
@@ -44,14 +41,7 @@ public class ContactListFragment extends DialogFragment {
 	public static final String ALERT_ID = "ALERT_ID";
 	public static final String FILTER_BY = "FILTER_BY";
 	
-	public void init() {
-		if (mListType == DbContract.ENTRY_LIST_ALLOW_LIST) {
-			mContacts = mAlert.getAllowedContacts();
-		} else {
-			mContacts = mAlert.getBlockedContacts();
-		}
-			
-	}
+
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -68,7 +58,7 @@ public class ContactListFragment extends DialogFragment {
 		
 		mListType = args.getInt(FILTER_BY);
 		
-		init();
+		getContacts();
 		
 		((MainActivity) getActivity()).setContactListFragment(this);
 		ListView view = new ListView(getActivity());
@@ -104,6 +94,15 @@ public class ContactListFragment extends DialogFragment {
 			.create();
 		
 	}
+
+    public void getContacts() {
+        if (mListType == DbContract.ENTRY_LIST_ALLOW_LIST) {
+            mContacts = mAlert.getAllowedContacts();
+        } else {
+            mContacts = mAlert.getBlockedContacts();
+        }
+
+    }
 	
 	private void addContact() {
 		Intent contactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);

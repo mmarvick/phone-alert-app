@@ -17,6 +17,7 @@ import android.provider.Settings;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.util.Log;
 
 /** Object that represents one alert (call or text) rule, keeps track of
  * information associated with it, and saves changes to the database when updated.
@@ -592,7 +593,7 @@ public abstract class Alert {
 		String lookup = getLookupFromPhoneNumber(phoneNumber);
 		
 		if (getFilterBy() == DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY) {
-			if (lookup != null && getAllowedContacts().contains(lookup)) {
+			if (lookup != null && isContactInDatabase(phoneNumber, getAllowedContacts())) {
 				return true;
 			} else {
 				return false;
@@ -602,7 +603,7 @@ public abstract class Alert {
 		else {
 			if (lookup == null) {
 				return true;
-			} else if (getBlockedContacts().contains(lookup)) {
+			} else if (isContactInDatabase(phoneNumber, getBlockedContacts())) {
 				return false;
 			} else {
 				return true;
@@ -624,6 +625,9 @@ public abstract class Alert {
             cursor.moveToFirst();
             String contactLookup = cursor.getString(cursor.getColumnIndex(CONTACT_LOOKUP));
             cursor.close();
+
+            Log.e("MATCH", "contactLookup: " + contactLookup);
+            Log.e("MATCH", "lookupToMatch: " + lookupToMatch);
 
             if (contactLookup.equals(lookupToMatch)) {
                 return true;

@@ -103,7 +103,7 @@ public class AlertText extends Alert {
 	 * @return String phrase
 	 */
 	public String getSinglePhrase() {
-        List<String> phrases = getPhrases();
+        List<String> phrases = getPhrases(null);
 
 		if (phrases.size() > 0) {
 			return phrases.get(0);
@@ -117,20 +117,24 @@ public class AlertText extends Alert {
 	 * @param s the phrase to allow text alerts with
 	 */
 	public void setSinglePhrase(String s) {
-		ArrayList<String> oldPhrases = new ArrayList<String>(getPhrases());
+		ArrayList<String> oldPhrases = new ArrayList<String>(getPhrases(null));
 		for (String phrase : oldPhrases) {
 			removePhrase(phrase);
 		}
 		addPhrase(s);
 	}
 
-	/** Returns a list of the lookup values for all phrases that will trigger
+    /** Returns a list of the lookup values for all phrases that will trigger
 	 * a text alert.
+     * @param db - a database to use, can be null
 	 * @return list of phrases
 	 */	
-	public List<String> getPhrases() {
+	public List<String> getPhrases(SQLiteDatabase db) {
+        if (db == null) {
+            db = getReadableDatabase();
+        }
         List<String> phrases = new ArrayList<String>();
-        Cursor phrasesCursor = getReadableDatabase().query(getPhraseTableName(),
+        Cursor phrasesCursor = db.query(getPhraseTableName(),
                 new String[]{TextRulePhraseEntry.COLUMN_TEXT_PHRASE},
                 TextRulePhraseEntry.COLUMN_ALERT_RULE_ID + " = " + mRuleId,
                 null, null, null, null);
@@ -169,7 +173,7 @@ public class AlertText extends Alert {
 		String trimmedPhrase = phrase.trim();
 		
 		boolean alreadyHas = false;
-		for (String existingPhrase : getPhrases()) {
+		for (String existingPhrase : getPhrases(db)) {
 			if (existingPhrase.toLowerCase().trim().equals(trimmedPhrase.toLowerCase())) {
 				alreadyHas = true;
 			}
@@ -224,7 +228,7 @@ public class AlertText extends Alert {
 	 * <code>false</code> if not
 	 */	
 	private boolean meetsPhraseCriteria(String message) {
-		for (String phrase : getPhrases()) {
+		for (String phrase : getPhrases(null)) {
 			if (message.toLowerCase().contains(phrase.toLowerCase().trim())) {
 				return true;
 			}

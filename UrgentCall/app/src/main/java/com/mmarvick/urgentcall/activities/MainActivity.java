@@ -335,7 +335,6 @@ public class MainActivity extends ActionBarActivity
 		if (getResources().getBoolean(R.bool.paid_version)) {
 		    MenuItem upgrade = menu.findItem(R.id.action_upgrade);
 		    upgrade.setVisible(false);
-		    supportInvalidateOptionsMenu();
 		}
 		
 		return returnValue;

@@ -77,7 +77,7 @@ public class OldRulesDbOpenHelper extends SQLiteOpenHelper {
 		updateAlert(oldDb, alertText, RulesEntryOld.MSG_STATE);
 		alertText.setAlertDuration(PrefHelper.getMessageTime(mContext, RulesEntryOld.MSG_STATE));
 		
-		List<String> badPhrases = alertText.getPhrases();
+		List<String> badPhrases = alertText.getPhrases(null);
 		
 		for (String badPhrase : badPhrases) {
 			alertText.removePhrase(badPhrase);

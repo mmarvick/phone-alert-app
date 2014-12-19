@@ -373,6 +373,7 @@ public abstract class Alert {
     private List<String> getContacts(int list) {
         SQLiteDatabase database = getReadableDatabase();
         List<String> contacts = new ArrayList<String>();
+        List<String> lookupsToRemove = new ArrayList<String>();
 
         Cursor contactsCursor = database.query(getContactTableName(),
                 new String[] {RuleContactEntry.COLUMN_LIST, RuleContactEntry.COLUMN_LOOKUP},
@@ -384,12 +385,30 @@ public abstract class Alert {
         while (!contactsCursor.isAfterLast()) {
             String lookup = contactsCursor.getString(contactsCursor.getColumnIndex(RuleContactEntry.COLUMN_LOOKUP));
             if (contactsCursor.getInt(contactsCursor.getColumnIndex(RuleContactEntry.COLUMN_LIST)) == list) {
-                contacts.add(lookup);
+                Uri lookupUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup);
+                Uri res = ContactsContract.Contacts.lookupContact(mContext.getContentResolver(), lookupUri);
+                if (res != null) {
+                    contacts.add(lookup);
+                } else {
+                    lookupsToRemove.add(lookup);
+                }
+
             }
             contactsCursor.moveToNext();
         }
 
         contactsCursor.close();
+
+        for (String lookupToRemove : lookupsToRemove) {
+
+            database.delete(getContactTableName(),
+                    RuleContactEntry.COLUMN_ALERT_RULE_ID + " = ? AND " +
+                            RuleContactEntry.COLUMN_LIST + " = ? AND " +
+                            RuleContactEntry.COLUMN_LOOKUP + " = ?",
+                    new String[]{"" + mRuleId, "" + list, lookupToRemove});
+
+        }
+
         database.close();
 
         return contacts;
@@ -420,13 +439,37 @@ public abstract class Alert {
 	 */		
 	//TODO: Revise this so that it doesn't keep opening the database!
 	// preferably, make getNameFromLookup use this function instead
-	public List<String> getContactNames(List<String> contacts) {
-		List<String> names = new ArrayList<>(contacts.size());
-		for (String lookup : contacts) {
-			names.add(getNameFromLookup(lookup));
-		}
+	public List<String> getContactNames(List<String> lookups) {
+		List<String> names = new ArrayList<>(lookups.size());
+		for (Uri contactUri : getContactUris(lookups)) {
+
+            Cursor cursor = mContext.getContentResolver().query(contactUri,
+                    null, null, null, null);
+
+            if (cursor.getCount() == 0) {
+                throw new IllegalArgumentException("Couldn't find contact from uri");
+            }
+
+            cursor.moveToFirst();
+            String name = cursor.getString(cursor.getColumnIndex(CONTACT_NAME));
+            cursor.close();
+            names.add(name);
+        }
 		return names;
-	}	
+	}
+
+    private List<Uri> getContactUris(List<String> lookups) {
+        List<Uri> uris = new ArrayList<>(lookups.size());
+        for (String lookup : lookups) {
+            uris.add(getContactUri(lookup));
+        }
+        return uris;
+    }
+
+    private Uri getContactUri(String lookup) {
+        Uri lookupUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup);
+        return ContactsContract.Contacts.lookupContact(mContext.getContentResolver(), lookupUri);
+    }
 	
 	/** Adds a contact to the "allow list" or "block list" and adds it to
 	 * the alert rule contact database. Note, you may also want to set
@@ -567,6 +610,29 @@ public abstract class Alert {
 		}
 	}
 
+    protected boolean isContactInDatabase(String phoneNumber, List<String> lookups) {
+        String lookupToMatch = getLookupFromPhoneNumber(phoneNumber);
+        List<Uri> contactUris = getContactUris(lookups);
+        for (Uri contactUri : contactUris) {
+            Cursor cursor = mContext.getContentResolver().query(contactUri,
+                    null, null, null, null);
+
+            if (cursor.getCount() == 0) {
+                throw new IllegalArgumentException("Couldn't find contact from uri");
+            }
+
+            cursor.moveToFirst();
+            String contactLookup = cursor.getString(cursor.getColumnIndex(CONTACT_LOOKUP));
+            cursor.close();
+
+            if (contactLookup.equals(lookupToMatch)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 	/** Gets the lookup in the phone's contact list from a phone number
 	 * @param phoneNumber the phone number
 	 * @return the lookup key
@@ -586,20 +652,13 @@ public abstract class Alert {
 		
 		return lookup;
 	}
-	
-	/** Gets the name in the phone's contact list from a lookup
-	 * @param lookup the lookup key for the contact
-	 * @return the name for the contact
-	 */	
-	public String getNameFromLookup(String lookup) {
-		Cursor cursor = mContext.getContentResolver().query(Contacts.CONTENT_URI,
-				new String[] {CONTACT_NAME},
-				CONTACT_LOOKUP + "=?",
-				new String[] {lookup}, null);
-		cursor.moveToFirst();
-		String name = cursor.getString(cursor.getColumnIndex(CONTACT_NAME));
-		cursor.close();
-		return name;		
-	}
+
+    public String getNameFromLookup(String lookup) {
+        List<String> contacts = new ArrayList<String>();
+        contacts.add(lookup);
+
+        List<String> names = getContactNames(contacts);
+        return names.get(0);
+    }
 
 }

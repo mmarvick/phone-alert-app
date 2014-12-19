@@ -157,7 +157,9 @@ public abstract class AlertView extends RelativeLayout {
 			filterByText = "Everyone";
 		} else if (filterBy == DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY) {
 			List<String> allowed = mAlert.getAllowedContactNames();
-			if (allowed.size() <= 3) {
+            if (allowed.size() == 0) {
+                filterByText = "Nobody (allowed contacts were removed)";
+            } else if (allowed.size() <= 3) {
 				filterByText += getNames(allowed);
 			} else {
 				filterByText = allowed.size() + " Allowed Contacts";
@@ -165,7 +167,9 @@ public abstract class AlertView extends RelativeLayout {
 		} else {
 			List<String> blocked = mAlert.getBlockedContactNames();
 			filterByText = "Everyone but";
-			if (blocked.size() <= 2) {
+            if (blocked.size() == 0) {
+                filterByText = "Everyone";
+            } else if (blocked.size() <= 2) {
 				filterByText += "\n" + getNames(blocked);
 			} else {
 				filterByText += "\n" + blocked.size() + " Blocked Contacts";

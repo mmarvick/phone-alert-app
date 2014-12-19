@@ -1,5 +1,4 @@
 ## Urgent Call for Android
-===============
 
 Urgent Call lets users filter out distractions by letting the most important calls or texts get through.
 

@@ -1,8 +1,6 @@
 package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
-import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.app.Service;
 import android.content.Context;
@@ -12,7 +10,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.provider.Telephony;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 

@@ -3,17 +3,12 @@ package com.mmarvick.urgentcall.background;
 import java.util.List;
 
 import com.mmarvick.urgentcall.Constants;
-import com.mmarvick.urgentcall.data.AlertCall;
 import com.mmarvick.urgentcall.data.AlertText;
-import com.mmarvick.urgentcall.data.OldRulesDbOpenHelper;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
-import com.mmarvick.urgentcall.data.OldRulesDbHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,16 +16,10 @@ import android.telephony.SmsMessage;
 
 public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 
-	OldRulesDbHelper dbHelper;
 	AudioManager audio;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		
-		/* ------- TEMPORARY, AND TO UPDATE THE DATABASE ------------*/
-		OldRulesDbOpenHelper updateDb = new OldRulesDbOpenHelper(context);
-		SQLiteDatabase updateDbDb = updateDb.getReadableDatabase();
-		updateDbDb.close();	
 		
 		Bundle bundle = intent.getExtras();
 		String message = "";
@@ -45,7 +34,7 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 			
 		}
 			
-		if (PrefHelper.getState(context, Constants.APP_STATE) == RulesEntryOld.STATE_ON
+		if (PrefHelper.getState(context, Constants.APP_STATE) == Constants.URGENT_CALL_STATE_ON
 				&& !PrefHelper.isSnoozing(context)) {
 			
 			boolean shouldAlert = false;

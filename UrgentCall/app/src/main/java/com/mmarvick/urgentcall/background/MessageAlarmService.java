@@ -2,7 +2,6 @@ package com.mmarvick.urgentcall.background;
 
 import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.data.PrefHelper;
-import com.mmarvick.urgentcall.data.OldDbContractDatabase.RulesEntryOld;
 
 import android.app.Service;
 import android.content.Context;

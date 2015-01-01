@@ -148,6 +148,14 @@
         android:layout_marginRight="10dp"
         android:src="@drawable/ic_action_settings" />
 
+    <ImageButton
+        android:id="@+id/imageButtonShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageButtonDelete"
+        android:layout_toLeftOf="@id/imageButtonExpand"
+        android:src="@drawable/ic_action_share" />
+
 
 
 </com.mmarvick.urgentcall.views.RelativeLayoutBugHack>

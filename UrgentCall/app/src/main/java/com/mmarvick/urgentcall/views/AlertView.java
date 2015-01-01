@@ -37,6 +37,9 @@ import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public abstract class AlertView extends RelativeLayout {
 	protected Context mContext;
 	protected Fragment mFragment;
@@ -57,6 +60,9 @@ public abstract class AlertView extends RelativeLayout {
 	protected ImageButton imageButtonTone;
 	protected ImageButton imageButtonExpand;
 	protected ImageButton imageButtonDelete;
+
+    @InjectView(R.id.imageButtonShare)
+    protected ImageButton imageButtonShare;
 	
 	protected TextView textViewAlertName;
 	protected TextView textViewFilterBy;	
@@ -74,7 +80,8 @@ public abstract class AlertView extends RelativeLayout {
 		
 		LayoutInflater inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).cloneInContext(new ContextThemeWrapper(context, R.style.AppThemeLight));
 		mView = inflater.inflate(R.layout.view_alert, this);
-		inflatePreView();
+        ButterKnife.inject(this, mView);
+        inflatePreView();
 		inflatePostView();
 	}
 	
@@ -349,6 +356,7 @@ public abstract class AlertView extends RelativeLayout {
 		expandable.add(imageButtonRing);
 		expandable.add(imageButtonTone);
 		expandable.add(imageButtonDelete);
+        expandable.add(imageButtonShare);
 		expandable.add(seekBarVolume);
 		expandable.add(textViewTone);
 		expandable.add(textViewSettings);

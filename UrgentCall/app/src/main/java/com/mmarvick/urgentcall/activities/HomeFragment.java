@@ -41,11 +41,8 @@ public class HomeFragment extends Fragment {
 	private void toggleState() {
 		if (PrefHelper.isSnoozing(getActivity().getApplicationContext())) {
 			((MainActivity) getActivity()).endSnooze();
-		}
-		else if (PrefHelper.getState(getActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
-			PrefHelper.setState(getActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_ON);
 		} else {
-			PrefHelper.setState(getActivity().getApplicationContext(), Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
+			PrefHelper.toggleOnState(getActivity().getApplicationContext());
 		}
 		
 		((MainActivity) getActivity()).disableEnableWhenOff();
@@ -65,7 +62,7 @@ public class HomeFragment extends Fragment {
 			mTextSnoozeFor.setVisibility(View.INVISIBLE);
 			mTextSnoozeTime.setVisibility(View.INVISIBLE);	
 			
-			if (PrefHelper.getState(getActivity().getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+			if (!PrefHelper.getOnState(getActivity().getApplicationContext())) {
 				mTextSafelySilence.setVisibility(View.INVISIBLE);
 				mButtonAppState.setText(getActivity().getString(R.string.status_allcaps_off));
 				mButtonAppState.setTextColor(Color.RED);

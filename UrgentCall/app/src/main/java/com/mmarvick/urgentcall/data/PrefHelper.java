@@ -10,22 +10,43 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 public class PrefHelper {
+    // STATE FOR WHETHER URGENT CALL IS ON OR OFF
+    public final static String APP_STATE = "STATE";
+    public final static int URGENT_CALL_STATE_OFF = 0;
+    public final static int URGENT_CALL_STATE_ON = 1;
 
-	public static int getState(Context context, String alertType) {
-		int def = Constants.URGENT_CALL_STATE_ON;
-		return getPrefs(context).getInt(alertType, def);
+    // VALUE FOR TIME THAT SNOOZE IS COMPLETE
+    public final static String SNOOZE_TIME = "SNOOZE";
+
+    // SETTINGS FOR THE DISCLAIMER VERSION MOST RECENTLY AGREED TO
+    public final static String DISCLAIMER_VERSION = "DISCLAIMER_VERSION";
+    public final static int DISCLAIMER_DEFAULT = 0;
+
+
+	public static boolean getOnState(Context context) {
+		int def = URGENT_CALL_STATE_ON;
+		if (getPrefs(context).getInt(APP_STATE, def) == URGENT_CALL_STATE_ON) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
-	public static void setState(Context context, String alertType, int state) {
+	public static void toggleOnState(Context context) {
 		Editor editor = getPrefs(context).edit();
-		editor.putInt(alertType, state);
+        boolean newState = !getOnState(context);
+        if (newState) {
+            editor.putInt(APP_STATE, URGENT_CALL_STATE_ON);
+        } else {
+            editor.putInt(APP_STATE, URGENT_CALL_STATE_OFF);
+        }
 		editor.commit();
 	}
 
 	
 	public static void setSnoozeTime(Context context, long remaining) {
 		Editor editor = getPrefs(context).edit();
-		editor.putLong(Constants.SNOOZE_TIME, SystemClock.elapsedRealtime() + remaining);
+		editor.putLong(SNOOZE_TIME, SystemClock.elapsedRealtime() + remaining);
 		editor.commit();
 	}
 	
@@ -34,14 +55,14 @@ public class PrefHelper {
 	}
 	
 	public static long snoozeRemaining(Context context) {
-		long snoozeTime = getPrefs(context).getLong(Constants.SNOOZE_TIME, SystemClock.elapsedRealtime());
+		long snoozeTime = getPrefs(context).getLong(SNOOZE_TIME, SystemClock.elapsedRealtime());
 		long clockTime = SystemClock.elapsedRealtime();
 		return snoozeTime - clockTime;
 	}	
 	
 	public static boolean disclaimerCheck(Context context) {
 		SharedPreferences prefs = getPrefs(context);
-		int agreed = prefs.getInt(Constants.DISCLAIMER_VERSION, Constants.DISCLAIMER_DEFAULT);
+		int agreed = prefs.getInt(DISCLAIMER_VERSION, DISCLAIMER_DEFAULT);
 		int current = context.getResources().getInteger(R.integer.disclaimer_version);
 		return (agreed == current);
 	}
@@ -50,26 +71,7 @@ public class PrefHelper {
 		SharedPreferences prefs = getPrefs(context);
 		Editor edit = prefs.edit();
 		int version = context.getResources().getInteger(R.integer.disclaimer_version);
-		edit.putInt(Constants.DISCLAIMER_VERSION, version);
-		edit.commit();
-	}
-	
-	public static void disclaimerSaveBackup(Context context) {
-		SharedPreferences prefs = getPrefs(context);
-		if (!prefs.getBoolean(Constants.DISCLAIMER_BACKUP_FLAG, false)) {
-			Editor edit = prefs.edit();
-			edit.putBoolean(Constants.DISCLAIMER_BACKUP_FLAG, true);
-			edit.putInt(Constants.DISCLAIMER_BACKUP_MODE, getState(context, Constants.APP_STATE));
-			setState(context, Constants.APP_STATE, Constants.URGENT_CALL_STATE_OFF);
-			edit.commit();
-		}
-	}
-	
-	public static void disclaimerResumeBackup(Context context) {
-		SharedPreferences prefs = getPrefs(context);
-		Editor edit = prefs.edit();
-		setState(context, Constants.APP_STATE, prefs.getInt(Constants.DISCLAIMER_BACKUP_MODE, Constants.URGENT_CALL_STATE_ON));
-		edit.putBoolean(Constants.DISCLAIMER_BACKUP_FLAG, false);
+		edit.putInt(DISCLAIMER_VERSION, version);
 		edit.commit();
 	}
 	

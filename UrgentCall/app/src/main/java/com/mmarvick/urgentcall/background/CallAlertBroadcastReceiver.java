@@ -28,7 +28,7 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 			String phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER); // phone number
 			Log.e("UC", "Call came in");
 			// ... and the app isn't snoozing or turne off ...
-			if (PrefHelper.getState(context, Constants.APP_STATE) == Constants.URGENT_CALL_STATE_ON
+			if (PrefHelper.getOnState(context)
 					&& !PrefHelper.isSnoozing(context)) {
 			
 				// ... and either a repeated call alert or single call alert criteria has been met ...

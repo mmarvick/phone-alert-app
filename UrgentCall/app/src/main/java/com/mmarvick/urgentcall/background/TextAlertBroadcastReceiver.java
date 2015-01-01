@@ -34,7 +34,7 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 			
 		}
 			
-		if (PrefHelper.getState(context, Constants.APP_STATE) == Constants.URGENT_CALL_STATE_ON
+		if (PrefHelper.getOnState(context)
 				&& !PrefHelper.isSnoozing(context)) {
 			
 			boolean shouldAlert = false;

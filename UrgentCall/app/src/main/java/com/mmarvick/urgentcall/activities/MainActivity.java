@@ -207,7 +207,7 @@ public class MainActivity extends ActionBarActivity
 	// Prevent the user from switching tabs or scrolling when the alerts are snoozed or off
 	public void disableEnableWhenOff() {
 		if (PrefHelper.isSnoozing(getApplicationContext())
-				|| PrefHelper.getState(getApplicationContext(), Constants.APP_STATE) == Constants.URGENT_CALL_STATE_OFF) {
+				|| !PrefHelper.getOnState(getApplicationContext())) {
 			mViewPager.setCurrentItem(TAB_HOME);
 			mViewPager.setScrollable(false);
 			mCanChangeTabs = false;
@@ -435,9 +435,6 @@ public class MainActivity extends ActionBarActivity
 	public void checkDisclaimer() {
 		if (!(PrefHelper.disclaimerCheck(getApplicationContext()))) {
 			
-			//Save the app state (on/off) as backup, and then turn off
-			PrefHelper.disclaimerSaveBackup(getApplicationContext());
-			
 			//Create and show alert dialog with waiver
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			
@@ -449,7 +446,6 @@ public class MainActivity extends ActionBarActivity
 					public void onClick(DialogInterface dialog, int id) {
 						// Set that the disclaimer was agreed, and resume phone state from backup
 						PrefHelper.disclaimerAgreed(getApplicationContext());
-						PrefHelper.disclaimerResumeBackup(getApplicationContext());
 						
 						// Refresh values due to state change
 						if (homeFragment != null) {

@@ -18,41 +18,10 @@
     <string name="action_add_alert">Add an alert</string>  
     
     <string name="status_heading">Urgent Call is</string>
-    <string name="status_home_msg_name">Text Alerts are&#160;</string>
-    <string name="status_home_rc_name">Repeat Call Alerts are&#160;</string>
-    <string name="status_home_sc_name">Single Call Alerts are&#160;</string>
-    <string name="status_home_all_alerts">All alerts are&#160;</string>
-    
-    <string name="message_text_intro">text messages containing</string>
-    <string name="message_text_will_trigger">will trigger an alarm</string>
-    <string name="message_text_anyone">from anyone</string>
-    <string name="message_text_whitelist_before">from&#160;</string>
-    <string name="message_text_whitelist_after">&#160;allowed texters only</string>
-    <string name="message_text_blacklist_before">from everyone except&#160;</string>
-    <string name="message_text_blacklist_after">&#160;blocked texters</string>
-    <string name="message_text_turned_off">text alerts are caused by a text message with a key word or phrase</string>
-    
-    <string name="rc_text_calls">&#160;calls in&#160;</string>
-    <string name="rc_text_mins">&#160;minutes</string>
-    <string name="rc_text_will_trigger">will trigger an alarm</string>
-    <string name="rc_text_anyone">from any caller</string>
-    <string name="rc_text_whitelist_before">from&#160;</string>
-    <string name="rc_text_whitelist_after">&#160;allowed callers only</string>
-    <string name="rc_text_blacklist_before">from everyone except&#160;</string>
-    <string name="rc_text_blacklist_after">&#160;blocked callers</string> 
-    <string name="rc_text_turned_off">repeated call alerts are caused by multiple calls from a person in a short time</string>
-    
-    <string name="sc_text_intro">a single call</string>
-    <string name="sc_text_will_trigger">will trigger an alarm</string>
-    <string name="sc_text_whitelist_before">from&#160;</string>
-    <string name="sc_text_whitelist_after">&#160;allowed users only</string>
-    <string name="sc_text_turned_off">single call alerts allow the most important people to get to you in just one call</string> 
-    
+
     <string name="status_allcaps_on">ON</string>
     <string name="status_allcaps_off">OFF</string>
     <string name="status_allcaps_snoozing">SNOOZING</string>
-    <string name="status_nocaps_on">on</string>
-    <string name="status_nocaps_off">off</string>
     
     <string name="list_fragment_list_allowed">Allowed Contacts</string>
     <string name="list_fragment_list_blocked">Blocked Contacts</string>
@@ -100,10 +69,6 @@
     <string name="pro_installed_title">Thank you!</string>
     <string name="pro_installed_body">Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.</string>
     <string name="pro_installed_ok">OK</string>
-
-    
-    
-    <string name="share_type_subject">Tell friends about&#8230;</string>
 
     <string name="share_uc_subject">Be reached in an emergency!</string>
     <string name="share_uc_1">Try the Urgent Call app for Android to turn off distractions, but always be alerted when needed urgently. Learn more:&#160;</string>

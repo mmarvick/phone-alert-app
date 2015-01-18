@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.CallLog;
 import android.util.Log;
 
+import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleContactEntry;
 import com.mmarvick.urgentcall.data.DbContractCallRule.CallRuleEntry;
 
@@ -202,4 +203,27 @@ public class AlertCall extends Alert {
 	public String getAlertType() {
 		return ALERT_TYPE;
 	}
+
+    /** {@inheritDoc} */
+    public String getShareText() {
+        String shareText = "";
+        if (getCallQty() == 1) {
+            shareText += mContext.getString(R.string.share_sc_1);
+        } else {
+            shareText += mContext.getString(R.string.share_rc_1) + getCallQty();
+            shareText += mContext.getString(R.string.share_rc_2) + getCallTime();
+            shareText += mContext.getString(R.string.share_rc_3);
+        }
+        shareText += mContext.getString(R.string.share_app_alert_url);
+        return shareText;
+    }
+
+    /** {@inheritDoc} */
+    public String getShareSubject() {
+        if (getCallQty() == 1) {
+            return mContext.getString(R.string.share_sc_subject);
+        } else {
+            return mContext.getString(R.string.share_rc_subject);
+        }
+    }
 }

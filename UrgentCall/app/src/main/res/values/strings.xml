@@ -7,7 +7,8 @@
     <string name="package_lite">com.mmarvick.uc_lite</string>
     <string name="url_play_app">market://details?id=</string>
 	<string name="url_play_web">http://play.google.com/store/apps/details?id=</string>
-	<string name="share_app_url">http://goo.gl/oSzaUk</string>
+	<string name="share_app_general_url">http://goo.gl/oSzaUk</string>
+    <string name="share_app_alert_url">http://goo.gl/gcQQf3</string>
     
     <string name="action_settings">Settings</string>
     <string name="action_snooze">Snooze</string>
@@ -70,23 +71,24 @@
     <string name="pro_installed_body">Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.</string>
     <string name="pro_installed_ok">OK</string>
 
+    <string name="share_by">Select an app to share over&#8230;</string>
+
     <string name="share_uc_subject">Be reached in an emergency!</string>
     <string name="share_uc_1">Try the Urgent Call app for Android to turn off distractions, but always be alerted when needed urgently. Learn more:&#160;</string>
-	<string name="share_uc_by">Select an app to share over&#8230;</string>     
     
     <string name="share_msg_subject">Reach me in an emergency!</string>
-    <string name="share_msg_1">Text me with &#160;</string>
-    <string name="share_msg_2">&#160; to alert my phone, even if silenced. To be reachable in an emergency too, add this app:&#160;</string>
-	<string name="share_msg_by">Select an app to share over&#8230;</string>    
+    <string name="share_msg_1">Text me with&#160;</string>
+    <string name="share_msg_2">&#160;to alert my phone, even if silenced. To be reachable in an emergency too, add this app:&#160;</string>
+
+    <string name="share_msg_once_subject">Reach me easily!</string>
+    <string name="share_msg_once_1">I\'ve set up my phone to always notify me of your texts, even when it\'s in silent mode. To do the same, add this app:&#160;</string>
     
     <string name="share_rc_subject">Reach me in an emergency!</string>
     <string name="share_rc_1">Call me&#160;</string>
     <string name="share_rc_2">&#160;times in&#160;</string>
     <string name="share_rc_3">&#160;minutes to alert my phone, even if silenced. To be reachable in an emergency too, add this app:&#160;</string>
-	<string name="share_rc_by">Select an app to share over&#8230;</string>
 
-    <string name="share_sc_subject">Reach me whenever!</string>
+    <string name="share_sc_subject">Reach me easily!</string>
     <string name="share_sc_1">I\'ve set up my phone to always notify me of your calls, even when it\'s in silent mode. To do the same, add this app:&#160;</string>
-	<string name="share_sc_by">Select an app to share over&#8230;</string>	
 	
 </resources>

@@ -163,6 +163,18 @@ public abstract class Alert {
 	 */
 	public abstract String getAlertType();
 
+    /**
+     * Get the share text for an alert
+     * @return the text for sharing
+     */
+    public abstract String getShareText();
+
+    /**
+     * Get the sharing subject for an alert
+     * @return the subject for sharing
+     */
+    public abstract String getShareSubject();
+
 	/** Removes an alert and all data associated with it. You should
 	 * set all references to this Alert to null after deleting.
 	 */	

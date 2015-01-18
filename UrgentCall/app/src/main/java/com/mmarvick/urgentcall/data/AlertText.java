@@ -3,6 +3,7 @@ package com.mmarvick.urgentcall.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.DbContractTextRule.TextRuleContactEntry;
 import com.mmarvick.urgentcall.data.DbContractTextRule.TextRuleEntry;
 import com.mmarvick.urgentcall.data.DbContractTextRule.TextRulePhraseEntry;
@@ -111,6 +112,16 @@ public class AlertText extends Alert {
 			return null;
 		}
 	}
+
+    /** Returns the single alert phrase with quotes around it **/
+    public String getQuotedSinglePhrase() {
+        return "\u201C" + getSinglePhrase() + "\u201D";
+    }
+
+    /** Returns true if should trigger on any message() */
+    public boolean isPhraseEmpty() {
+        return getSinglePhrase().equals("");
+    }
 	
 	/** Removes all phrases from the list of acceptable phrases for a text
 	 * alert, and replaces it with the passed phrase. Not for long-term use.
@@ -288,4 +299,26 @@ public class AlertText extends Alert {
 		return ALERT_TYPE;
 	}
 
+
+    /** {@inheritDoc} */
+    public String getShareText() {
+        String shareText = "";
+        if (isPhraseEmpty()) {
+            shareText += mContext.getString(R.string.share_msg_once_1);
+        } else {
+            shareText += mContext.getString(R.string.share_msg_1) + getQuotedSinglePhrase();
+            shareText += mContext.getString(R.string.share_msg_2);
+        }
+        shareText += mContext.getString(R.string.share_app_alert_url);
+        return shareText;
+    }
+
+    /** {@inheritDoc} */
+    public String getShareSubject() {
+        if (isPhraseEmpty()) {
+            return mContext.getString(R.string.share_msg_once_subject);
+        } else {
+            return mContext.getString(R.string.share_msg_subject);
+        }
+    }
 }

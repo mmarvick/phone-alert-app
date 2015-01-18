@@ -7,6 +7,7 @@ import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.Alert;
 import com.mmarvick.urgentcall.data.DbContract;
+import com.mmarvick.urgentcall.helpers.ShareHelper;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.FilterPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
@@ -39,6 +40,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public abstract class AlertView extends RelativeLayout {
 	protected Context mContext;
@@ -313,6 +315,11 @@ public abstract class AlertView extends RelativeLayout {
 			}
 		}
 	}
+
+    @OnClick(R.id.imageButtonShare)
+    public void share() {
+        ShareHelper.share(mContext, mAlert.getShareSubject(), mAlert.getShareText());
+    }
 	
 	public void delete() {
 		mAlert.delete();

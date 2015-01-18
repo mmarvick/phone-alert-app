@@ -66,7 +66,11 @@ public class TextAlertView extends AlertView {
 	}
 	
 	private void updateViewMessagePhrase() {
-		textViewMessagePhrase.setText(getAlertText().getSinglePhrase());
+        if (getAlertText().isPhraseEmpty()) {
+            textViewMessagePhrase.setText("Anything");
+        } else {
+            textViewMessagePhrase.setText(getAlertText().getQuotedSinglePhrase());
+        }
 	}
 	
 	private void promptDuration() {

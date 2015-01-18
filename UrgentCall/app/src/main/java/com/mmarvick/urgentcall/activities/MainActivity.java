@@ -2,9 +2,9 @@ package com.mmarvick.urgentcall.activities;
 
 import java.util.List;
 
-import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.helpers.ShareHelper;
 import com.mmarvick.urgentcall.widgets.MyViewPager;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
 import com.mmarvick.urgentcall.widgets.RateDialog;
@@ -332,24 +332,9 @@ public class MainActivity extends ActionBarActivity
 	
 	// Generate message and intent to share app with other users
 	private void share() {
-
-		Intent shareIntent = new Intent();
-		
-		String message = "";
-		String subject = "";
-		String intentPickerTitle = "";
-		
-		subject = getString(R.string.share_uc_subject);
-		message = getString(R.string.share_uc_1) + getString(R.string.share_app_url);
-		intentPickerTitle = getString(R.string.share_uc_by);
-
-		shareIntent.setAction(Intent.ACTION_SEND);
-		shareIntent.setType("text/plain");
-		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-		shareIntent.putExtra(Intent.EXTRA_TEXT, message);
-		startActivity(Intent.createChooser(shareIntent, intentPickerTitle));
-		
+        String subject = getString(R.string.share_uc_subject);
+        String message = getString(R.string.share_uc_1) + getString(R.string.share_app_general_url);
+		ShareHelper.share(this, subject, message);
 	}
 	
 	@Override

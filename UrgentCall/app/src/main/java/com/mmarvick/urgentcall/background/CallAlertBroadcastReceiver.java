@@ -2,7 +2,6 @@ package com.mmarvick.urgentcall.background;
 
 import java.util.List;
 
-import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.data.AlertCall;
 import com.mmarvick.urgentcall.data.PrefHelper;
 
@@ -26,7 +25,6 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 		if (callState.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
 			Log.e("UC", "Incoming.. phone is ringing! ");
 			String phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER); // phone number
-			Log.e("UC", "Call came in");
 			// ... and the app isn't snoozing or turne off ...
 			if (PrefHelper.getOnState(context)
 					&& !PrefHelper.isSnoozing(context)) {

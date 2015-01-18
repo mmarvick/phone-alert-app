@@ -139,9 +139,13 @@ public class AlertCall extends Alert {
 	 */	
 	private boolean meetsCallQuantityCriteria(String phoneNumber) {
 		String time = "" + ((new Date()).getTime() - getCallTime() * 60 * 1000);
+        String incomingType = "" + CallLog.Calls.INCOMING_TYPE;
+        String missedType = "" +  CallLog.Calls.MISSED_TYPE;
 		String selection = CallLog.Calls.NUMBER + " = ?";
-		selection += " AND " + CallLog.Calls.DATE + "> ?";
-		String[] selectors = {phoneNumber, time};
+		selection += " AND " + CallLog.Calls.DATE + " > ?";
+        selection += " AND (" + CallLog.Calls.TYPE + " = ?";
+        selection += " OR " + CallLog.Calls.TYPE + " = ?)";
+		String[] selectors = {phoneNumber, time, incomingType, missedType};
 		Cursor calls = mContext.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, selectors, null);
 		int numCalls = calls.getCount();
 		calls.close();

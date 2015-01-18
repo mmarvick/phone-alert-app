@@ -53,6 +53,10 @@
 
         <service android:name="com.mmarvick.urgentcall.background.MessageAlarmService" />
 
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="1b357c1006d3adfa2da3cf0e7ad0c8373462ca37" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

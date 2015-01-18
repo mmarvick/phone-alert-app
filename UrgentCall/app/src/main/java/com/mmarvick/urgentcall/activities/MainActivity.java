@@ -1,5 +1,7 @@
 package com.mmarvick.urgentcall.activities;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.util.List;
 
 import com.mmarvick.urgentcall.R;
@@ -77,6 +79,7 @@ public class MainActivity extends ActionBarActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Fabric.with(this, new Crashlytics());
 
 		setContentView(R.layout.activity_main);
 		

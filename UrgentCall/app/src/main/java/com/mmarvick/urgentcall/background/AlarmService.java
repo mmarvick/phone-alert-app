@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.util.Log;
 
 import com.mmarvick.urgentcall.R;
 
@@ -15,15 +16,16 @@ import com.mmarvick.urgentcall.R;
  * Created by michael on 1/19/15.
  */
 public abstract class AlarmService extends Service {
-    protected AudioManager audio;
-    protected MediaPlayer media;
-    protected Vibrator vibrator;
-    protected int streamVolumeInit;
+    protected AudioManager mAudioManager;
+    protected MediaPlayer mMediaPlayer;
+    protected Vibrator mVibrator;
+    protected int mInitAlarmVolume;
+    protected int mInitRingVolume;
 
-    protected int volume;
-    protected Uri toneUri;
-    protected boolean ring;
-    protected boolean vibrate;
+    protected int mVolume;
+    protected Uri mToneUri;
+    protected boolean mRing;
+    protected boolean mVibrate;
 
     public static final String RING = "RING";
     public static final String VIBRATE = "VIBRATE";
@@ -39,43 +41,44 @@ public abstract class AlarmService extends Service {
 
     @Override
     public void onCreate() {
-        audio = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-        streamVolumeInit = audio.getStreamVolume(AudioManager.STREAM_ALARM);
-        media = new MediaPlayer();
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mAudioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        mInitAlarmVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+        mInitRingVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
+        mMediaPlayer = new MediaPlayer();
+        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startid) {
         startidStatic = startid;
-        ring = intent.getBooleanExtra(RING,  true);
-        vibrate = intent.getBooleanExtra(VIBRATE, true);
-        toneUri = (Uri) intent.getExtras().get(TONE);
-        volume = intent.getIntExtra(VOLUME, 1000);
+        mRing = intent.getBooleanExtra(RING,  true);
+        mVibrate = intent.getBooleanExtra(VIBRATE, true);
+        mToneUri = (Uri) intent.getExtras().get(TONE);
+        mVolume = intent.getIntExtra(VOLUME, 1000);
 
-        if (ring) {
-            audio.setStreamVolume(AudioManager.STREAM_ALARM, audio.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
+        if (mRing) {
+            mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
 
-            if (media.isPlaying()) {
-                media.reset();
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.reset();
             }
 
             try {
-                media.setVolume(getVolume(volume), getVolume(volume));
-                media.setDataSource(this, toneUri);
-                media.setAudioStreamType(AudioManager.STREAM_ALARM);
-                media.setLooping(true);
-                media.prepare();
-                media.start();
+                mMediaPlayer.setVolume(getVolume(mVolume), getVolume(mVolume));
+                mMediaPlayer.setDataSource(this, mToneUri);
+                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                mMediaPlayer.setLooping(true);
+                mMediaPlayer.prepare();
+                mMediaPlayer.start();
             } catch (Exception e) {
                 // TODO Can't play media
             }
         }
 
-        if (vibrate) {
+        if (mVibrate) {
             long[] pattern = {0, 100, 0};
-            vibrator.vibrate(pattern, 0);
+            mVibrator.vibrate(pattern, 0);
         }
 
         return Service.START_STICKY;
@@ -83,16 +86,23 @@ public abstract class AlarmService extends Service {
 
     @Override
     public void onDestroy() {
-        audio.setStreamVolume(AudioManager.STREAM_ALARM, streamVolumeInit, 0);
-        media.stop();
-        media.release();
-        vibrator.cancel();
+        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mInitAlarmVolume, 0);
+        mMediaPlayer.stop();
+        mMediaPlayer.release();
+        mVibrator.cancel();
         stopSelf(startidStatic);
     }
 
     protected float getVolume(int volume) {
-        int maxVolume = getResources().getInteger(R.integer.volume_max);
-        return (float) (1 - (Math.log(maxVolume - volume) / Math.log(maxVolume)));
+        float alertVolume = getLogVolume(volume, getResources().getInteger(R.integer.volume_max));
+        float ringVolume = getLogVolume(mInitRingVolume, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING));
+        Log.e("UC", "Ring volume: " + ringVolume);
+        return Math.max(alertVolume, ringVolume);
+    }
+
+    protected float getLogVolume(int actualVolume, int maxVolume) {
+        int numOfIncrements = maxVolume + 1;
+        return (float) (1 - (Math.log(numOfIncrements - actualVolume) / Math.log(numOfIncrements)));
     }
 
 }

@@ -16,13 +16,13 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <receiver android:name="com.mmarvick.urgentcall.background.CallAlertBroadcastReceiver" >
+        <receiver android:name=".background.AlertBroadcastReceiverCall" >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.mmarvick.urgentcall.background.TextAlertBroadcastReceiver">
+        <receiver android:name=".background.AlertBroadcastReceiverText">
             <intent-filter>
                 <action android:name=
                     "android.provider.Telephony.SMS_RECEIVED" />

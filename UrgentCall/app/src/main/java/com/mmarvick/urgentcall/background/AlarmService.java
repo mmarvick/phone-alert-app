@@ -14,7 +14,7 @@ import com.mmarvick.urgentcall.R;
 /**
  * Created by michael on 1/19/15.
  */
-public class AlarmService extends Service {
+public abstract class AlarmService extends Service {
     protected AudioManager audio;
     protected MediaPlayer media;
     protected Vibrator vibrator;

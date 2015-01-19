@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="disclaimer_version">3</integer>
+    <integer name="disclaimer_version">2</integer>
     <string name="disclaimer_title">Disclaimer</string>
     <string name="disclaimer_agree">Agree</string>
     <string name="disclaimer_disagree">Disagree</string>

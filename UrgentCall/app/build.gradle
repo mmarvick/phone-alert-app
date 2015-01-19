@@ -36,13 +36,13 @@ android {
     productFlavors {
         pro {
             applicationId "com.mmarvick.uc_pro"
-            versionName "2.1-pro"
-            versionCode 5
+            versionName "2.2-pro"
+            versionCode 6
         }
         lite {
             applicationId "com.mmarvick.uc_lite"
-            versionName "2.1-lite"
-            versionCode 5
+            versionName "2.2-lite"
+            versionCode 6
         }
     }
 }

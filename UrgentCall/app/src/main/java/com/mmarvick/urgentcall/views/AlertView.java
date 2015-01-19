@@ -8,6 +8,7 @@ import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.Alert;
 import com.mmarvick.urgentcall.data.DbContract;
 import com.mmarvick.urgentcall.helpers.ShareHelper;
+import com.mmarvick.urgentcall.widgets.CustomSeekBar;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.FilterPrompt;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
@@ -71,7 +72,7 @@ public abstract class AlertView extends RelativeLayout {
 	protected TextView textViewTone;
 	protected TextView textViewSettings;
 	
-	protected SeekBar seekBarVolume;
+	protected CustomSeekBar seekBarVolume;
 	
 	protected boolean mExpanded;
 	
@@ -217,15 +218,22 @@ public abstract class AlertView extends RelativeLayout {
 	private void updateAlertVolume(int progress) {
 		mAlert.setVolume(progress);
 	}
+
+    private void updateViewRing() {
+        if (mAlert.getRing()) {
+            imageButtonRing.setImageResource(R.drawable.ic_action_volume_on);
+        } else {
+            imageButtonRing.setImageResource(R.drawable.ic_action_volume_muted);
+        }
+    }
 	
 	private void updateViewRingAndVolume() {
 		seekBarVolume.setMax(Constants.ALERT_VOLUME_MAX);
+        updateViewRing();
 		if (mAlert.getRing()) {
-			imageButtonRing.setImageResource(R.drawable.ic_action_volume_on);
 			seekBarVolume.setEnabled(true);
 			seekBarVolume.setProgress(mAlert.getVolume());
 		} else {
-			imageButtonRing.setImageResource(R.drawable.ic_action_volume_muted);
 			seekBarVolume.setEnabled(false);
 			seekBarVolume.setProgress(0);			
 		}		
@@ -353,7 +361,7 @@ public abstract class AlertView extends RelativeLayout {
 		textViewFilterBy = (TextView) mView.findViewById(R.id.textViewCallFrom);
 		textViewTone = (TextView) mView.findViewById(R.id.textViewTone);
 		textViewSettings = (TextView) mView.findViewById(R.id.textViewSettings);
-		seekBarVolume = (SeekBar) mView.findViewById(R.id.seekBarVolume);
+		seekBarVolume = (CustomSeekBar) mView.findViewById(R.id.seekBarVolume);
 		layoutFilterBy = (RelativeLayoutBugHack) mView.findViewById(R.id.relativeLayoutCallFrom);
 	}
 	
@@ -455,7 +463,8 @@ public abstract class AlertView extends RelativeLayout {
 			
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
-				// DO NOTHING
+                mAlert.setRing(true);
+                updateViewRing();
 			}
 			
 			@Override

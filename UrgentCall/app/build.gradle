@@ -27,7 +27,7 @@ android {
         release {
             minifyEnabled true
             //noinspection GroovyAssignabilityCheck
-            proguardFile getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard-rules.txt"
         }
         debug {
             minifyEnabled false

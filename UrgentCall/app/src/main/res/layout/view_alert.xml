@@ -96,7 +96,7 @@
         android:layout_alignTop="@id/imageButtonVibrate"        
         android:src="@drawable/ic_action_volume_on" /> 
         
-	<SeekBar
+	<com.mmarvick.urgentcall.widgets.CustomSeekBar
 	    android:id="@+id/seekBarVolume"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"

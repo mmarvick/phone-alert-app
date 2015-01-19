@@ -49,9 +49,9 @@
         </receiver>
 
 
-        <service android:name="com.mmarvick.urgentcall.background.RingService" />
+        <service android:name=".background.AlarmServiceCall" />
 
-        <service android:name="com.mmarvick.urgentcall.background.MessageAlarmService" />
+        <service android:name=".background.AlarmServiceText" />
 
         <meta-data
             android:name="com.crashlytics.ApiKey"

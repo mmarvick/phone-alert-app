@@ -65,12 +65,12 @@ public class TextAlertBroadcastReceiver extends BroadcastReceiver {
 			}
 			
 			if (shouldAlert) {
-				Intent alarmService = new Intent(context, MessageAlarmService.class);
-				alarmService.putExtra(MessageAlarmService.RING, ring);
-				alarmService.putExtra(MessageAlarmService.VIBRATE, vibrate);
-				alarmService.putExtra(MessageAlarmService.TONE, tone);
-				alarmService.putExtra(MessageAlarmService.VOLUME, volume);
-				alarmService.putExtra(MessageAlarmService.DURATION, duration);
+				Intent alarmService = new Intent(context, AlarmServiceText.class);
+				alarmService.putExtra(AlarmServiceText.RING, ring);
+				alarmService.putExtra(AlarmServiceText.VIBRATE, vibrate);
+				alarmService.putExtra(AlarmServiceText.TONE, tone);
+				alarmService.putExtra(AlarmServiceText.VOLUME, volume);
+				alarmService.putExtra(AlarmServiceText.DURATION, duration);
 				context.startService(alarmService);				
 			}
 			

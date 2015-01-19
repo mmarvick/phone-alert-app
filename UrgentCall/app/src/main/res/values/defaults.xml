@@ -4,5 +4,6 @@
     <integer name="call_qty_max">9</integer>
     <integer name="call_time_min">1</integer>
     <integer name="call_time_max">90</integer>
+    <integer name="message_alert_time_default">10</integer>
     <integer name="volume_max">1000</integer>
 </resources>

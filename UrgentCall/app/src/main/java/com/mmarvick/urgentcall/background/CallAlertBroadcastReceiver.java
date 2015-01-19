@@ -59,11 +59,11 @@ public class CallAlertBroadcastReceiver extends BroadcastReceiver {
 				}
 				
 				if (shouldAlert) {
-					Intent ringService = new Intent(context, RingService.class);
-					ringService.putExtra(RingService.RING, ring);
-					ringService.putExtra(RingService.VIBRATE, vibrate);
-					ringService.putExtra(RingService.TONE, tone);
-					ringService.putExtra(RingService.VOLUME, volume);
+					Intent ringService = new Intent(context, AlarmServiceCall.class);
+					ringService.putExtra(AlarmServiceCall.RING, ring);
+					ringService.putExtra(AlarmServiceCall.VIBRATE, vibrate);
+					ringService.putExtra(AlarmServiceCall.TONE, tone);
+					ringService.putExtra(AlarmServiceCall.VOLUME, volume);
 					context.startService(ringService);
 				}
 			

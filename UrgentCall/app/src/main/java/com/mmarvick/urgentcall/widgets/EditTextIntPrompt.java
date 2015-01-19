@@ -1,7 +1,6 @@
 package com.mmarvick.urgentcall.widgets;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class EditTextIntPrompt {
 	private int min;

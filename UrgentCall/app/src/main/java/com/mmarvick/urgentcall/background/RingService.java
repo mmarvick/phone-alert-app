@@ -1,6 +1,6 @@
 package com.mmarvick.urgentcall.background;
 
-import com.mmarvick.urgentcall.Constants;
+import com.mmarvick.urgentcall.R;
 
 import android.app.Service;
 import android.content.Context;
@@ -104,7 +104,8 @@ public class RingService extends Service {
 	}	
 	
 	private float getVolume(int volume) {
-		return (float) (1 - (Math.log(Constants.ALERT_VOLUME_MAX - volume) / Math.log(Constants.ALERT_VOLUME_MAX)));
+        int maxVolume = getResources().getInteger(R.integer.volume_max);
+        return (float) (1 - (Math.log(maxVolume - volume) / Math.log(maxVolume)));
 	}
 	
 	private class TeleListener extends PhoneStateListener {

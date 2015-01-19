@@ -1,24 +1,20 @@
 package com.mmarvick.urgentcall.views;
 
 
-import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.AlertCall;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnIntValueUpdatedListener;
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class CallAlertView extends AlertView {
-	
 	private ImageButton imageButtonCallQty;
 	private ImageButton imageButtonCallTime;
 	
@@ -28,11 +24,15 @@ public class CallAlertView extends AlertView {
 	
 	public CallAlertView(Context context, Fragment fragment) {
 		super(context, fragment);
+        mContext = context;
 	}
 	
 	public void promptCallQty() {
-		EditTextIntPrompt callNumberPrompt = new EditTextIntPrompt(mContext, Constants.CALL_QTY_MIN, Constants.CALL_QTY_MAX,
-				getAlertCall().getCallQty(), Constants.CALL_QTY_TITLE);
+		EditTextIntPrompt callNumberPrompt = new EditTextIntPrompt(mContext,
+                getContext().getResources().getInteger(R.integer.call_qty_min),
+                getContext().getResources().getInteger(R.integer.call_qty_max),
+				getAlertCall().getCallQty(),
+                getContext().getString(R.string.dialog_number_calls));
 		
 		callNumberPrompt.setOnIntValueUpdatedListener(new OnIntValueUpdatedListener() {
 			
@@ -68,8 +68,11 @@ public class CallAlertView extends AlertView {
 	}
 	
 	public void promptCallTime() {
-		EditTextIntPrompt callTimePrompt = new EditTextIntPrompt(mContext, Constants.CALL_MIN_MIN, Constants.CALL_MIN_MAX,
-				getAlertCall().getCallTime(), Constants.CALL_MIN_TITLE);
+		EditTextIntPrompt callTimePrompt = new EditTextIntPrompt(mContext,
+                getContext().getResources().getInteger(R.integer.call_time_min),
+                getContext().getResources().getInteger(R.integer.call_time_max),
+				getAlertCall().getCallTime(),
+                getContext().getString(R.string.dialog_number_minutes));
 		
 		callTimePrompt.setOnIntValueUpdatedListener(new OnIntValueUpdatedListener() {
 			

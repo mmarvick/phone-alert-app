@@ -1,8 +1,6 @@
 package com.mmarvick.urgentcall.views;
 
-import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.AlertCall;
 import com.mmarvick.urgentcall.data.AlertText;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
@@ -11,7 +9,6 @@ import com.mmarvick.urgentcall.widgets.OnStringValueUpdatedListener;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.ImageButton;

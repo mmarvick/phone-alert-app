@@ -82,7 +82,7 @@ public class ContactListFragment extends DialogFragment {
 		
 		return new AlertDialog.Builder(getActivity())
 			.setCustomTitle(titleView)
-			.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			.setPositiveButton(getActivity().getString(R.string.state_change_dialog_ok), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {

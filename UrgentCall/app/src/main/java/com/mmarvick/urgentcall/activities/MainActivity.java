@@ -5,7 +5,7 @@ import io.fabric.sdk.android.Fabric;
 import java.util.List;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.helpers.PrefHelper;
 import com.mmarvick.urgentcall.helpers.ShareHelper;
 import com.mmarvick.urgentcall.widgets.MyViewPager;
 import com.mmarvick.urgentcall.widgets.OnOptionsChangedListener;
@@ -66,9 +66,7 @@ public class MainActivity extends ActionBarActivity
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (mContactListFragment != null && requestCode == ContactListFragment.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 			mContactListFragment.contactAdded(data);
-			
 		}
-
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	

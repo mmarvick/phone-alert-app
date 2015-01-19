@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="call_qty_min">1</integer>
+    <integer name="call_qty_max">9</integer>
+    <integer name="call_time_min">1</integer>
+    <integer name="call_time_max">90</integer>
+    <integer name="volume_max">1000</integer>
+</resources>

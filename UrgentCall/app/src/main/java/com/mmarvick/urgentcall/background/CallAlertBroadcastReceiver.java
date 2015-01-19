@@ -3,7 +3,7 @@ package com.mmarvick.urgentcall.background;
 import java.util.List;
 
 import com.mmarvick.urgentcall.data.AlertCall;
-import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.helpers.PrefHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

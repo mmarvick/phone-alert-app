@@ -1,6 +1,5 @@
-package com.mmarvick.urgentcall.data;
+package com.mmarvick.urgentcall.helpers;
 
-import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 
 import android.content.Context;
@@ -22,7 +21,6 @@ public class PrefHelper {
     public final static String DISCLAIMER_VERSION = "DISCLAIMER_VERSION";
     public final static int DISCLAIMER_DEFAULT = 0;
 
-
 	public static boolean getOnState(Context context) {
 		int def = URGENT_CALL_STATE_ON;
 		if (getPrefs(context).getInt(APP_STATE, def) == URGENT_CALL_STATE_ON) {
@@ -42,7 +40,6 @@ public class PrefHelper {
         }
 		editor.commit();
 	}
-
 	
 	public static void setSnoozeTime(Context context, long remaining) {
 		Editor editor = getPrefs(context).edit();

@@ -3,7 +3,6 @@ package com.mmarvick.urgentcall.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.Alert;
 import com.mmarvick.urgentcall.data.DbContract;
@@ -23,18 +22,14 @@ import android.net.Uri;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -228,7 +223,7 @@ public abstract class AlertView extends RelativeLayout {
     }
 	
 	private void updateViewRingAndVolume() {
-		seekBarVolume.setMax(Constants.ALERT_VOLUME_MAX);
+		seekBarVolume.setMax(getResources().getInteger(R.integer.volume_max));
         updateViewRing();
 		if (mAlert.getRing()) {
 			seekBarVolume.setEnabled(true);

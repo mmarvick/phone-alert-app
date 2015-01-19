@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.helpers.PrefHelper;
 
 public class SnoozeEndDialog {
 	private AlertDialog dialog;

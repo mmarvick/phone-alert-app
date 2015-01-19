@@ -1,8 +1,7 @@
 package com.mmarvick.urgentcall.activities;
 
-import com.mmarvick.urgentcall.Constants;
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.PrefHelper;
+import com.mmarvick.urgentcall.helpers.PrefHelper;
 
 import android.graphics.Color;
 import android.os.Bundle;

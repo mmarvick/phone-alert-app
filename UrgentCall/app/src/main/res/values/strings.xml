@@ -23,9 +23,7 @@
     <string name="status_allcaps_on">ON</string>
     <string name="status_allcaps_off">OFF</string>
     <string name="status_allcaps_snoozing">SNOOZING</string>
-    
-    <string name="list_fragment_list_allowed">Allowed Contacts</string>
-    <string name="list_fragment_list_blocked">Blocked Contacts</string>
+
     <string name="list_fragment_alert_msg">Text Alerts</string>
     <string name="list_fragment_alert_rc">Repeat Call Alerts</string>
     <string name="list_fragment_alert_sc">Single Call Alerts</string>
@@ -34,7 +32,7 @@
     <string name="upgrade_title_menu">Upgrade to Pro</string>
     <string name="upgrade_body_general">Would you like to upgrade?</string>
     <string name="upgrade_body_menu">
-    Upgrading to Urgent Call Pro gives you more control over who can trigger an alarm. You also get the ablity to add additional call and text alerts.</string>
+    Upgrading to Urgent Call Pro gives you more control over who can trigger an alarm. You also get the ability to add additional call and text alerts.</string>
     <string name="upgrade_body_filter_by">
     Users of Urgent Call Pro can filter alerts with an allow list or block list.\n\n\
 \	Users of Urgent Call Lite must leave the alerts on or off for everyone.</string>
@@ -51,15 +49,19 @@
     <string name="rate_dialog_body">Would you like to rate this app? We\'d really appreciate it!</string>
     <string name="rate_dialog_yes">Yes!</string>
     <string name="rate_dialog_no">Maybe Later</string>    
-      
-    <string name="state_change_dialog_title_msg">Text alerts on for&#8230;</string>
-    <string name="state_change_dialog_title_rc">Repeat call alerts on for&#8230;</string>
+
     <string name="state_change_dialog_on">Everyone</string>
     <string name="state_change_dialog_whitelist">Allowed callers only</string>
     <string name="state_change_dialog_blacklist">Everyone except blocked callers</string>
-    <string name="state_change_dialog_ok">OK</string>
+    <string name="state_change_dialog_ok">Done</string>
     <string name="state_change_dialog_edit_whitelist_button">Allowed Contacts&#8230;</string>
     <string name="state_change_dialog_edit_blacklist_button">Blocked Contacts&#8230;</string>
+
+    <string name="list_fragment_list_allowed">Allowed Contacts</string>
+    <string name="list_fragment_list_blocked">Blocked Contacts</string>
+
+    <string name="dialog_number_minutes">Number of minutes</string>
+    <string name="dialog_number_calls">Number of calls</string>
     
     <string name="tab_change_prohibitted_dialog_off_title">Urgent Call is off</string>
     <string name="tab_change_prohibitted_dialog_off_message">Urgent Call must be turned on in order to change the settings of individual alerts.</string>
@@ -71,7 +73,10 @@
     <string name="pro_installed_body">Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.</string>
     <string name="pro_installed_ok">OK</string>
 
-    <string name="share_by">Select an app to share over&#8230;</string>
+
+    <!-- Share messages -->
+
+    <string name="share_by">Share with&#8230;</string>
 
     <string name="share_uc_subject">Be reached in an emergency!</string>
     <string name="share_uc_1">Try the Urgent Call app for Android to turn off distractions, but always be alerted when needed urgently. Learn more:&#160;</string>

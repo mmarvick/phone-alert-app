@@ -17,17 +17,9 @@ public class PrefHelper {
     // VALUE FOR TIME THAT SNOOZE IS COMPLETE
     public final static String SNOOZE_TIME = "SNOOZE";
 
-    // SETTINGS FOR THE DISCLAIMER VERSION MOST RECENTLY AGREED TO
-    public final static String DISCLAIMER_VERSION = "DISCLAIMER_VERSION";
-    public final static int DISCLAIMER_DEFAULT = 0;
-
 	public static boolean getOnState(Context context) {
-		int def = URGENT_CALL_STATE_ON;
-		if (getPrefs(context).getInt(APP_STATE, def) == URGENT_CALL_STATE_ON) {
-            return true;
-        } else {
-            return false;
-        }
+		return (getPrefs(context).getInt(APP_STATE, URGENT_CALL_STATE_ON)
+                == URGENT_CALL_STATE_ON);
 	}
 
 	public static void toggleOnState(Context context) {
@@ -56,23 +48,8 @@ public class PrefHelper {
 		long clockTime = SystemClock.elapsedRealtime();
 		return snoozeTime - clockTime;
 	}	
-	
-	public static boolean disclaimerCheck(Context context) {
-		SharedPreferences prefs = getPrefs(context);
-		int agreed = prefs.getInt(DISCLAIMER_VERSION, DISCLAIMER_DEFAULT);
-		int current = context.getResources().getInteger(R.integer.disclaimer_version);
-		return (agreed == current);
-	}
-	
-	public static void disclaimerAgreed(Context context) {
-		SharedPreferences prefs = getPrefs(context);
-		Editor edit = prefs.edit();
-		int version = context.getResources().getInteger(R.integer.disclaimer_version);
-		edit.putInt(DISCLAIMER_VERSION, version);
-		edit.commit();
-	}
-	
-	private static SharedPreferences getPrefs(Context context) {
+
+	public static SharedPreferences getPrefs(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
 }

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.mmarvick.urgentcall.data.Alert;
+import com.mmarvick.urgentcall.helpers.DisclaimerHelper;
 import com.mmarvick.urgentcall.helpers.PrefHelper;
 
 import java.util.List;
@@ -29,7 +30,8 @@ public abstract class AlertBroadcastReceiver extends BroadcastReceiver {
 
     protected void checkAlerts() {
         if (PrefHelper.getOnState(mContext)
-                && !PrefHelper.isSnoozing(mContext)) {
+                && !PrefHelper.isSnoozing(mContext)
+                && DisclaimerHelper.disclaimerIsApproved(mContext)) {
 
             List<? extends Alert> alerts = getAlerts();
 

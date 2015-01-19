@@ -5,6 +5,7 @@ import io.fabric.sdk.android.Fabric;
 import java.util.List;
 
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.helpers.DisclaimerHelper;
 import com.mmarvick.urgentcall.helpers.PrefHelper;
 import com.mmarvick.urgentcall.helpers.ShareHelper;
 import com.mmarvick.urgentcall.widgets.MyViewPager;
@@ -419,7 +420,7 @@ public class MainActivity extends ActionBarActivity
 	
 	// Checks if the current disclaimer has been agreed to
 	public void checkDisclaimer() {
-		if (!(PrefHelper.disclaimerCheck(getApplicationContext()))) {
+		if (!(DisclaimerHelper.disclaimerIsCurrent(getApplicationContext()))) {
 			
 			//Create and show alert dialog with waiver
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -431,7 +432,7 @@ public class MainActivity extends ActionBarActivity
 				.setPositiveButton(getString(R.string.disclaimer_agree), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						// Set that the disclaimer was agreed, and resume phone state from backup
-						PrefHelper.disclaimerAgreed(getApplicationContext());
+						DisclaimerHelper.disclaimerAgreed(getApplicationContext());
 						
 						// Refresh values due to state change
 						if (homeFragment != null) {
@@ -449,7 +450,9 @@ public class MainActivity extends ActionBarActivity
 				});
 			
 			AlertDialog disclaimerDialog = alertDialogBuilder.create();
-			disclaimerDialog.show();			
+			disclaimerDialog.show();
+
+            DisclaimerHelper.disclaimerViewed(getApplicationContext());
 		}
 	}	
 	

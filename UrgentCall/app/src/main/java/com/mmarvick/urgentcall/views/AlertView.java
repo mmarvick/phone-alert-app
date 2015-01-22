@@ -7,6 +7,7 @@ import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.Alert;
 import com.mmarvick.urgentcall.data.DbContract;
 import com.mmarvick.urgentcall.helpers.ShareHelper;
+import com.mmarvick.urgentcall.helpers.SoundHelper;
 import com.mmarvick.urgentcall.widgets.CustomSeekBar;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.FilterPrompt;
@@ -207,12 +208,19 @@ public abstract class AlertView extends RelativeLayout {
 	
 	private void toggleAlertRing() {
 		mAlert.setRing(!mAlert.getRing());
+        soundVolume();
 		updateViewRingAndVolume();
 	}
 	
 	private void updateAlertVolume(int progress) {
 		mAlert.setVolume(progress);
 	}
+
+    private void soundVolume() {
+        if (mAlert.getRing()) {
+            SoundHelper.beep(mContext, mAlert.getVolume());
+        }
+    }
 
     private void updateViewRing() {
         if (mAlert.getRing()) {
@@ -453,7 +461,8 @@ public abstract class AlertView extends RelativeLayout {
 			
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				updateViewRingAndVolume();
+				soundVolume();
+                updateViewRingAndVolume();
 			}
 			
 			@Override

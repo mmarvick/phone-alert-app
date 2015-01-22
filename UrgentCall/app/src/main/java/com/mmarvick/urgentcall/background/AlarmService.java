@@ -11,6 +11,7 @@ import android.os.Vibrator;
 import android.util.Log;
 
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.helpers.SoundHelper;
 
 /**
  * Created by michael on 1/19/15.
@@ -94,15 +95,12 @@ public abstract class AlarmService extends Service {
     }
 
     protected float getVolume(int volume) {
-        float alertVolume = getLogVolume(volume, getResources().getInteger(R.integer.volume_max));
-        float ringVolume = getLogVolume(mInitRingVolume, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING));
+        float alertVolume = SoundHelper.getLogVolume(volume, getResources().getInteger(R.integer.volume_max));
+        float ringVolume = SoundHelper.getLogVolume(mInitRingVolume, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING));
         Log.e("UC", "Ring volume: " + ringVolume);
         return Math.max(alertVolume, ringVolume);
     }
 
-    protected float getLogVolume(int actualVolume, int maxVolume) {
-        int numOfIncrements = maxVolume + 1;
-        return (float) (1 - (Math.log(numOfIncrements - actualVolume) / Math.log(numOfIncrements)));
-    }
+
 
 }

@@ -337,6 +337,7 @@ public abstract class Alert {
 		if (getToneString().equals(Settings.System.DEFAULT_ALARM_ALERT_URI.toString())) {
 			return "Default Alarm Sound";
 		}
+
 		return RingtoneManager.getRingtone(context, getTone()).getTitle(context);
 	}
 

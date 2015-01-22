@@ -9,7 +9,12 @@ import android.os.Handler;
 public class AlarmServiceText extends AlarmService {
 	private int actualDuration;
 	public static final String DURATION = "DURATION";
-	
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid) {
         super.onStartCommand(intent, flags, startid);;

@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mmarvick.urgentcall">
+    package="com.mmarvick.urgentcall" >
 
     <uses-feature android:name="android.hardware.telephony" />
 
@@ -10,6 +11,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -21,42 +23,36 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".background.AlertBroadcastReceiverText">
+        <receiver android:name=".background.AlertBroadcastReceiverText" >
             <intent-filter>
-                <action android:name=
-                    "android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name="com.mmarvick.urgentcall.activities.MainActivity"
-            android:label="@string/app_name"
-            android:configChanges="keyboardHidden" >
+            android:name=".activities.MainActivity"
+            android:configChanges="keyboardHidden"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-
-        <receiver android:name = "com.mmarvick.urgentcall.background.SnoozeReset" >
+        <receiver android:name=".background.SnoozeReset" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-
         <service android:name=".background.AlarmServiceCall" />
-
         <service android:name=".background.AlarmServiceText" />
 
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="1b357c1006d3adfa2da3cf0e7ad0c8373462ca37" />
+
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

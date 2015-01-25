@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.util.Log;
 
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.helpers.SoundHelper;
@@ -97,7 +96,6 @@ public abstract class AlarmService extends Service {
     protected float getVolume(int volume) {
         float alertVolume = SoundHelper.getLogVolume(volume, getResources().getInteger(R.integer.volume_max));
         float ringVolume = SoundHelper.getLogVolume(mInitRingVolume, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING));
-        Log.e("UC", "Ring volume: " + ringVolume);
         return Math.max(alertVolume, ringVolume);
     }
 

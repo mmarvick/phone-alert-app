@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="store_google">0</integer>
+    <integer name="store_amazon">1</integer>
+    <integer name="store">@integer/store_google</integer>
+</resources>

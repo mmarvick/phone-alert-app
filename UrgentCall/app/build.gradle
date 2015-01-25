@@ -6,6 +6,8 @@ buildscript {
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
     }
+
+
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
@@ -16,6 +18,9 @@ repositories {
 
 
 android {
+    def versionCodeNumber = 7
+    def versionNamePrefix = "2.3"
+
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
 
@@ -36,13 +41,23 @@ android {
     productFlavors {
         pro {
             applicationId "com.mmarvick.uc_pro"
-            versionName "2.2-pro"
-            versionCode 6
+            versionName versionNamePrefix + "-pro"
+            versionCode versionCodeNumber
         }
         lite {
             applicationId "com.mmarvick.uc_lite"
-            versionName "2.2-lite"
-            versionCode 6
+            versionName versionNamePrefix + "-lite"
+            versionCode versionCodeNumber
+        }
+        proAmazon {
+            applicationId "com.mmarvick.uc_pro"
+            versionName versionNamePrefix + "-pro-amazon"
+            versionCode versionCodeNumber
+        }
+        liteAmazon {
+            applicationId "com.mmarvick.uc_lite"
+            versionName versionNamePrefix + "-lite-amazon"
+            versionCode versionCodeNumber
         }
     }
 }

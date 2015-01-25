@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.helpers.StoreHelper;
 
 public class RateDialog {
 	private AlertDialog dialog;
@@ -26,17 +27,8 @@ public class RateDialog {
 					} else {
 						packageName = context.getString(R.string.package_lite);
 					}
-					Uri uri;
-					try {
-						uri = Uri.parse(context.getString(R.string.url_play_app) + packageName);
-					} catch (android.content.ActivityNotFoundException anfe) {
-						uri = Uri.parse(context.getString(R.string.url_play_web) + packageName);
-					}
-					
-					Intent rateIntent = new Intent(Intent.ACTION_VIEW, uri);
-					rateIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-					
-					context.startActivity(rateIntent);
+
+                    StoreHelper.goToStore(packageName, context);
 				}
 			})
 			.setNeutralButton(context.getString(R.string.rate_dialog_no), new DialogInterface.OnClickListener() {

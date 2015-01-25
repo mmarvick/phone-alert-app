@@ -1,6 +1,7 @@
 package com.mmarvick.urgentcall.widgets;
 
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.helpers.StoreHelper;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -29,17 +30,7 @@ public class UpgradeDialog {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					String packageName = context.getString(R.string.package_pro);
-					Uri uri;
-					try {
-						uri = Uri.parse(context.getString(R.string.url_play_app) + packageName);
-					} catch (android.content.ActivityNotFoundException anfe) {
-						uri = Uri.parse(context.getString(R.string.url_play_web) + packageName);
-					}
-					
-					Intent upgradeIntent = new Intent(Intent.ACTION_VIEW, uri);
-					upgradeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-					
-					context.startActivity(upgradeIntent);
+                    StoreHelper.goToStore(packageName, context);
 				}
 			});
 		

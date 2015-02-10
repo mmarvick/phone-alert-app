@@ -34,7 +34,7 @@
     <string name="cancel_snooze_dialog_yes">Yes</string>
     <string name="cancel_snooze_dialog_no">No</string>
     <string name="rate_dialog_title">Rate Urgent Call</string>
-    <string name="rate_dialog_body">Would you like to rate this app? We\'d really appreciate it!</string>
+    <string name="rate_dialog_body">Would you like to rate Urgent Call? We\'d really appreciate it!</string>
     <string name="rate_dialog_yes">Yes!</string>
     <string name="rate_dialog_no">Maybe Later</string>
     <string name="state_change_dialog_on">Everyone</string>
@@ -48,10 +48,13 @@
     <string name="dialog_number_minutes">Number of minutes</string>
     <string name="dialog_number_calls">Number of calls</string>
     <string name="tab_change_prohibitted_dialog_off_title">Urgent Call is off</string>
-    <string name="tab_change_prohibitted_dialog_off_message">Urgent Call must be turned on in order to change the settings of individual alerts.</string>
+    <string name="tab_change_prohibitted_dialog_off_message">Turn Urgent Call back on before modifying your alerts.</string>
     <string name="tab_change_prohibitted_dialog_snooze_title">Urgent Call is snoozing</string>
-    <string name="tab_change_prohibitted_dialog_snooze_message">Urgent Call must be active in order to change the settings of individual alerts.</string>
+    <string name="tab_change_prohibitted_dialog_snooze_message">Turn off snooze before modifying your alerts.</string>
     <string name="tab_change_prohibitted_dialog_ok">OK</string>
+    <string name="try_to_snooze_when_off_title">Urgent Call is off</string>
+    <string name="try_to_snooze_when_off_message">You can\'t snooze Urgent Call if it\'s already off. Turn it on first!</string>
+    <string name="try_to_snooze_when_off_ok">OK</string>
     <string name="pro_installed_title">Thank you!</string>
     <string name="pro_installed_body">Thank you for installing Urgent Call Pro!\n\nBefore continuing, please remove Urgent Call Lite.</string>
     <string name="pro_installed_ok">OK</string>

@@ -245,8 +245,24 @@ public class MainActivity extends ActionBarActivity
 	
 	// A prompt to snooze
 	private void promptSnooze() {
-		SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
-		snooze.show();
+        if (PrefHelper.getOnState(this)) {
+            SnoozeDialog snooze = new SnoozeDialog(this, this, 0, 0, true);
+            snooze.show();
+        } else {
+            AlertDialog.Builder dialogBuilder = new Builder(MainActivity.this);
+            dialogBuilder
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.try_to_snooze_when_off_ok, new OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setTitle(getString(R.string.try_to_snooze_when_off_title))
+                    .setMessage(getString(R.string.try_to_snooze_when_off_message));
+            dialogBuilder.create().show();
+        }
 	}
 	
 	private void beginSnooze(long snoozeTime) {

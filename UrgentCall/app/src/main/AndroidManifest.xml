@@ -53,6 +53,12 @@
             android:name="com.crashlytics.ApiKey"
             android:value="1b357c1006d3adfa2da3cf0e7ad0c8373462ca37" />
 
+        <activity
+            android:name=".activities.TextAlertNotificationActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_text_alert_notification"
+            android:theme="@style/FullscreenTheme" >
+        </activity>
     </application>
 
 </manifest>

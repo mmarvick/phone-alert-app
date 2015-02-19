@@ -1,5 +1,6 @@
 package com.mmarvick.urgentcall.background;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,9 @@ import com.mmarvick.urgentcall.helpers.SoundHelper;
  * Created by michael on 1/19/15.
  */
 public abstract class AlarmService extends Service {
+    public static final int ALARM_ID_TEXT_ONGING = 1;
+
+    protected NotificationManager mNotificationManager;
     protected AudioManager mAudioManager;
     protected MediaPlayer mMediaPlayer;
     protected Vibrator mVibrator;
@@ -32,8 +36,6 @@ public abstract class AlarmService extends Service {
     public static final String TONE = "TONE";
     public static final String VOLUME = "VOLUME";
 
-    protected static int startidStatic;
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -41,6 +43,7 @@ public abstract class AlarmService extends Service {
 
     @Override
     public void onCreate() {
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mAudioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         mInitAlarmVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
         mInitRingVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
@@ -51,7 +54,6 @@ public abstract class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startid) {
-        startidStatic = startid;
         mRing = intent.getBooleanExtra(RING,  true);
         mVibrate = intent.getBooleanExtra(VIBRATE, true);
         mToneUri = (Uri) intent.getExtras().get(TONE);
@@ -90,7 +92,6 @@ public abstract class AlarmService extends Service {
         mMediaPlayer.stop();
         mMediaPlayer.release();
         mVibrator.cancel();
-        stopSelf(startidStatic);
     }
 
     protected float getVolume(int volume) {

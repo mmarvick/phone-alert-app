@@ -78,8 +78,14 @@
     <string name="title_activity_notificaton">NotificatonActivity</string>
     <string name="hello_world">Hello world!</string>
 
-    <string name="title_activity_text_alert_notification">TextAlertNotificationActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <plurals name="plural_alert_capialized">
+        <item quantity="one">Alert</item>
+        <item quantity="other">Alerts</item>
+    </plurals>
+
+    <plurals name="plural_text">
+        <item quantity="one">text</item>
+        <item quantity="other">texts</item>
+    </plurals>
 
 </resources>

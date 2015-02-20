@@ -78,6 +78,15 @@
     <string name="title_activity_notificaton">NotificatonActivity</string>
     <string name="hello_world">Hello world!</string>
 
+    <!-- Notifications -->
+
+    <string name="notification_call_title">Urgent Calls received</string>
+    <string name="notification_call_text">Check your call logs</string>
+    <string name="notification_text_title">Urgent Texts received</string>
+    <string name="notification_text_text">Check your message history</string>
+
+    <string name="notification_alert_stop">Stop Alert</string>
+
     <plurals name="plural_alert_capialized">
         <item quantity="one">Alert</item>
         <item quantity="other">Alerts</item>

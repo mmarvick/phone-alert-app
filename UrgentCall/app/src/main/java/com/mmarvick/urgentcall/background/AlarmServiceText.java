@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 
 import com.mmarvick.urgentcall.R;
 
@@ -16,7 +17,7 @@ public class AlarmServiceText extends AlarmService {
 	private int actualDuration;
     private List<Integer> arrayIds;
 	public static final String DURATION = "DURATION";
-    public static final String EXTRA_CANCEL_ALERTS = "CANCEL_ALERTS";
+    public static final String ACTION_CANCEL_ALERTS = "CANCEL_ALERTS";
 
     @Override
     public void onCreate() {
@@ -26,7 +27,7 @@ public class AlarmServiceText extends AlarmService {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid) {
-        if (intent.getBooleanExtra(EXTRA_CANCEL_ALERTS, false)) {
+        if (TextUtils.equals(intent.getAction(), ACTION_CANCEL_ALERTS)) {
             stopSelf();
             return Service.START_STICKY;
         }
@@ -39,22 +40,19 @@ public class AlarmServiceText extends AlarmService {
 		actualDuration = 1000 * intent.getIntExtra(DURATION,
                 getResources().getInteger(R.integer.message_alert_time_default));
 
-        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, TextAlertNotificationActivity.class), 0);
-
         Intent cancelAlertIntent = new Intent(this, AlarmServiceText.class);
-        cancelAlertIntent.putExtra(EXTRA_CANCEL_ALERTS, true);
-        cancelAlertIntent.setAction("random"); // this is needed to pass the extra
+        cancelAlertIntent.setAction(ACTION_CANCEL_ALERTS);
         PendingIntent cancelAlertPendingIntent = PendingIntent.getService(this, 0, cancelAlertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        //notificationBuilder.setFullScreenIntent(pendingIntent, true);
         notificationBuilder.setContentTitle("Urgent Text " + getResources().getQuantityString(R.plurals.plural_alert_capialized, arrayIds.size()) + " incoming");
         notificationBuilder.setContentText(arrayIds.size() + " " + getResources().getQuantityString(R.plurals.plural_text, arrayIds.size()));
-        notificationBuilder.setOngoing(true);
+        notificationBuilder.setOngoing(false);
         notificationBuilder.setSmallIcon(R.drawable.ic_notify);
-        notificationBuilder.addAction(R.drawable.ic_action_discard, "Cancel Alert", cancelAlertPendingIntent);
+        notificationBuilder.setDeleteIntent(cancelAlertPendingIntent);
+        notificationBuilder.addAction(R.drawable.ic_action_cancel, getResources().getString(R.string.notification_alert_stop), cancelAlertPendingIntent);
         notificationBuilder.setPriority(Notification.PRIORITY_MAX);
-        mNotificationManager.notify(ALARM_ID_TEXT_ONGING, notificationBuilder.build());
+        mNotificationManager.notify(NOTIFICATION_ID_TEXT_ONGING, notificationBuilder.build());
 
         final int startidFinal = startid;
 		new Handler().postDelayed(new Runnable() {
@@ -69,9 +67,24 @@ public class AlarmServiceText extends AlarmService {
 
     @Override
     public void onDestroy() {
-        mNotificationManager.cancel(ALARM_ID_TEXT_ONGING);
+        mNotificationManager.cancel(NOTIFICATION_ID_TEXT_ONGING);
         arrayIds.clear();
         super.onDestroy();
     }
-	
+
+    @Override
+    protected String getNotificationTitle() {
+        return getString(R.string.notification_text_title);
+    }
+
+    @Override
+    protected String getNotificationText() {
+        return getString(R.string.notification_text_text);
+    }
+
+    @Override
+    protected int getNotificationId() {
+        return NOTIFICATION_ID_TEXT_AFTER;
+    }
+
 }

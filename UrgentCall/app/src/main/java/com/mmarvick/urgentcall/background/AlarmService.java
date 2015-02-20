@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
 
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.helpers.SoundHelper;
@@ -17,7 +18,9 @@ import com.mmarvick.urgentcall.helpers.SoundHelper;
  * Created by michael on 1/19/15.
  */
 public abstract class AlarmService extends Service {
-    public static final int ALARM_ID_TEXT_ONGING = 1;
+    public static final int NOTIFICATION_ID_TEXT_ONGING = 1;
+    public static final int NOTIFICATION_ID_TEXT_AFTER = 2;
+    public static final int NOTIFICATION_ID_CALL_AFTER = 3;
 
     protected NotificationManager mNotificationManager;
     protected AudioManager mAudioManager;
@@ -88,6 +91,13 @@ public abstract class AlarmService extends Service {
 
     @Override
     public void onDestroy() {
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        notificationBuilder.setContentTitle(getNotificationTitle());
+        notificationBuilder.setContentText(getNotificationText());
+        notificationBuilder.setOngoing(false);
+        notificationBuilder.setSmallIcon(R.drawable.ic_notify);
+        mNotificationManager.notify(getNotificationId(), notificationBuilder.build());
+
         mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mInitAlarmVolume, 0);
         mMediaPlayer.stop();
         mMediaPlayer.release();
@@ -100,6 +110,7 @@ public abstract class AlarmService extends Service {
         return Math.max(alertVolume, ringVolume);
     }
 
-
-
+    protected abstract String getNotificationTitle();
+    protected abstract String getNotificationText();
+    protected abstract int getNotificationId();
 }

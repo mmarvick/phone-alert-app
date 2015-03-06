@@ -18,8 +18,8 @@ repositories {
 
 
 android {
-    def versionCodeNumber = 7
-    def versionNamePrefix = "2.3"
+    def versionCodeNumber = 8
+    def versionNamePrefix = "2.4"
 
     compileSdkVersion 21
     buildToolsVersion "21.1.1"

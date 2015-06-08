@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.base.Alert;
-import com.mmarvick.urgentcall.data.call.AlertCall;
+import com.mmarvick.urgentcall.data.call.CallAlert;
 import com.mmarvick.urgentcall.data.text.AlertText;
 import com.mmarvick.urgentcall.data.base.DbContract;
 
@@ -50,8 +50,8 @@ public class ContactListFragment extends DialogFragment {
 		String alertType = args.getString(ALERT_CLASS);
 		long alertId = args.getLong(ALERT_ID);
 		
-		if (alertType.equals(AlertCall.ALERT_TYPE)) {
-			mAlert = new AlertCall(getActivity(), alertId);
+		if (alertType.equals(CallAlert.ALERT_TYPE)) {
+			mAlert = new CallAlert(getActivity(), alertId);
 		} else if (alertType.equals(AlertText.ALERT_TYPE)) {
 			mAlert = new AlertText(getActivity(), alertId);
 		}

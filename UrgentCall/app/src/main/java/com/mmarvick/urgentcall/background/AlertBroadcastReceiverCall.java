@@ -3,7 +3,8 @@ package com.mmarvick.urgentcall.background;
 import java.util.List;
 
 import com.mmarvick.urgentcall.data.base.Alert;
-import com.mmarvick.urgentcall.data.call.AlertCall;
+import com.mmarvick.urgentcall.data.call.CallAlert;
+import com.mmarvick.urgentcall.data.call.CallAlertStore;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,12 +36,13 @@ public class AlertBroadcastReceiverCall extends AlertBroadcastReceiver {
     protected void noteAlertSpecificProperties(Alert alert) {}
 
     protected List<? extends Alert> getAlerts() {
-        return AlertCall.getAlerts(mContext);
+        CallAlertStore callAlertStore = CallAlertStore.getInstance(mContext);
+        return callAlertStore.getAlerts();
     }
 
     protected boolean shouldAlert(Alert alert) {
-        AlertCall alertCall = (AlertCall) alert;
-        return alertCall.shouldAlert(phoneNumber);
+        CallAlert callAlert = (CallAlert) alert;
+        return callAlert.shouldAlert(phoneNumber);
     }
 
     protected Intent getAlarmServiceIntent() {

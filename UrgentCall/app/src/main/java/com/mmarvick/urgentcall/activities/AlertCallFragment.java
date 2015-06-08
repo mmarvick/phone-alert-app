@@ -3,14 +3,16 @@ package com.mmarvick.urgentcall.activities;
 import java.util.List;
 
 import com.mmarvick.urgentcall.data.base.Alert;
-import com.mmarvick.urgentcall.data.call.AlertCall;
+import com.mmarvick.urgentcall.data.call.CallAlert;
+import com.mmarvick.urgentcall.data.call.CallAlertStore;
 import com.mmarvick.urgentcall.views.AlertView;
 import com.mmarvick.urgentcall.views.CallAlertView;
 
 public class AlertCallFragment extends AlertFragment {
 	
 	protected List<? extends Alert> getAlerts() {
-		return AlertCall.getAlerts(getActivity());
+        CallAlertStore callAlertStore = CallAlertStore.getInstance(getActivity());
+        return callAlertStore.getAlerts();
 	}
 	
 	protected AlertView createAlertView() {
@@ -18,7 +20,7 @@ public class AlertCallFragment extends AlertFragment {
 	}
 	
 	protected Alert createAlert() {
-		return new AlertCall(getActivity());
+		return new CallAlert(getActivity());
 	}
 
 }

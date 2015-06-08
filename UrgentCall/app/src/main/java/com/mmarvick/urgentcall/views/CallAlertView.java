@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.views;
 
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.call.AlertCall;
+import com.mmarvick.urgentcall.data.call.CallAlert;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnIntValueUpdatedListener;
 import android.content.Context;
@@ -168,8 +168,8 @@ public class CallAlertView extends AlertView {
 
 	}
 	
-	protected AlertCall getAlertCall() {
-		return (AlertCall) mAlert;
+	protected CallAlert getAlertCall() {
+		return (CallAlert) mAlert;
 	}
 
 }

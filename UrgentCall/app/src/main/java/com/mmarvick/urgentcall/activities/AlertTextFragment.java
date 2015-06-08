@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.mmarvick.urgentcall.data.base.Alert;
 import com.mmarvick.urgentcall.data.text.TextAlert;
+import com.mmarvick.urgentcall.data.text.TextAlertStore;
 import com.mmarvick.urgentcall.views.AlertView;
 import com.mmarvick.urgentcall.views.TextAlertView;
 
 public class AlertTextFragment extends AlertFragment {
 	
 	protected List<? extends Alert> getAlerts() {
-		return TextAlert.getAlerts(getActivity());
+		return TextAlertStore.getInstance(getActivity()).getAlerts();
 	}
 	
 	protected AlertView createAlertView() {
@@ -18,7 +19,7 @@ public class AlertTextFragment extends AlertFragment {
 	}
 	
 	protected Alert createAlert() {
-		return new TextAlert(getActivity());
+		return new TextAlert();
 	}
 
 }

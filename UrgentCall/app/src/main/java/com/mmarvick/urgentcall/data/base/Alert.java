@@ -322,12 +322,24 @@ public abstract class Alert {
 	 * <code>DbContract.ENTRY_LIST_BLOCK_LIST</code> to add to the block list
 	 * @return <code>true</code> if added; <code>false</code>
 	 */
-	public void addContact(String lookup, int list) {
+	public boolean addContact(String lookup, int list) {
         if (list == DbContract.ENTRY_LIST_ALLOW_LIST) {
-            mAllowedContacts.add(lookup);
+            if (mAllowedContacts.contains(lookup)) {
+                return false;
+            } else {
+                mAllowedContacts.add(lookup);
+                return true;
+            }
         } else if (list == DbContract.ENTRY_LIST_BLOCK_LIST) {
-            mBlockedContacts.add(lookup);
+            if (mBlockedContacts.contains(lookup)) {
+                return false;
+            } else {
+                mBlockedContacts.add(lookup);
+                return true;
+            }
         }
+
+        return false;
 	}
 
 	/** Removes a contact from the "allow list" or "block list" and removes it

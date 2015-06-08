@@ -5,8 +5,10 @@ import java.util.List;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.base.Alert;
 import com.mmarvick.urgentcall.data.call.CallAlert;
+import com.mmarvick.urgentcall.data.call.CallAlertStore;
 import com.mmarvick.urgentcall.data.text.TextAlert;
 import com.mmarvick.urgentcall.data.base.DbContract;
+import com.mmarvick.urgentcall.data.text.TextAlertStore;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -31,7 +33,6 @@ public class ContactListFragment extends DialogFragment {
 	private Alert mAlert;
 	private int mListType;
 	private List<String> mContacts;
-	private AlertFragment mAlertFragment;
 	private ContactsArrayAdapter mAdapter;
 	
 	public static final int REQUEST_CODE = 0;
@@ -51,9 +52,9 @@ public class ContactListFragment extends DialogFragment {
 		long alertId = args.getLong(ALERT_ID);
 		
 		if (alertType.equals(CallAlert.ALERT_TYPE)) {
-			mAlert = new CallAlert(getActivity(), alertId);
+			mAlert = CallAlertStore.getInstance(getActivity()).getAlert(alertId);
 		} else if (alertType.equals(TextAlert.ALERT_TYPE)) {
-			mAlert = new TextAlert(getActivity(), alertId);
+			mAlert = TextAlertStore.getInstance(getActivity()).getAlert(alertId);
 		}
 		
 		mListType = args.getInt(FILTER_BY);
@@ -156,7 +157,7 @@ public class ContactListFragment extends DialogFragment {
 			
 			// Set contact name
 			TextView textView = (TextView) rowView.findViewById(R.id.list_contact_name_simple);
-			textView.setText(mAlert.getNameFromLookup(values.get(position)));
+			textView.setText(mAlert.getNameFromLookup(getActivity(), values.get(position)));
 			
 			// Create delete action
 			ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.list_contact_delete_button);

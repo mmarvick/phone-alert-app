@@ -20,7 +20,7 @@ public class AlertCallFragment extends AlertFragment {
 	}
 	
 	protected Alert createAlert() {
-		return new CallAlert(getActivity());
+		return new CallAlert();
 	}
 
 }

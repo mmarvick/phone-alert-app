@@ -24,46 +24,20 @@ public class CallAlert extends Alert {
 	/** The default name of a call alert */
 	public static final String ALERT_CALL_TYPE_NAME = "Call Alert";
 
-	/** Constructor for an AlertCall not currently in the database, with all
-	 * initial values generated as defaults. Also adds the Alert to the
-	 * database.
-	 * 
-	 * @param context the current context
-	 */
-	public CallAlert(Context context) {
-		super(context);
-	}
+    private int mCallQty;
+    private int mCallTime;
 
-	/** Constructor for an AlertCall not currently in the database, with all
-	 * initial values generated as defaults. Also adds the Alert to the
-	 * database.
-	 * 
-	 * @param context the current context
-	 * @param db a writable database for call rules
-	 * @param isInitial <code>true</code> if is the initial rule created when
-	 * the application runs for the first time; <code>false</code> if not 
-	 */	
-	public CallAlert(Context context, SQLiteDatabase db, boolean isInitial) {
-		super(context, db, isInitial);
-	}	
-	
-	/** Constructor for an AlertCall already in the database..
-	 * 
-	 * @param context (required) context of the call alert
-	 * @param id (required) row number of the call alert
-	 * @throws IndexOutOfBoundsException no row exists in the call alert table
-	 * with that id
-	 */
-	public CallAlert(Context context, long id) {
-		super(context, id);
+	public CallAlert() {
+		super();
+        mCallQty = 3;
+        mCallTime = 15;
 	}
 	
 	/** Gets the call quantity threshold for the alert
 	 * @return the number of calls needed to trigger an alert
 	 */
 	public int getCallQty() {
-        Cursor ruleCursor = getRuleCursor();
-        return ruleCursor.getInt(ruleCursor.getColumnIndex(DbContractCallRule.CallRuleEntry.COLUMN_CALL_QTY));
+        return mCallQty;
 	}
 	
 	/** Sets the call quantity threshold for the alert, and saves it to the
@@ -71,17 +45,14 @@ public class CallAlert extends Alert {
 	 * @param callQty the number of calls needed to trigger an alert
 	 */
 	public void setCallQty(int callQty) {
-		ContentValues newValues = new ContentValues();
-		newValues.put(DbContractCallRule.CallRuleEntry.COLUMN_CALL_QTY, callQty);
-		updateRuleTable(newValues);
+		mCallQty = callQty;
 	}
 	
 	/** Gets the time span within which calls must be made to trigger a call alert
 	 * @return the time span in minutes
 	 */
 	public int getCallTime() {
-        Cursor ruleCursor = getRuleCursor();
-        return ruleCursor.getInt(ruleCursor.getColumnIndex(DbContractCallRule.CallRuleEntry.COLUMN_CALL_TIME));
+        return mCallTime;
 	}
 
 	/** Sets the time span within which calls must be made to trigger a call alert,
@@ -89,9 +60,7 @@ public class CallAlert extends Alert {
 	 * @param callTime the time span in minutes
 	 */	
 	public void setCallTime(int callTime) {
-		ContentValues newValues = new ContentValues();
-		newValues.put(DbContractCallRule.CallRuleEntry.COLUMN_CALL_TIME, callTime);
-		updateRuleTable(newValues);
+		mCallTime = callTime;
 	}	
 	
 	/** Checks to see if all the criteria of this alert have been met by the
@@ -100,8 +69,8 @@ public class CallAlert extends Alert {
 	 * @return <code>true</code> if all criteria are met;
 	 * <code>false</code> otherwise
 	 */
-	public boolean shouldAlert(String phoneNumber) {
-		return (getOnState() && meetsCallQuantityCriteria(phoneNumber) && meetsContactCriteria(phoneNumber));
+	public boolean shouldAlert(Context context, String phoneNumber) {
+		return (getOnState() && meetsCallQuantityCriteria(context, phoneNumber) && meetsContactCriteria(context, phoneNumber));
 	}
 	
 	/** Checks to see if a contact fulfills the call quantity criteria of the
@@ -111,7 +80,7 @@ public class CallAlert extends Alert {
 	 * @return <code>true<code> if the call quantity criteria is met;
 	 * <code>false</code> if not
 	 */	
-	private boolean meetsCallQuantityCriteria(String phoneNumber) {
+	private boolean meetsCallQuantityCriteria(Context context, String phoneNumber) {
 		String time = "" + ((new Date()).getTime() - getCallTime() * 60 * 1000);
         String incomingType = "" + CallLog.Calls.INCOMING_TYPE;
         String missedType = "" +  CallLog.Calls.MISSED_TYPE;
@@ -120,56 +89,17 @@ public class CallAlert extends Alert {
         selection += " AND (" + CallLog.Calls.TYPE + " = ?";
         selection += " OR " + CallLog.Calls.TYPE + " = ?)";
 		String[] selectors = {phoneNumber, time, incomingType, missedType};
-		Cursor calls = mContext.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, selectors, null);
+		Cursor calls = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection, selectors, null);
 		int numCalls = calls.getCount();
 		calls.close();
 		numCalls++; // need to do this because the incoming call hasn't been registered yet
 		Log.e("CALL ALERT", "Num calls: " + numCalls);
 		return numCalls >= getCallQty();
 	}
-	
-	/** Initializes the remaining information that is specific to call alerts,
-	 * and stores into the ContentValues as key-value pairs to be saved
-	 * to the database.
-	 * @param ruleValues the repository of key-value pairs to save in the database
-	 */		
-	protected void initializeAndStoreRemainingRuleData(ContentValues ruleValues) {
-		int callQty = 3;
-		int callTime = 15;
-		ruleValues.put(DbContractCallRule.CallRuleEntry.COLUMN_CALL_QTY, callQty);
-		ruleValues.put(DbContractCallRule.CallRuleEntry.COLUMN_CALL_TIME, callTime);
-	}
-	
-	/** {@inheritDoc} */
-	protected void performRemainingDropCommands(SQLiteDatabase db) {
-		// nothing needed
-	}
 
 	/** {@inheritDoc} */
 	protected String getAlertTypeName() {
 		return ALERT_CALL_TYPE_NAME;
-	}	
-	
-	/** {@inheritDoc} */
-	protected String getRuleTableName() {
-		return DbContractCallRule.CallRuleEntry.TABLE_NAME;
-	}
-	
-	/** {@inheritDoc} */
-	protected String getContactTableName() {
-		return DbContractCallRule.CallRuleContactEntry.TABLE_NAME;
-	}
-	
-	/** {@inheritDoc} */
-	protected SQLiteDatabase getReadableDatabase() {
-		DbOpenHelperCall dbOpenHelper = new DbOpenHelperCall(mContext);
-		return dbOpenHelper.getReadableDatabase();
-	}
-	
-	/** {@inheritDoc} */
-	protected SQLiteDatabase getWritableDatabase() {
-		DbOpenHelperCall dbOpenHelper = new DbOpenHelperCall(mContext);
-		return dbOpenHelper.getWritableDatabase();		
 	}
 	
 	/** {@inheritDoc} */
@@ -178,25 +108,25 @@ public class CallAlert extends Alert {
 	}
 
     /** {@inheritDoc} */
-    public String getShareText() {
+    public String getShareText(Context context) {
         String shareText = "";
         if (getCallQty() == 1) {
-            shareText += mContext.getString(R.string.share_sc_1);
+            shareText += context.getString(R.string.share_sc_1);
         } else {
-            shareText += mContext.getString(R.string.share_rc_1) + getCallQty();
-            shareText += mContext.getString(R.string.share_rc_2) + getCallTime();
-            shareText += mContext.getString(R.string.share_rc_3);
+            shareText += context.getString(R.string.share_rc_1) + getCallQty();
+            shareText += context.getString(R.string.share_rc_2) + getCallTime();
+            shareText += context.getString(R.string.share_rc_3);
         }
-        shareText += mContext.getString(R.string.share_app_alert_url);
+        shareText += context.getString(R.string.share_app_alert_url);
         return shareText;
     }
 
     /** {@inheritDoc} */
-    public String getShareSubject() {
+    public String getShareSubject(Context context) {
         if (getCallQty() == 1) {
-            return mContext.getString(R.string.share_sc_subject);
+            return context.getString(R.string.share_sc_subject);
         } else {
-            return mContext.getString(R.string.share_rc_subject);
+            return context.getString(R.string.share_rc_subject);
         }
     }
 }

@@ -40,7 +40,7 @@ public abstract class AlertBroadcastReceiver extends BroadcastReceiver {
                         ring = true;
                         if (alert.getVolume() > volume) {
                             volume = alert.getVolume();
-                            tone = alert.getTone();
+                            tone = alert.getToneUri();
                         }
                     }
                     if (alert.getVibrate()) {

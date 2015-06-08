@@ -246,7 +246,7 @@ public abstract class AlertView extends RelativeLayout {
 	private void promptTone() {
 		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
 
-		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mAlert.getTone());
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mAlert.getToneUri());
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI);	
 		

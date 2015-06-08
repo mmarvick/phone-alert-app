@@ -3,6 +3,7 @@ package com.mmarvick.urgentcall.data.call;
 import com.mmarvick.urgentcall.data.call.DbContractCallRule.CallRuleContactEntry;
 import com.mmarvick.urgentcall.data.call.DbContractCallRule.CallRuleEntry;
 import com.mmarvick.urgentcall.data.base.DbOpenHelper;
+import com.mmarvick.urgentcall.data.text.TextAlertStore;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,7 +36,8 @@ public class DbOpenHelperCall extends DbOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		super.onCreate(db);
-		new CallAlert(mContext, db, true);
+		//CallAlert callAlert = new CallAlert();
+        //CallAlertStore.getInstance(mContext).addAlert(mContext, callAlert);
 	}		
 	
 	/** {@inheritDoc} */

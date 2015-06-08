@@ -176,6 +176,7 @@ public abstract class AlertStore<E extends Alert> {
         }
 
         ruleCursor.close();
+        database.close();
     }
 
 

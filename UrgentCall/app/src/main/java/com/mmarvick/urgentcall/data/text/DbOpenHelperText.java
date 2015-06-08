@@ -46,7 +46,8 @@ public class DbOpenHelperText extends DbOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		super.onCreate(db);
 		createRulePhraseTable(db);
-		new TextAlert(mContext, db, true);
+		//TextAlert textAlert = new TextAlert();
+        //TextAlertStore.getInstance(mContext).addAlert(mContext, textAlert);
 	}	
 	
 	private void createRulePhraseTable(SQLiteDatabase db) {

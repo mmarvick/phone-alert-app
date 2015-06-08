@@ -93,7 +93,7 @@ public abstract class DbOpenHelper extends SQLiteOpenHelper {
 	 * @param db the database
 	 */
 	private void createRuleContactTable(SQLiteDatabase db) {
-		String tableName = getRuleContactTableName();
+        String tableName = getRuleContactTableName();
 		String columns = CREATE_RULE_CONTACT_TABLE_COLUMNS;
 		createTable(db, tableName, columns);
 	}

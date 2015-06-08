@@ -4,9 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
-import com.mmarvick.urgentcall.data.Alert;
+import com.mmarvick.urgentcall.data.base.Alert;
 import com.mmarvick.urgentcall.helpers.DisclaimerHelper;
 import com.mmarvick.urgentcall.helpers.PrefHelper;
 

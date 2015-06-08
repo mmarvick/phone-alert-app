@@ -3,10 +3,10 @@ package com.mmarvick.urgentcall.activities;
 import java.util.List;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.Alert;
-import com.mmarvick.urgentcall.data.AlertCall;
-import com.mmarvick.urgentcall.data.AlertText;
-import com.mmarvick.urgentcall.data.DbContract;
+import com.mmarvick.urgentcall.data.base.Alert;
+import com.mmarvick.urgentcall.data.call.AlertCall;
+import com.mmarvick.urgentcall.data.text.AlertText;
+import com.mmarvick.urgentcall.data.base.DbContract;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

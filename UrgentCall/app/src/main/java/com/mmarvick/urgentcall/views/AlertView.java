@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.Alert;
-import com.mmarvick.urgentcall.data.DbContract;
+import com.mmarvick.urgentcall.data.base.Alert;
+import com.mmarvick.urgentcall.data.base.DbContract;
 import com.mmarvick.urgentcall.helpers.ShareHelper;
 import com.mmarvick.urgentcall.helpers.SoundHelper;
 import com.mmarvick.urgentcall.widgets.CustomSeekBar;

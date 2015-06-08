@@ -2,8 +2,8 @@ package com.mmarvick.urgentcall.background;
 
 import java.util.List;
 
-import com.mmarvick.urgentcall.data.Alert;
-import com.mmarvick.urgentcall.data.AlertCall;
+import com.mmarvick.urgentcall.data.base.Alert;
+import com.mmarvick.urgentcall.data.call.AlertCall;
 
 import android.content.Context;
 import android.content.Intent;

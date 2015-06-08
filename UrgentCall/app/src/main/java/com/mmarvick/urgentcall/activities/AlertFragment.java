@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.Alert;
+import com.mmarvick.urgentcall.data.base.Alert;
 import com.mmarvick.urgentcall.views.AlertView;
 import com.mmarvick.urgentcall.views.AlertView.OnDeleteListener;
 import com.mmarvick.urgentcall.widgets.UpgradeDialog;

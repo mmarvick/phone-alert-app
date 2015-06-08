@@ -2,7 +2,7 @@ package com.mmarvick.urgentcall.views;
 
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.AlertCall;
+import com.mmarvick.urgentcall.data.call.AlertCall;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnIntValueUpdatedListener;
 import android.content.Context;

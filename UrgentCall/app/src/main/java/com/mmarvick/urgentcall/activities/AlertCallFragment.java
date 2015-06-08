@@ -2,8 +2,8 @@ package com.mmarvick.urgentcall.activities;
 
 import java.util.List;
 
-import com.mmarvick.urgentcall.data.Alert;
-import com.mmarvick.urgentcall.data.AlertCall;
+import com.mmarvick.urgentcall.data.base.Alert;
+import com.mmarvick.urgentcall.data.call.AlertCall;
 import com.mmarvick.urgentcall.views.AlertView;
 import com.mmarvick.urgentcall.views.CallAlertView;
 

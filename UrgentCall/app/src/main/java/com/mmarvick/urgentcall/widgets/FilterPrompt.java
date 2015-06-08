@@ -1,10 +1,9 @@
 package com.mmarvick.urgentcall.widgets;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.activities.AlertFragment;
 import com.mmarvick.urgentcall.activities.ContactListFragment;
-import com.mmarvick.urgentcall.data.Alert;
-import com.mmarvick.urgentcall.data.DbContract;
+import com.mmarvick.urgentcall.data.base.Alert;
+import com.mmarvick.urgentcall.data.base.DbContract;
 
 import android.app.AlertDialog;
 import android.content.Context;

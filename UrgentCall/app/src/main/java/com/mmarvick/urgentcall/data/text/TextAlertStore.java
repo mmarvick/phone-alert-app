@@ -46,7 +46,6 @@ public class TextAlertStore extends AlertStore<TextAlert> {
         db.delete(getPhraseTableName(),
                 DbContractTextRule.TextRulePhraseEntry.COLUMN_ALERT_RULE_ID + " = ?",
                 new String[] {Long.toString(alert.getId())});
-        db.close();
 
         for (String phrase : alert.getPhrases()) {
             ContentValues phraseValues = new ContentValues();
@@ -89,6 +88,7 @@ public class TextAlertStore extends AlertStore<TextAlert> {
         }
 
         phrasesCursor.close();
+        db.close();
 
         alert.setPhrases(phrases);
         return alert;

@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-import com.mmarvick.urgentcall.data.call.DbOpenHelperCall;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,8 +158,7 @@ public abstract class AlertStore<E extends Alert> {
     protected abstract void addRemainingParameters(ContentValues ruleValues, Alert alert);
 
     private void readAlertsFromDb(Context context) {
-        DbOpenHelperCall dbOpenHelper = new DbOpenHelperCall(context);
-        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        SQLiteDatabase database = getReadableDatabase(context);
         mAlerts = new ArrayList<>();
 
         Cursor ruleCursor = database.query(getRuleTableName(),

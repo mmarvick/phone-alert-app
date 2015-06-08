@@ -5,7 +5,7 @@ import java.util.List;
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.base.Alert;
 import com.mmarvick.urgentcall.data.call.CallAlert;
-import com.mmarvick.urgentcall.data.text.AlertText;
+import com.mmarvick.urgentcall.data.text.TextAlert;
 import com.mmarvick.urgentcall.data.base.DbContract;
 
 import android.app.AlertDialog;
@@ -52,8 +52,8 @@ public class ContactListFragment extends DialogFragment {
 		
 		if (alertType.equals(CallAlert.ALERT_TYPE)) {
 			mAlert = new CallAlert(getActivity(), alertId);
-		} else if (alertType.equals(AlertText.ALERT_TYPE)) {
-			mAlert = new AlertText(getActivity(), alertId);
+		} else if (alertType.equals(TextAlert.ALERT_TYPE)) {
+			mAlert = new TextAlert(getActivity(), alertId);
 		}
 		
 		mListType = args.getInt(FILTER_BY);

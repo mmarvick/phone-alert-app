@@ -27,29 +27,13 @@ public class CallAlertStore extends AlertStore<CallAlert> {
         super(context);
     }
 
-    /**
-     * Returns a list of all call alerts in the database
-     *
-     * @return a list of AlertCall objects representing each currently stored
-     * call alert
-     */
-    @Override
-    public List<CallAlert> getAlerts() {
-        return mAlerts;
-    }
-
-    @Override
-    public void readAlertsFromDb() {
-
-    }
-
     @Override
     protected CallAlert getNewAlert() {
         return new CallAlert();
     }
 
     @Override
-    protected void performRemainingDropCommands(SQLiteDatabase db) {
+    protected void performRemainingDropCommands(SQLiteDatabase db, CallAlert alert) {
         // Pass
     }
 

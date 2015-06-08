@@ -1,7 +1,7 @@
 package com.mmarvick.urgentcall.views;
 
 import com.mmarvick.urgentcall.R;
-import com.mmarvick.urgentcall.data.text.AlertText;
+import com.mmarvick.urgentcall.data.text.TextAlert;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnIntValueUpdatedListener;
@@ -155,8 +155,8 @@ public class TextAlertView extends AlertView {
 		});
 	}
 	
-	protected AlertText getAlertText() {
-		return (AlertText) mAlert;
+	protected TextAlert getAlertText() {
+		return (TextAlert) mAlert;
 	}	
 
 }

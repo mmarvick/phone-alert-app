@@ -1,7 +1,9 @@
 package com.mmarvick.urgentcall.views;
 
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.data.base.AlertStore;
 import com.mmarvick.urgentcall.data.text.TextAlert;
+import com.mmarvick.urgentcall.data.text.TextAlertStore;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.EditTextStringPrompt;
 import com.mmarvick.urgentcall.widgets.OnIntValueUpdatedListener;
@@ -24,9 +26,14 @@ public class TextAlertView extends AlertView {
 
 	public TextAlertView(Context context, Fragment fragment) {
 		super(context, fragment);
-	}	
+	}
 
-	@Override
+    @Override
+    protected AlertStore getAlertStore() {
+        return TextAlertStore.getInstance(mContext);
+    }
+
+    @Override
 	protected void inflatePreView() {
 		ViewStub stub = (ViewStub) mView.findViewById(R.id.viewStubPre);
 		stub.setLayoutResource(R.layout.view_text_alert_req);

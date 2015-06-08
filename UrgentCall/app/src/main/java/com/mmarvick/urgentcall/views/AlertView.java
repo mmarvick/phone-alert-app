@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mmarvick.urgentcall.R;
 import com.mmarvick.urgentcall.data.base.Alert;
+import com.mmarvick.urgentcall.data.base.AlertStore;
 import com.mmarvick.urgentcall.data.base.DbContract;
 import com.mmarvick.urgentcall.helpers.ShareHelper;
 import com.mmarvick.urgentcall.helpers.SoundHelper;
@@ -83,6 +84,8 @@ public abstract class AlertView extends RelativeLayout {
         inflatePreView();
 		inflatePostView();
 	}
+
+    protected abstract AlertStore getAlertStore();
 	
 	public void setAlert(Alert alert) {
 		mAlert = alert;
@@ -162,7 +165,7 @@ public abstract class AlertView extends RelativeLayout {
 		if (filterBy == DbContract.ENTRY_FILTER_BY_EVERYONE) {
 			filterByText = "Everyone";
 		} else if (filterBy == DbContract.ENTRY_FILTER_BY_ALLOWED_ONLY) {
-			List<String> allowed = mAlert.getAllowedContactNames();
+			List<String> allowed = mAlert.getAllowedContactNames(mContext);
             if (allowed.size() == 0) {
                 filterByText = "Nobody (allowed contacts were removed)";
             } else if (allowed.size() <= 3) {
@@ -171,7 +174,7 @@ public abstract class AlertView extends RelativeLayout {
 				filterByText = allowed.size() + " Allowed Contacts";
 			}
 		} else {
-			List<String> blocked = mAlert.getBlockedContactNames();
+			List<String> blocked = mAlert.getBlockedContactNames(mContext);
 			filterByText = "Everyone but";
             if (blocked.size() == 0) {
                 filterByText = "Everyone";
@@ -329,11 +332,11 @@ public abstract class AlertView extends RelativeLayout {
 
     @OnClick(R.id.imageButtonShare)
     public void share() {
-        ShareHelper.share(mContext, mAlert.getShareSubject(), mAlert.getShareText());
+        ShareHelper.share(mContext, mAlert.getShareSubject(mContext), mAlert.getShareText(mContext));
     }
 	
 	public void delete() {
-		mAlert.delete();
+		getAlertStore().deleteAlert(mContext, mAlert);
 		
 		if (mOnDeleteListener != null) {
 			mOnDeleteListener.onDelete(this);

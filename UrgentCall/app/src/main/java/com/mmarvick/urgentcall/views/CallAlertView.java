@@ -2,7 +2,9 @@ package com.mmarvick.urgentcall.views;
 
 
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.data.base.AlertStore;
 import com.mmarvick.urgentcall.data.call.CallAlert;
+import com.mmarvick.urgentcall.data.call.CallAlertStore;
 import com.mmarvick.urgentcall.widgets.EditTextIntPrompt;
 import com.mmarvick.urgentcall.widgets.OnIntValueUpdatedListener;
 import android.content.Context;
@@ -26,8 +28,13 @@ public class CallAlertView extends AlertView {
 		super(context, fragment);
         mContext = context;
 	}
-	
-	public void promptCallQty() {
+
+    @Override
+    protected AlertStore getAlertStore() {
+        return CallAlertStore.getInstance(mContext);
+    }
+
+    public void promptCallQty() {
 		EditTextIntPrompt callNumberPrompt = new EditTextIntPrompt(mContext,
                 getContext().getResources().getInteger(R.integer.call_qty_min),
                 getContext().getResources().getInteger(R.integer.call_qty_max),

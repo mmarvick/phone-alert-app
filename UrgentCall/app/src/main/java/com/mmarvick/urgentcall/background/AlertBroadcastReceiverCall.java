@@ -33,18 +33,22 @@ public class AlertBroadcastReceiverCall extends AlertBroadcastReceiver {
         }
     }
 
+    @Override
     protected void noteAlertSpecificProperties(Alert alert) {}
 
+    @Override
     protected List<? extends Alert> getAlerts() {
-        CallAlertStore callAlertStore = CallAlertStore.getInstance(mContext);
-        return callAlertStore.getAlerts();
+        CallAlertStore alertStore = CallAlertStore.getInstance(mContext);
+        return alertStore.getAlerts();
     }
 
+    @Override
     protected boolean shouldAlert(Alert alert) {
         CallAlert callAlert = (CallAlert) alert;
-        return callAlert.shouldAlert(phoneNumber);
+        return callAlert.shouldAlert(mContext, phoneNumber);
     }
 
+    @Override
     protected Intent getAlarmServiceIntent() {
         Intent ringService = new Intent(mContext, AlarmServiceCall.class);
         return ringService;

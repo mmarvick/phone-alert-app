@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mmarvick.urgentcall.data.base.Alert;
 import com.mmarvick.urgentcall.data.text.TextAlert;
+import com.mmarvick.urgentcall.data.text.TextAlertStore;
 
 import android.content.Context;
 import android.content.Intent;;
@@ -33,6 +34,7 @@ public class AlertBroadcastReceiverText extends AlertBroadcastReceiver {
         checkAlerts();
 	}
 
+    @Override
     protected void noteAlertSpecificProperties(Alert alert) {
         TextAlert textAlert = (TextAlert) alert;
         if (textAlert.getAlertDuration() > duration) {
@@ -40,15 +42,19 @@ public class AlertBroadcastReceiverText extends AlertBroadcastReceiver {
         }
     }
 
+    @Override
     protected List<? extends Alert> getAlerts() {
-        return TextAlert.getAlerts(mContext);
+        TextAlertStore alertStore = TextAlertStore.getInstance(mContext);
+        return alertStore.getAlerts();
     }
 
+    @Override
     protected boolean shouldAlert(Alert alert) {
         TextAlert textAlert = (TextAlert) alert;
-        return textAlert.shouldAlert(phoneNumber, message);
+        return textAlert.shouldAlert(mContext, phoneNumber, message);
     }
 
+    @Override
     protected Intent getAlarmServiceIntent() {
         Intent ringService = new Intent(mContext, AlarmServiceText.class);
         ringService.putExtra(AlarmServiceText.DURATION, duration);

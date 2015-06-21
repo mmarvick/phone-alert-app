@@ -31,6 +31,7 @@ proguard/
 # Other local files
 debug/
 .metadata
+.DS_Store
 
 # application files ready for deployment
 deploy/

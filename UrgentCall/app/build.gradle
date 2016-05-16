@@ -21,11 +21,11 @@ android {
     def versionCodeNumber = 8
     def versionNamePrefix = "2.4"
 
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    compileSdkVersion 22
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 11
         targetSdkVersion 19
     }
     buildTypes {
@@ -67,7 +67,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.2.1@aar') {
         transitive = true;
     }
-    compile 'com.android.support:appcompat-v7:21.0.2'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:design:22.2.0'
     compile 'com.jakewharton:butterknife:6.0.0'
-    compile 'com.android.support:support-v4:21.0.2'
+    compile 'com.android.support:support-v4:22.2.0'
 }

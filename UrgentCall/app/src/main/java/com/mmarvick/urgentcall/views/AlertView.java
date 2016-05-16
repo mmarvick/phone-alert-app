@@ -78,7 +78,7 @@ public abstract class AlertView extends RelativeLayout {
 		mContext = context;
 		mFragment = fragment;
 		
-		LayoutInflater inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).cloneInContext(new ContextThemeWrapper(context, R.style.AppThemeLight));
+		LayoutInflater inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).cloneInContext(new ContextThemeWrapper(context, R.style.AppTheme));
 		mView = inflater.inflate(R.layout.view_alert, this);
         ButterKnife.inject(this, mView);
         inflatePreView();

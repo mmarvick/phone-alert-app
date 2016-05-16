@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Titles -->
+    <string name="title_activity_call_alert">CallAlertActivity</string>
+
     <string name="package_pro">com.mmarvick.uc_pro</string>
     <string name="package_lite">com.mmarvick.uc_lite</string>
     <string name="url_play_app">market://details?id=</string>

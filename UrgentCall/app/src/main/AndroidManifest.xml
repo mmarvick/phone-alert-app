@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mmarvick.urgentcall" >
+    package="com.mmarvick.urgentcall">
 
     <uses-feature android:name="android.hardware.telephony" />
 
@@ -17,13 +17,13 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <receiver android:name=".background.AlertBroadcastReceiverCall" >
+        android:theme="@style/AppTheme">
+        <receiver android:name=".background.AlertBroadcastReceiverCall">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".background.AlertBroadcastReceiverText" >
+        <receiver android:name=".background.AlertBroadcastReceiverText">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
@@ -31,16 +31,26 @@
 
         <activity
             android:name=".activities.MainActivity"
+            android:theme="@style/AppThemeOld"
             android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".background.SnoozeReset" >
+        <activity
+            android:name=".activities.refactor.CallAlertActivity"
+            android:label="@string/title_activity_call_alert"
+            android:exported="true"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mmarvick.urgentcall.activities.MainActivity" />
+        </activity>
+
+        <receiver android:name=".background.SnoozeReset">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -52,7 +62,6 @@
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="1b357c1006d3adfa2da3cf0e7ad0c8373462ca37" />
-
     </application>
 
 </manifest>

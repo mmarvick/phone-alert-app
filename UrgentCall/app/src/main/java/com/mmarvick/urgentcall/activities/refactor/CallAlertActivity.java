@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.mmarvick.urgentcall.R;
 
-public class CallAlertActivity extends ToolbarActivity {
+public class CallAlertActivity extends BaseActivity {
     private static final String ARG_FRAGMENT = "call_fragment";
     private CallAlertFragment fragment;
 

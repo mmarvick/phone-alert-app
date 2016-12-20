@@ -5,6 +5,7 @@ import io.fabric.sdk.android.Fabric;
 import java.util.List;
 
 import com.mmarvick.urgentcall.R;
+import com.mmarvick.urgentcall.activities.refactor.BaseActivity;
 import com.mmarvick.urgentcall.helpers.DisclaimerHelper;
 import com.mmarvick.urgentcall.helpers.PrefHelper;
 import com.mmarvick.urgentcall.helpers.ShareHelper;
@@ -41,7 +42,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TimePicker;
 
-public class MainActivity extends ActionBarActivity 
+public class MainActivity extends BaseActivity
 	implements TimePickerDialog.OnTimeSetListener{
 	
 	private static boolean testMode = true;

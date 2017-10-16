@@ -1,3 +1,5 @@
+.DS_Store
+
 # built application files
 bin/*.apk
 bin/*.ap_

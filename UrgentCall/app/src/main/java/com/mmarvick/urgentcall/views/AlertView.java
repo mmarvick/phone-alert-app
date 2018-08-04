@@ -36,7 +36,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public abstract class AlertView extends RelativeLayout {
@@ -60,7 +60,7 @@ public abstract class AlertView extends RelativeLayout {
 	protected ImageButton imageButtonExpand;
 	protected ImageButton imageButtonDelete;
 
-    @InjectView(R.id.imageButtonShare)
+    @BindView(R.id.imageButtonShare)
     protected ImageButton imageButtonShare;
 	
 	protected TextView textViewAlertName;
@@ -79,7 +79,7 @@ public abstract class AlertView extends RelativeLayout {
 		
 		LayoutInflater inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).cloneInContext(new ContextThemeWrapper(context, R.style.AppThemeLight));
 		mView = inflater.inflate(R.layout.view_alert, this);
-        ButterKnife.inject(this, mView);
+        ButterKnife.bind(this, mView);
         inflatePreView();
 		inflatePostView();
 	}

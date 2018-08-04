@@ -34,14 +34,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TimePicker;
 
-public class MainActivity extends ActionBarActivity 
+public class MainActivity extends AppCompatActivity
 	implements TimePickerDialog.OnTimeSetListener{
 	
 	private static boolean testMode = true;
@@ -82,9 +83,9 @@ public class MainActivity extends ActionBarActivity
 
 		setContentView(R.layout.activity_main);
 		
-		checkDisclaimer();		
+		checkDisclaimer();
 
-		actionBar = getSupportActionBar();		
+		actionBar = getSupportActionBar();
 		
 		// Add the fragments to the view pager
 		mAdapter = new MyPagerAdapter(getSupportFragmentManager());

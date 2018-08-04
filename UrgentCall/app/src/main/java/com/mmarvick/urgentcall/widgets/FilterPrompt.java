@@ -12,7 +12,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -148,7 +148,7 @@ public class FilterPrompt {
 	}
 	
 	public void showListDialog(int listType) {
-		FragmentManager manager = ((ActionBarActivity) mContext).getSupportFragmentManager();
+		FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
 		
 		Bundle args = new Bundle();
 		args.putInt(ContactListFragment.FILTER_BY, listType);
